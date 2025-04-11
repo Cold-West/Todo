@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import TodoAppBlock from './components/TodoAppBlock'
 import TodoAppHeader from './components/TodoAppHeader'
 import './TodoAppStyles/App.css'
@@ -7,15 +7,25 @@ function App() {
 
   const [todoBlocks, setTodoBlocks] = useState([
     {text:"11111", id:1, check:false},
-    {text:"22222", id:2, check:false},
+    {text:"22222", id:2, check:true},
     {text:"33333", id:3, check:false}
   ])
+
+  const [filters, setFilters] = useState('all')
 
   const [visibleBlocks, setVisibleBlocks] = useState(todoBlocks)
 
   useEffect(()=>{
-    setVisibleBlocks(todoBlocks)
-  },[todoBlocks])
+    if (filters == 'all'){
+      setVisibleBlocks(todoBlocks)
+    }
+    else if (filters == 'completed'){
+      setVisibleBlocks(todoBlocks.filter(t => t.check !== true))
+    }
+    else if (filters == 'active'){
+      setVisibleBlocks(todoBlocks.filter(t => t.check == true))
+    }
+  },[todoBlocks, filters])
 
   const TodoNewBlock =(text:string)=>{
     setTodoBlocks([...todoBlocks, {
@@ -46,16 +56,6 @@ function App() {
     setTodoBlocks(prev => prev.map(task => ({ ...task, check: true })));
   }
 
-  const filterAll =()=>{
-    setVisibleBlocks(todoBlocks)
-  }
-  const filterAllUnChecked =()=>{
-    setVisibleBlocks(todoBlocks.filter(t => t.check !== true))
-  }
-  const filterAllChecked =()=>{
-    setVisibleBlocks(todoBlocks.filter(t => t.check == true))
-  }
-
   return (
     <>
       <h1>Todos</h1>
@@ -80,18 +80,18 @@ function App() {
             {todoBlocks.filter(t => t.check !== true).length}
           </span>
           <nav className='footerFilter'>
-            <button 
-              className='footerNavButton'
-              onClick={filterAll}
-            >All</button>
-            <button 
-              className='footerNavButton'
-              onClick={filterAllUnChecked}
-            >Active</button>
-            <button 
-              className='footerNavButton'
-              onClick={filterAllChecked}
-            >Completed</button>
+              <button 
+                className='footerNavButton' 
+                onClick={()=>setFilters('all')}
+              >All</button>
+              <button 
+                className='footerNavButton' 
+                onClick={()=>setFilters('completed')}
+              >Completed</button>
+              <button 
+                className='footerNavButton' 
+                onClick={()=>setFilters('active')}
+              >active</button>
           </nav>
         </footer>
         
