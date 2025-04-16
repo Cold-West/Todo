@@ -1,4 +1,4 @@
-header{
+header {
   width: 100%;
   border-bottom: 1px solid teal;
   display: flex;
@@ -6,7 +6,7 @@ header{
   align-items: center;
   margin-bottom: 1px;
 }
-.TodoAppCheckAll{
+.TodoAppCheckAll {
   border: 0;
   background: 0;
   position: absolute;
@@ -16,11 +16,11 @@ header{
   text-align: center;
   cursor: pointer;
 }
-form{
+form {
   width: 100%;
   height: 100%;
 }
-.TodoAppInput{
+.TodoAppInput {
   border: 0;
   width: 100%;
   height: 100%;
@@ -28,7 +28,7 @@ form{
   font-size: 20px;
   background-color: rgba(0, 200, 200, 0.1);
 }
-.TodoAppInput:focus{
+.TodoAppInput:focus {
   background-color: rgba(0, 255, 200, 0.1);
   outline: 0;
 }
