@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -10,17 +10,17 @@
   align-items: center;
   margin-top: 50px;
 }
-h1{
+h1 {
   color: teal;
 }
-.TodoApp{
+.TodoApp {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 500px;
   border: 1px solid teal;
 }
-footer{
+footer {
   width: 100%;
   height: 30px;
   display: flex;
@@ -29,14 +29,14 @@ footer{
   color: teal;
   background-color: rgba(0, 200, 200, 0.1);
 }
-.footerFilter{
+.footerFilter {
   margin-left: auto;
   margin-right: 5px;
 }
-.footerCounter{
+.footerCounter {
   margin-left: 5px;
 }
-.footerNavButton{
+.footerNavButton {
   color: teal;
   border: 0;
   background: 0;

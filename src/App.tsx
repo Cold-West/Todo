@@ -1,103 +1,112 @@
-import { use, useEffect, useState } from 'react'
-import TodoAppBlock from './components/TodoAppBlock'
-import TodoAppHeader from './components/TodoAppHeader'
-import './TodoAppStyles/App.css'
+import { useMemo, useState, useCallback } from "react";
+import { TodoAppTask } from "./components/TodoAppTask/TodoAppTask";
+import { TodoAppHeader } from "./components/Header/TodoAppHeader";
+import { todoListDefault } from "./todoListDefault";
+import { FilterType } from "./types";
+import "./App.css";
 
-function App() {
+export function App() {
+  const [todoTasks, setTodoTasks] = useState(todoListDefault);
 
-  const [todoBlocks, setTodoBlocks] = useState([
-    {text:"11111", id:1, check:false},
-    {text:"22222", id:2, check:true},
-    {text:"33333", id:3, check:false}
-  ])
+  const [filters, setFilters] = useState<FilterType>(FilterType.ALL);
 
-  const [filters, setFilters] = useState('all')
+  const [visibleTasks, setVisibleTasks] = useState(todoTasks);
 
-  const [visibleBlocks, setVisibleBlocks] = useState(todoBlocks)
-
-  useEffect(()=>{
-    if (filters == 'all'){
-      setVisibleBlocks(todoBlocks)
+  useMemo(() => {
+    if (filters === FilterType.ALL) {
+      setVisibleTasks(todoTasks);
+    } else if (filters === FilterType.COMPLETED) {
+      setVisibleTasks(todoTasks.filter((t) => t.check !== true));
+    } else if (filters === FilterType.ACTIVE) {
+      setVisibleTasks(todoTasks.filter((t) => t.check == true));
     }
-    else if (filters == 'completed'){
-      setVisibleBlocks(todoBlocks.filter(t => t.check !== true))
-    }
-    else if (filters == 'active'){
-      setVisibleBlocks(todoBlocks.filter(t => t.check == true))
-    }
-  },[todoBlocks, filters])
+  }, [todoTasks, filters]);
 
-  const TodoNewBlock =(text:string)=>{
-    setTodoBlocks([...todoBlocks, {
-      text,
-      id: Date.now(),
-      check: false
-    }])
-  }
+  const todoActiveCounter = useMemo(() => {
+    return todoTasks.filter((t) => t.check !== true).length;
+  }, [todoTasks]);
 
-  const TodoDelete =(id: number)=>{
-    setTodoBlocks(prev => prev.filter(t => t.id !== id))
-  }
+  const createNewTodo = useCallback(
+    (text: string) => {
+      setTodoTasks((prev) => {
+        return [
+          ...prev,
+          {
+            text,
+            id: Date.now(),
+            check: false,
+          },
+        ];
+      });
+    },
+    [todoTasks]
+  );
 
-  const checkClicked = (id: number) => {
-    setTodoBlocks(prev => prev.map(task => {
-      if (task.id === id) {
-        return {
-          ...task,
-          check: !task.check,
+  const removeTodo = useCallback((id: number) => {
+    setTodoTasks((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const checkClicked = useCallback((id: number) => {
+    setTodoTasks((prev) =>
+      prev.map((task) => {
+        if (task.id === id) {
+          return {
+            ...task,
+            check: !task.check,
+          };
         }
-      }
 
-      return task;
-    }))
-  }
+        return task;
+      })
+    );
+  }, []);
 
-  const toggleChecks = () => {
-    setTodoBlocks(prev => prev.map(task => ({ ...task, check: true })));
-  }
+  const toggleChecks = useCallback(() => {
+    if (todoActiveCounter == todoTasks.length) {
+      setTodoTasks((prev) => prev.map((task) => ({ ...task, check: true })));
+    } else
+      setTodoTasks((prev) => prev.map((task) => ({ ...task, check: false })));
+  }, [todoActiveCounter]);
 
   return (
     <>
       <h1>Todos</h1>
-      <div className='TodoApp'>
-        
-        <TodoAppHeader
-          check={toggleChecks}
-          create={TodoNewBlock}
-        />
+      <div className="TodoApp">
+        <TodoAppHeader check={toggleChecks} create={createNewTodo} />
 
-        {visibleBlocks.map(task=>
-          <TodoAppBlock
-            remove={()=>TodoDelete(task.id)}
+        {visibleTasks.map((task) => (
+          <TodoAppTask
+            remove={() => removeTodo(task.id)}
             onCheckClicked={() => checkClicked(task.id)}
             task={task}
             key={task.id}
           />
-        )}
+        ))}
 
         <footer>
-          <span className='footerCounter'>Tasks Left: 
-            {todoBlocks.filter(t => t.check !== true).length}
-          </span>
-          <nav className='footerFilter'>
-              <button 
-                className='footerNavButton' 
-                onClick={()=>setFilters('all')}
-              >All</button>
-              <button 
-                className='footerNavButton' 
-                onClick={()=>setFilters('completed')}
-              >Completed</button>
-              <button 
-                className='footerNavButton' 
-                onClick={()=>setFilters('active')}
-              >active</button>
+          <span className="footerCounter">Tasks Left: {todoActiveCounter}</span>
+          <nav className="footerFilter">
+            <button
+              className="footerNavButton"
+              onClick={() => setFilters(FilterType.ALL)}
+            >
+              All
+            </button>
+            <button
+              className="footerNavButton"
+              onClick={() => setFilters(FilterType.COMPLETED)}
+            >
+              Completed
+            </button>
+            <button
+              className="footerNavButton"
+              onClick={() => setFilters(FilterType.ACTIVE)}
+            >
+              active
+            </button>
           </nav>
         </footer>
-        
       </div>
     </>
-  )
+  );
 }
-
-export default App
