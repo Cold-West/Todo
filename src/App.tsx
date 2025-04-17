@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback } from "react";
-import { TodoAppTask } from "./components/TodoAppTask/TodoAppTask";
-import { TodoAppHeader } from "./components/Header/TodoAppHeader";
+import { TodoAppTask, TodoAppHeader } from "./components";
+import { TodoAppFooter } from "./components/Footer/TodoAppFooter";
 import { todoListDefault } from "./todoListDefault";
 import { FilterType } from "./types";
 import "./App.css";
@@ -10,15 +10,13 @@ export function App() {
 
   const [filters, setFilters] = useState<FilterType>(FilterType.ALL);
 
-  const [visibleTasks, setVisibleTasks] = useState(todoTasks);
-
-  useMemo(() => {
+  const visibleTasks = useMemo(() => {
     if (filters === FilterType.ALL) {
-      setVisibleTasks(todoTasks);
+      return todoTasks;
     } else if (filters === FilterType.COMPLETED) {
-      setVisibleTasks(todoTasks.filter((t) => t.check !== true));
+      return todoTasks.filter((t) => t.check !== true);
     } else if (filters === FilterType.ACTIVE) {
-      setVisibleTasks(todoTasks.filter((t) => t.check == true));
+      return todoTasks.filter((t) => t.check == true);
     }
   }, [todoTasks, filters]);
 
@@ -62,10 +60,10 @@ export function App() {
   }, []);
 
   const toggleChecks = useCallback(() => {
-    if (todoActiveCounter == todoTasks.length) {
-      setTodoTasks((prev) => prev.map((task) => ({ ...task, check: true })));
-    } else
+    if (todoActiveCounter == 0) {
       setTodoTasks((prev) => prev.map((task) => ({ ...task, check: false })));
+    } else
+      setTodoTasks((prev) => prev.map((task) => ({ ...task, check: true })));
   }, [todoActiveCounter]);
 
   return (
@@ -83,29 +81,7 @@ export function App() {
           />
         ))}
 
-        <footer>
-          <span className="footerCounter">Tasks Left: {todoActiveCounter}</span>
-          <nav className="footerFilter">
-            <button
-              className="footerNavButton"
-              onClick={() => setFilters(FilterType.ALL)}
-            >
-              All
-            </button>
-            <button
-              className="footerNavButton"
-              onClick={() => setFilters(FilterType.COMPLETED)}
-            >
-              Completed
-            </button>
-            <button
-              className="footerNavButton"
-              onClick={() => setFilters(FilterType.ACTIVE)}
-            >
-              active
-            </button>
-          </nav>
-        </footer>
+        <TodoAppFooter counter={todoActiveCounter} onClickFilter={setFilters} />
       </div>
     </>
   );
