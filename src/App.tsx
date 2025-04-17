@@ -13,11 +13,15 @@ export function App() {
   const visibleTasks = useMemo(() => {
     if (filters === FilterType.ALL) {
       return todoTasks;
-    } else if (filters === FilterType.COMPLETED) {
-      return todoTasks.filter((t) => t.check !== true);
-    } else if (filters === FilterType.ACTIVE) {
-      return todoTasks.filter((t) => t.check == true);
     }
+    
+    if (filters === FilterType.COMPLETED) {
+      return todoTasks.filter((t) => t.check !== true);
+    }
+    
+    // if (filters === FilterType.ACTIVE) {
+      return todoTasks.filter((t) => t.check == true);
+    // }
   }, [todoTasks, filters]);
 
   const todoActiveCounter = useMemo(() => {
