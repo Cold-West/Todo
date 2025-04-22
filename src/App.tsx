@@ -44,6 +44,7 @@ export function App() {
   const removeTodo = useCallback((id: number) => {
     setTodoTasks((prev) => prev.filter((t) => t.id !== id));
   }, []);
+
   const checkClicked = useCallback((id: number) => {
     setTodoTasks((prev) =>
       prev.map((task) => {
@@ -66,20 +67,11 @@ export function App() {
       setTodoTasks((prev) => prev.map((task) => ({ ...task, check: true })));
   }, [todoActiveCounter]);
 
-  const filterByName = useCallback(
-    (sort: string) => {
-      if (sort == "off") {
-        setSorters(SorterType.OFF);
-        console.log(sorters);
-      } else if (sort == "aTOb") {
-        setSorters(SorterType.aTOb);
-        console.log(sorters);
-      } else if (sort == "bTOa") {
-        setSorters(SorterType.bTOa);
-        console.log(sorters);
-      }
+  const sortByName = useCallback(
+    (sort: SorterType) => {
+      setSorters(sort)
     },
-    [sorters],
+    [],
   );
   return (
     <>
@@ -99,8 +91,8 @@ export function App() {
 
           <TodoAppFooter
             counter={todoActiveCounter}
-            onClickFilter={setFilters}
-            filterByName={filterByName}
+            onFilterChange={setFilters}
+            onSortingChange={sortByName}
           />
         </div>
       </div>

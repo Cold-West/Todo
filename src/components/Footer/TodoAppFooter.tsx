@@ -1,51 +1,55 @@
-import { FilterType } from "../../types";
+import { useCallback } from "react";
+import { FilterType, SorterType } from "../../types";
 import "./TodoAppFooter.css";
 
 type TodoFooterProps = {
   counter: number;
-  onClickFilter: (filterType: FilterType) => void;
-  filterByName: (value: string) => void;
+  onFilterChange: (filterType: FilterType) => void;
+  onSortingChange: (sortingType: SorterType) => void;
 };
 
 export const TodoAppFooter = (props: TodoFooterProps) => {
-  const { onClickFilter, counter, filterByName } = props;
+  const { onFilterChange, counter, onSortingChange } = props;
 
+  const filterValue = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      onSortingChange(event.target.value as SorterType);
+    },
+    [onSortingChange]
+  );
   return (
     <footer>
       <span className="footerCounter">Tasks Left: {counter}</span>
       <nav className="footerFilter">
-        <select
-          className="footerSelector"
-          onChange={(event) => filterByName(event.target.value)}
-        >
-          <option value="off" key="off">
-            Сортировка
+        <select className="footerSelector" onChange={filterValue}>
+          <option value={SorterType.OFF} key="OFF">
+            Сортировка отключена
           </option>
-          <option value="aTOb" key="aTOb">
+          <option value={SorterType.aTOb} key="aTOb">
             По заголовку (А-Я)
           </option>
-          <option value="bTOa" key="bTOa">
+          <option value={SorterType.bTOa} key="bTOa">
             По заголовку (Я-А)
           </option>
         </select>
         <button
           className="footerNavButton"
           value="ALL"
-          onClick={() => onClickFilter(FilterType.ALL)}
+          onClick={() => onFilterChange(FilterType.ALL)}
         >
           All
         </button>
         <button
           className="footerNavButton"
           value="COMPLETED"
-          onClick={() => onClickFilter(FilterType.COMPLETED)}
+          onClick={() => onFilterChange(FilterType.COMPLETED)}
         >
           Completed
         </button>
         <button
           className="footerNavButton"
           value="ACTIVE"
-          onClick={() => onClickFilter(FilterType.ACTIVE)}
+          onClick={() => onFilterChange(FilterType.ACTIVE)}
         >
           active
         </button>
