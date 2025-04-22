@@ -22,10 +22,10 @@ export function App() {
   }, [filters, todoTasks]);
 
   const visibleTasks = useMemo(() => {
-    if (sorters === "aTOb") {
+    if (sorters === SorterType.aTOb) {
       return [...filteredTasks].sort((a, b) => a.text.localeCompare(b.text));
     }
-    if (sorters === "bTOa") {
+    if (sorters === SorterType.bTOa) {
       return [...filteredTasks].sort((a, b) => b.text.localeCompare(a.text));
     }
     return filteredTasks;
