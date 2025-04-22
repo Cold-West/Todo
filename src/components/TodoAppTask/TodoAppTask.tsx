@@ -1,7 +1,7 @@
 import "./TodoAppTask.css";
 import { TaskType } from "../../types";
 type TodoAppTaskProps = {
-  task: TaskType
+  task: TaskType;
   remove: () => void;
   onCheckClicked: () => void;
 };

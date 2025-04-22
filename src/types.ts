@@ -5,7 +5,13 @@ export type TaskType = {
 };
 
 export enum FilterType {
-    ALL = 'All',
-    ACTIVE = 'Active',
-    COMPLETED = 'Completed',
-};
+  ALL = "All",
+  ACTIVE = "Active",
+  COMPLETED = "Completed",
+}
+
+export enum SorterType {
+  OFF = "OFF",
+  aTOb = "aTOb",
+  bTOa = "bTOa",
+}

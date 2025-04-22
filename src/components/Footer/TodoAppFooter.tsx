@@ -4,16 +4,30 @@ import "./TodoAppFooter.css";
 type TodoFooterProps = {
   counter: number;
   onClickFilter: (filterType: FilterType) => void;
+  filterByName: (value: string) => void;
 };
 
 export const TodoAppFooter = (props: TodoFooterProps) => {
+  const { onClickFilter, counter, filterByName } = props;
 
-  const { onClickFilter, counter } = props;
-  
   return (
     <footer>
       <span className="footerCounter">Tasks Left: {counter}</span>
       <nav className="footerFilter">
+        <select
+          className="footerSelector"
+          onChange={(event) => filterByName(event.target.value)}
+        >
+          <option value="off" key="off">
+            Сортировка
+          </option>
+          <option value="aTOb" key="aTOb">
+            По заголовку (А-Я)
+          </option>
+          <option value="bTOa" key="bTOa">
+            По заголовку (Я-А)
+          </option>
+        </select>
         <button
           className="footerNavButton"
           value="ALL"

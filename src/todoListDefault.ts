@@ -1,7 +1,10 @@
 import { TaskType } from "./types";
 
 export const todoListDefault: TaskType[] = [
-  { text: "11111", id: 1, check: false },
-  { text: "22222", id: 2, check: true },
-  { text: "33333", id: 3, check: false },
+  { text: "aaaa", id: 1, check: true },
+  { text: "bbbb", id: 2, check: true },
+  { text: "cccc", id: 3, check: true },
+  { text: "aaaa", id: 4, check: false },
+  { text: "bbbb", id: 5, check: false },
+  { text: "cccc", id: 6, check: false },
 ];

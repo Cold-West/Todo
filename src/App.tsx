@@ -1,8 +1,7 @@
 import { useMemo, useState, useCallback } from "react";
-import { TodoAppTask, TodoAppHeader } from "./components";
-import { TodoAppFooter } from "./components/Footer/TodoAppFooter";
+import { TodoAppTask, TodoAppHeader, TodoAppFooter } from "./components";
 import { todoListDefault } from "./todoListDefault";
-import { FilterType } from "./types";
+import { FilterType, SorterType } from "./types";
 import "./App.css";
 
 export function App() {
@@ -10,44 +9,41 @@ export function App() {
 
   const [filters, setFilters] = useState<FilterType>(FilterType.ALL);
 
-  const visibleTasks = useMemo(() => {
-    if (filters === FilterType.ALL) {
-      return todoTasks;
-    }
-    
-    if (filters === FilterType.COMPLETED) {
+  const [sorters, setSorters] = useState<SorterType>(SorterType.OFF);
+
+  const filteredTasks = useMemo(() => {
+    if (filters === FilterType.ACTIVE) {
       return todoTasks.filter((t) => t.check !== true);
     }
-    
-    // if (filters === FilterType.ACTIVE) {
+    if (filters === FilterType.COMPLETED) {
       return todoTasks.filter((t) => t.check == true);
-    // }
-  }, [todoTasks, filters]);
+    }
+    return todoTasks;
+  }, [filters, todoTasks]);
+
+  const visibleTasks = useMemo(() => {
+    if (sorters === "aTOb") {
+      return [...filteredTasks].sort((a, b) => a.text.localeCompare(b.text));
+    }
+    if (sorters === "bTOa") {
+      return [...filteredTasks].sort((a, b) => b.text.localeCompare(a.text));
+    }
+    return filteredTasks;
+  }, [filteredTasks, sorters]);
 
   const todoActiveCounter = useMemo(() => {
     return todoTasks.filter((t) => t.check !== true).length;
   }, [todoTasks]);
 
-  const createNewTodo = useCallback(
-    (text: string) => {
-      setTodoTasks((prev) => {
-        return [
-          ...prev,
-          {
-            text,
-            id: Date.now(),
-            check: false,
-          },
-        ];
-      });
-    },
-    [todoTasks]
-  );
+  const createNewTodo = useCallback((text: string) => {
+    setTodoTasks((prev) => {
+      return [...prev, { text, id: Date.now(), check: false }];
+    });
+  }, []);
 
   const removeTodo = useCallback((id: number) => {
     setTodoTasks((prev) => prev.filter((t) => t.id !== id));
   }, []);
-
   const checkClicked = useCallback((id: number) => {
     setTodoTasks((prev) =>
       prev.map((task) => {
@@ -59,7 +55,7 @@ export function App() {
         }
 
         return task;
-      })
+      }),
     );
   }, []);
 
@@ -70,22 +66,43 @@ export function App() {
       setTodoTasks((prev) => prev.map((task) => ({ ...task, check: true })));
   }, [todoActiveCounter]);
 
+  const filterByName = useCallback(
+    (sort: string) => {
+      if (sort == "off") {
+        setSorters(SorterType.OFF);
+        console.log(sorters);
+      } else if (sort == "aTOb") {
+        setSorters(SorterType.aTOb);
+        console.log(sorters);
+      } else if (sort == "bTOa") {
+        setSorters(SorterType.bTOa);
+        console.log(sorters);
+      }
+    },
+    [sorters],
+  );
   return (
     <>
       <h1>Todos</h1>
-      <div className="TodoApp">
-        <TodoAppHeader check={toggleChecks} create={createNewTodo} />
+      <div className="page">
+        <div className="TodoApp">
+          <TodoAppHeader check={toggleChecks} create={createNewTodo} />
 
-        {visibleTasks.map((task) => (
-          <TodoAppTask
-            remove={() => removeTodo(task.id)}
-            onCheckClicked={() => checkClicked(task.id)}
-            task={task}
-            key={task.id}
+          {visibleTasks.map((task) => (
+            <TodoAppTask
+              remove={() => removeTodo(task.id)}
+              onCheckClicked={() => checkClicked(task.id)}
+              task={task}
+              key={task.id}
+            />
+          ))}
+
+          <TodoAppFooter
+            counter={todoActiveCounter}
+            onClickFilter={setFilters}
+            filterByName={filterByName}
           />
-        ))}
-
-        <TodoAppFooter counter={todoActiveCounter} onClickFilter={setFilters} />
+        </div>
       </div>
     </>
   );
