@@ -1,5 +1,6 @@
 export type TaskType = {
-  text: string;
+  title: string;
+  text:string
   id: number;
   check: boolean;
   date: Date | null

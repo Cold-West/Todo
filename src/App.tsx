@@ -24,10 +24,10 @@ export function App() {
 
   const visibleTasks = useMemo(() => {
     if (sorters === SorterType.aTOb) {
-      return [...filteredTasks].sort((a, b) => a.text.localeCompare(b.text));
+      return [...filteredTasks].sort((a, b) => a.title.localeCompare(b.title));
     }
     if (sorters === SorterType.bTOa) {
-      return [...filteredTasks].sort((a, b) => b.text.localeCompare(a.text));
+      return [...filteredTasks].sort((a, b) => b.title.localeCompare(a.title));
     }
     return filteredTasks;
   }, [filteredTasks, sorters]);
@@ -36,9 +36,9 @@ export function App() {
     return todoTasks.filter((t) => t.check !== true).length;
   }, [todoTasks]);
 
-  const createNewTodo = useCallback((text: string, date: Date | null) => {
+  const createNewTodo = useCallback((title: string, text:string, date: Date | null) => {
     setTodoTasks((prev) => {
-      return [...prev, { text, id: Date.now(), check: false, date }];
+      return [...prev, { title, text, id: Date.now(), check: false, date }];
     });
   }, []);
 

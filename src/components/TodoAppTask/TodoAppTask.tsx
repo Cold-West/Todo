@@ -13,13 +13,18 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
   const [startDate, setStartDate] = useState<Date | null>(task.date);
   return (
     <div className="TodoAppBox">
-      <input
-        type="checkbox"
-        className="TodoAppBoxCheck"
-        checked={task.check}
-        onChange={onCheckClicked}
-      />
-      <span>{task.text}</span>
+      <div>
+        <input
+          type="checkbox"
+          className="TodoAppBoxCheck"   
+          checked={task.check}
+          onChange={onCheckClicked}
+        />
+      </div>
+      <span>
+        <h2>{task.title}</h2>
+        <p>{task.text}</p>
+      </span>
       <div className="rightSide">
         <button className="TodoAppBoxDelete" onClick={remove}>
           ×
