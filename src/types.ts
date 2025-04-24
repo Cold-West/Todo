@@ -2,6 +2,7 @@ export type TaskType = {
   text: string;
   id: number;
   check: boolean;
+  date: Date | null
 };
 
 export enum FilterType {
