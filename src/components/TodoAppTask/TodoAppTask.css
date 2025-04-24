@@ -20,16 +20,38 @@
 .TodoAppBoxCheck:checked {
   background-color: teal;
 }
-.TodoAppBoxDelete {
-  margin-right: 5px;
+.rightSide{
+  display: flex;
+  flex-direction: column;
   margin-left: auto;
+  margin-right: 5px;
+  height: 100%;
+}
+.TodoAppBoxDelete {
+  margin-left: auto;
+  width: 20px;
+  height: 60%;
   background: 0;
   border: 0;
   color: red;
   font-size: 25px;
   cursor: pointer;
   opacity: 0;
+  float: right;
+  padding-bottom: 10px;
 }
 .TodoAppBox:hover .TodoAppBoxDelete {
   opacity: 1;
+}
+.datePickerInput{
+  background-color: rgba(0, 255, 255, 0);
+  color: rgb(0, 90, 90);
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  width: 70px;
+  cursor: pointer;
+}
+.datePickerInput:focus{
+  outline: 0;
 }

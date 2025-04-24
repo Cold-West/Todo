@@ -35,9 +35,9 @@ export function App() {
     return todoTasks.filter((t) => t.check !== true).length;
   }, [todoTasks]);
 
-  const createNewTodo = useCallback((text: string) => {
+  const createNewTodo = useCallback((text: string, date: Date | null) => {
     setTodoTasks((prev) => {
-      return [...prev, { text, id: Date.now(), check: false }];
+      return [...prev, { text, id: Date.now(), check: false, date }];
     });
   }, []);
 
@@ -56,7 +56,7 @@ export function App() {
         }
 
         return task;
-      }),
+      })
     );
   }, []);
 
@@ -67,12 +67,9 @@ export function App() {
       setTodoTasks((prev) => prev.map((task) => ({ ...task, check: true })));
   }, [todoActiveCounter]);
 
-  const sortByName = useCallback(
-    (sort: SorterType) => {
-      setSorters(sort)
-    },
-    [],
-  );
+  const sortByName = useCallback((sort: SorterType) => {
+    setSorters(sort);
+  }, []);
   return (
     <>
       <h1>Todos</h1>
