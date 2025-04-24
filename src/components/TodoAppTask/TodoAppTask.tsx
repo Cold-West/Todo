@@ -2,7 +2,6 @@ import "./TodoAppTask.css";
 import { TaskType } from "../../types";
 import DatePicker from "react-datepicker";
 import { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
 type TodoAppTaskProps = {
   task: TaskType;
   remove: () => void;

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./TodoAppHeader.css";
-import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 type TodoHeaderProps = {
   create: (text: string, date: Date | null) => void;

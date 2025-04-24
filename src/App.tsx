@@ -3,6 +3,7 @@ import { TodoAppTask, TodoAppHeader, TodoAppFooter } from "./components";
 import { todoListDefault } from "./todoListDefault";
 import { FilterType, SorterType } from "./types";
 import "./App.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 export function App() {
   const [todoTasks, setTodoTasks] = useState(todoListDefault);
