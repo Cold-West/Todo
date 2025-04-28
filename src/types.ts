@@ -1,9 +1,9 @@
 export type TaskType = {
   title: string;
-  text:string
+  text: string;
   id: number;
   check: boolean;
-  date: Date | null
+  date: Date | null;
 };
 
 export enum FilterType {

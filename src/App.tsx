@@ -36,11 +36,14 @@ export function App() {
     return todoTasks.filter((t) => t.check !== true).length;
   }, [todoTasks]);
 
-  const createNewTodo = useCallback((title: string, text:string, date: Date | null) => {
-    setTodoTasks((prev) => {
-      return [...prev, { title, text, id: Date.now(), check: false, date }];
-    });
-  }, []);
+  const createNewTodo = useCallback(
+    (title: string, text: string, date: Date | null) => {
+      setTodoTasks((prev) => {
+        return [...prev, { title, text, id: Date.now(), check: false, date }];
+      });
+    },
+    [],
+  );
 
   const removeTodo = useCallback((id: number) => {
     setTodoTasks((prev) => prev.filter((t) => t.id !== id));
@@ -57,7 +60,7 @@ export function App() {
         }
 
         return task;
-      })
+      }),
     );
   }, []);
 
@@ -71,6 +74,37 @@ export function App() {
   const sortByName = useCallback((sort: SorterType) => {
     setSorters(sort);
   }, []);
+
+  const [currentTask, setCurrentTask] = useState(null);
+
+  const dragOverHandler = (e) => {
+    e.preventDefault();
+    if (e.target.className == "TodoAppBox") {
+      e.target.style.boxShadow = "0 4px 3px gray";
+    }
+  };
+
+  const dragLeaveHandler = (e) => {
+    e.target.style.boxShadow = "none";
+  };
+
+  const dragStartHandler = (e, task) => {
+    setCurrentTask(task);
+  };
+
+  const dragEndHandler = (e) => {
+    e.target.style.boxShadow = "none";
+  };
+
+  const dropHandler = (e, task) => {
+    e.target.style.boxShadow = "none";
+    const currentIndex = visibleTasks.indexOf(currentTask);
+    const dropIndex = visibleTasks.indexOf(task);
+    visibleTasks.splice(currentIndex, 1);
+    visibleTasks.splice(dropIndex, 0, currentTask);
+    setCurrentTask(null);
+  };
+
   return (
     <>
       <h1>Todos</h1>
@@ -80,6 +114,11 @@ export function App() {
 
           {visibleTasks.map((task) => (
             <TodoAppTask
+              onDragOver={(e) => dragOverHandler(e)}
+              onDragLeave={(e) => dragLeaveHandler(e)}
+              onDragStart={(e) => dragStartHandler(e, task)}
+              onDragEnd={(e) => dragEndHandler(e)}
+              onDrop={(e) => dropHandler(e, task)}
               remove={() => removeTodo(task.id)}
               onCheckClicked={() => checkClicked(task.id)}
               task={task}
