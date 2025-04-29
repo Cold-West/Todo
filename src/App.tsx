@@ -1,7 +1,7 @@
 import { useMemo, useState, useCallback } from "react";
 import { TodoAppTask, TodoAppHeader, TodoAppFooter } from "./components";
 import { todoListDefault } from "./todoListDefault";
-import { FilterType, SorterType } from "./types";
+import { FilterType, SorterType, TaskType } from "./types";
 import "./App.css";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -42,7 +42,7 @@ export function App() {
         return [...prev, { title, text, id: Date.now(), check: false, date }];
       });
     },
-    [],
+    []
   );
 
   const removeTodo = useCallback((id: number) => {
@@ -60,7 +60,7 @@ export function App() {
         }
 
         return task;
-      }),
+      })
     );
   }, []);
 
@@ -75,7 +75,7 @@ export function App() {
     setSorters(sort);
   }, []);
 
-  const [currentTask, setCurrentTask] = useState(null);
+  const [currentTask, setCurrentTask] = useState<null | TaskType>(null);
 
   const dragOverHandler = (e) => {
     e.preventDefault();
@@ -88,7 +88,7 @@ export function App() {
     e.target.style.boxShadow = "none";
   };
 
-  const dragStartHandler = (e, task) => {
+  const dragStartHandler = (e, task: TaskType) => {
     setCurrentTask(task);
   };
 
@@ -96,36 +96,55 @@ export function App() {
     e.target.style.boxShadow = "none";
   };
 
-  const dropHandler = (e, task) => {
+  const dropHandler = (e, task: TaskType) => {
     e.target.style.boxShadow = "none";
-    const currentIndex = visibleTasks.indexOf(currentTask);
-    const dropIndex = visibleTasks.indexOf(task);
-    visibleTasks.splice(currentIndex, 1);
-    visibleTasks.splice(dropIndex, 0, currentTask);
-    setCurrentTask(null);
+    if (currentTask === null) {
+      return;
+    }
+    if (e.target.className === "TodoAppBox") {
+      const currentIndex = visibleTasks.indexOf(currentTask);
+      const dropIndex = visibleTasks.indexOf(task);
+      visibleTasks.splice(currentIndex, 1);
+      visibleTasks.splice(dropIndex, 0, currentTask);
+      setCurrentTask(null);
+    }
   };
-
+  const dropOnBoardHandler = (e) => {
+    if (currentTask === null) {
+      return;
+    }
+    if (e.target.className !== "TodoAppBox") {
+      visibleTasks.push(currentTask);
+      const currentIndex = visibleTasks.indexOf(currentTask);
+      visibleTasks.splice(currentIndex, 1);
+      setCurrentTask(null);
+    }
+  };
   return (
     <>
       <h1>Todos</h1>
       <div className="page">
         <div className="TodoApp">
           <TodoAppHeader check={toggleChecks} create={createNewTodo} />
-
-          {visibleTasks.map((task) => (
-            <TodoAppTask
-              onDragOver={(e) => dragOverHandler(e)}
-              onDragLeave={(e) => dragLeaveHandler(e)}
-              onDragStart={(e) => dragStartHandler(e, task)}
-              onDragEnd={(e) => dragEndHandler(e)}
-              onDrop={(e) => dropHandler(e, task)}
-              remove={() => removeTodo(task.id)}
-              onCheckClicked={() => checkClicked(task.id)}
-              task={task}
-              key={task.id}
-            />
-          ))}
-
+          <div
+            className="board"
+            onDragOver={(e) => dragOverHandler(e)}
+            onDrop={(e) => dropOnBoardHandler(e)}
+          >
+            {visibleTasks.map((task) => (
+              <TodoAppTask
+                onDragOver={(e) => dragOverHandler(e)}
+                onDragLeave={(e) => dragLeaveHandler(e)}
+                onDragStart={(e) => dragStartHandler(e, task)}
+                onDragEnd={(e) => dragEndHandler(e)}
+                onDrop={(e) => dropHandler(e, task)}
+                remove={() => removeTodo(task.id)}
+                onCheckClicked={() => checkClicked(task.id)}
+                task={task}
+                key={task.id}
+              />
+            ))}
+          </div>
           <TodoAppFooter
             counter={todoActiveCounter}
             onFilterChange={setFilters}
