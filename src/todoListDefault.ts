@@ -8,3 +8,9 @@ export const todoListDefault: TaskType[] = [
   { title: "5", text: "bbbb", id: 5, check: false, date: new Date() },
   { title: "6", text: "cccc", id: 6, check: false, date: new Date() },
 ];
+
+export const testTasks: TaskType[] = [
+  { title: "7", text: "qwe", id: 7, check: true, date: new Date() },
+  { title: "8", text: "asd", id: 8, check: true, date: new Date() },
+  { title: "9", text: "zxc", id: 9, check: true, date: new Date() },
+];

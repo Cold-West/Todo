@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback } from "react";
 import { TodoAppTask, TodoAppHeader, TodoAppFooter } from "./components";
-import { todoListDefault } from "./todoListDefault";
+import { testTasks, todoListDefault } from "./todoListDefault";
 import { FilterType, SorterType, TaskType } from "./types";
 import "./App.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -36,6 +36,11 @@ export function App() {
     return todoTasks.filter((t) => t.check !== true).length;
   }, [todoTasks]);
 
+  const [boards, setBoards] = useState([
+    { id: 1, title: "Сделать", items: visibleTasks },
+    { id: 2, title: "Сделано", items: testTasks },
+  ]);
+
   const createNewTodo = useCallback(
     (title: string, text: string, date: Date | null) => {
       setTodoTasks((prev) => {
@@ -44,6 +49,12 @@ export function App() {
     },
     []
   );
+
+  const addBoard = () =>{
+    setBoards((prev) => {
+      return [...prev, { id: Date.now(), title:"test", items:[]}];
+    });
+  }
 
   const removeTodo = useCallback((id: number) => {
     setTodoTasks((prev) => prev.filter((t) => t.id !== id));
@@ -77,6 +88,8 @@ export function App() {
 
   const [currentTask, setCurrentTask] = useState<null | TaskType>(null);
 
+  const [currentBoard, setCurrentBoard] = useState(null);
+
   const dragOverHandler = (e) => {
     e.preventDefault();
     if (e.target.className == "TodoAppBox") {
@@ -88,35 +101,38 @@ export function App() {
     e.target.style.boxShadow = "none";
   };
 
-  const dragStartHandler = (e, task: TaskType) => {
+  const dragStartHandler = (e, task: TaskType, board) => {
     setCurrentTask(task);
+    setCurrentBoard(board);
   };
 
   const dragEndHandler = (e) => {
     e.target.style.boxShadow = "none";
   };
 
-  const dropHandler = (e, task: TaskType) => {
+  const dropHandler = (e, task: TaskType, board) => {
     e.target.style.boxShadow = "none";
-    if (currentTask === null) {
+    if (currentTask === null || currentBoard === null) {
       return;
     }
+
     if (e.target.className === "TodoAppBox") {
-      const currentIndex = visibleTasks.indexOf(currentTask);
-      const dropIndex = visibleTasks.indexOf(task);
-      visibleTasks.splice(currentIndex, 1);
-      visibleTasks.splice(dropIndex, 0, currentTask);
+      const currentIndex = currentBoard.items.indexOf(currentTask);
+      const dropIndex = board.items.indexOf(task);
+      currentBoard.items.splice(currentIndex, 1);
+      board.items.splice(dropIndex, 0, currentTask);
       setCurrentTask(null);
     }
   };
-  const dropOnBoardHandler = (e) => {
-    if (currentTask === null) {
+
+  const dropOnBoardHandler = (e, board:BoardType) => {
+    if (currentTask === null || currentBoard === null) {
       return;
     }
     if (e.target.className !== "TodoAppBox") {
-      visibleTasks.push(currentTask);
-      const currentIndex = visibleTasks.indexOf(currentTask);
-      visibleTasks.splice(currentIndex, 1);
+      board.items.push(currentTask);
+      const currentIndex = currentBoard.items.indexOf(currentTask);
+      currentBoard.items.splice(currentIndex, 1);
       setCurrentTask(null);
     }
   };
@@ -125,24 +141,32 @@ export function App() {
       <h1>Todos</h1>
       <div className="page">
         <div className="TodoApp">
+          <button type="button" className="boardButton" onClick={addBoard}></button>
           <TodoAppHeader check={toggleChecks} create={createNewTodo} />
-          <div
-            className="board"
-            onDragOver={(e) => dragOverHandler(e)}
-            onDrop={(e) => dropOnBoardHandler(e)}
-          >
-            {visibleTasks.map((task) => (
-              <TodoAppTask
+
+          <div className="boardSpace">
+            
+            {boards.map((board) => (
+              <div
+                className="board"
                 onDragOver={(e) => dragOverHandler(e)}
-                onDragLeave={(e) => dragLeaveHandler(e)}
-                onDragStart={(e) => dragStartHandler(e, task)}
-                onDragEnd={(e) => dragEndHandler(e)}
-                onDrop={(e) => dropHandler(e, task)}
-                remove={() => removeTodo(task.id)}
-                onCheckClicked={() => checkClicked(task.id)}
-                task={task}
-                key={task.id}
-              />
+                onDrop={(e) => dropOnBoardHandler(e, board)}
+              >
+                <h1>{board.title}</h1>
+                {board.items.map((task) => (
+                  <TodoAppTask
+                    onDragOver={(e) => dragOverHandler(e)}
+                    onDragLeave={(e) => dragLeaveHandler(e)}
+                    onDragStart={(e) => dragStartHandler(e, task, board)}
+                    onDragEnd={(e) => dragEndHandler(e)}
+                    onDrop={(e) => dropHandler(e, task, board)}
+                    remove={() => removeTodo(task.id)}
+                    onCheckClicked={() => checkClicked(task.id)}
+                    task={task}
+                    key={task.id}
+                  />
+                ))}
+              </div>
             ))}
           </div>
           <TodoAppFooter
