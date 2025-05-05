@@ -12,34 +12,48 @@ export function App() {
 
   const [sorters, setSorters] = useState<SorterType>(SorterType.OFF);
 
-  const filteredTasks = useMemo(() => {
-    if (filters === FilterType.ACTIVE) {
-      return todoTasks.filter((t) => t.check !== true);
-    }
-    if (filters === FilterType.COMPLETED) {
-      return todoTasks.filter((t) => t.check == true);
-    }
-    return todoTasks;
-  }, [filters, todoTasks]);
-
-  const visibleTasks = useMemo(() => {
-    if (sorters === SorterType.aTOb) {
-      return [...filteredTasks].sort((a, b) => a.title.localeCompare(b.title));
-    }
-    if (sorters === SorterType.bTOa) {
-      return [...filteredTasks].sort((a, b) => b.title.localeCompare(a.title));
-    }
-    return filteredTasks;
-  }, [filteredTasks, sorters]);
+  const [boards, setBoards] = useState([
+    { id: 1, title: "Сделать", items: todoTasks },
+    { id: 2, title: "Сделано", items: testTasks },
+  ]);
 
   const todoActiveCounter = useMemo(() => {
     return todoTasks.filter((t) => t.check !== true).length;
   }, [todoTasks]);
 
-  const [boards, setBoards] = useState([
-    { id: 1, title: "Сделать", items: visibleTasks },
-    { id: 2, title: "Сделано", items: testTasks },
-  ]);
+  const filteredBoards = useMemo(() => {
+    if (filters === FilterType.ACTIVE) {
+      return boards.map((board) => {
+        return {
+          ...board,
+          items: board.items.filter((t) => t.check !== true),
+        };
+      });
+    }
+    if (filters === FilterType.COMPLETED) {
+      return boards.map((board) => {
+        return {
+          ...board,
+          items: board.items.filter((t) => t.check == true),
+        };
+      });
+    }
+    return boards;
+  }, [boards, filters]);
+
+  const visibleBoards = useMemo(() => {
+    if (sorters === SorterType.aTOb) {
+      return filteredBoards.filter((prev) =>
+        prev.items.sort((a, b) => a.title.localeCompare(b.title))
+      );
+    }
+    if (sorters === SorterType.bTOa) {
+      return filteredBoards.filter((prev) =>
+        prev.items.sort((a, b) => b.title.localeCompare(a.title))
+      );
+    }
+    return filteredBoards;
+  }, [filteredBoards, sorters]);
 
   const createNewTodo = useCallback(
     (title: string, text: string, date: Date | null) => {
@@ -50,11 +64,11 @@ export function App() {
     []
   );
 
-  const addBoard = () =>{
+  const addBoard = () => {
     setBoards((prev) => {
-      return [...prev, { id: Date.now(), title:"test", items:[]}];
+      return [...prev, { id: Date.now(), title: "test", items: [] }];
     });
-  }
+  };
 
   const removeTodo = useCallback((id: number) => {
     setTodoTasks((prev) => prev.filter((t) => t.id !== id));
@@ -122,18 +136,32 @@ export function App() {
       currentBoard.items.splice(currentIndex, 1);
       board.items.splice(dropIndex, 0, currentTask);
       setCurrentTask(null);
+      setCurrentBoard(null);
     }
   };
 
-  const dropOnBoardHandler = (e, board:BoardType) => {
-    if (currentTask === null || currentBoard === null) {
+  const dragBoardStartHandler = (e, board) => {
+    setCurrentBoard(board);
+  };
+
+
+  const dropOnBoardHandler = (e, board) => {
+    if (currentBoard === null) {
       return;
     }
-    if (e.target.className !== "TodoAppBox") {
+    if (currentTask === null){
+      const currentIndex = filteredBoards.indexOf(currentBoard);
+      const dropIndex = filteredBoards.indexOf(board);
+      filteredBoards.splice(currentIndex, 1);
+      filteredBoards.splice(dropIndex, 0, currentBoard);
+      setCurrentBoard(null);
+    }
+    if (e.target.className !== "TodoAppBox" && currentTask !== null) {
       board.items.push(currentTask);
       const currentIndex = currentBoard.items.indexOf(currentTask);
       currentBoard.items.splice(currentIndex, 1);
       setCurrentTask(null);
+      setCurrentBoard(null);
     }
   };
   return (
@@ -141,16 +169,21 @@ export function App() {
       <h1>Todos</h1>
       <div className="page">
         <div className="TodoApp">
-          <button type="button" className="boardButton" onClick={addBoard}></button>
+          <button
+            type="button"
+            className="boardButton"
+            onClick={addBoard}
+          ></button>
           <TodoAppHeader check={toggleChecks} create={createNewTodo} />
 
           <div className="boardSpace">
-            
-            {boards.map((board) => (
+            {visibleBoards.map((board) => (
               <div
                 className="board"
+                draggable={true}
                 onDragOver={(e) => dragOverHandler(e)}
                 onDrop={(e) => dropOnBoardHandler(e, board)}
+                onDragStart={(e)=> dragBoardStartHandler(e, board)}
               >
                 <h1>{board.title}</h1>
                 {board.items.map((task) => (
