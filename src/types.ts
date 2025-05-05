@@ -1,10 +1,19 @@
 export type TaskType = {
   title: string;
   text: string;
-  id: number;
+  id: string;
   check: boolean;
   date: Date | null;
 };
+export type TaskMap = {
+  [taskId: string]: TaskType;
+}
+
+export type BoardType = {
+  title: string;
+  taskIds: string[];
+  id: string;
+}
 
 export enum FilterType {
   ALL = "All",
