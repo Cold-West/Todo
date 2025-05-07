@@ -11,6 +11,7 @@ type TodoAppTaskProps = {
   onDragStart: (e) => void;
   onDragEnd: (e) => void;
   onDrop: (e) => void;
+  boardId: string;
 };
 
 export const TodoAppTask = (props: TodoAppTaskProps) => {
@@ -23,6 +24,7 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
     onDragEnd,
     onDragStart,
     onDrop,
+    boardId,
   } = props;
   const [startDate, setStartDate] = useState<Date | null>(task.date);
   return (
@@ -46,6 +48,7 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
       <span>
         <h2>{task.title}</h2>
         <p>{task.text}</p>
+        <p>Айди борда{boardId}</p>
       </span>
       <div className="rightSide">
         <button className="TodoAppBoxDelete" onClick={remove}>
