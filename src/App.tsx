@@ -38,7 +38,6 @@ export function App() {
     return todoTasks.filter((t) => t.check !== true).length;
   }, [todoTasks]);
 
-
   const createNewTodo = useCallback(
     (title: string, text: string, date: Date | null) => {
       setTodoTasks((prev) => {
@@ -53,7 +52,7 @@ export function App() {
 
   const addBoard = () => {
     setBoards((prev) => {
-      return [...prev, { id: String(Date.now()), title: "test"}];
+      return [...prev, { id: String(Date.now()), title: "test" }];
     });
   };
 
@@ -105,7 +104,6 @@ export function App() {
   const dragStartHandler = (e, task: TaskType, board) => {
     setCurrentTask(task);
     setCurrentBoard(board);
-    console.log(visibleTasks)
   };
 
   const dragEndHandler = (e) => {
@@ -114,38 +112,39 @@ export function App() {
 
   const dropHandler = (e, task: TaskType, board) => {
     e.target.style.boxShadow = "none";
+    const newTodoTasks = [...todoTasks];
     if (currentTask === null || currentBoard === null) {
       return;
     }
 
     if (e.target.className === "TodoAppBox") {
-      const currentIndex = visibleTasks.indexOf(currentTask);
-      const dropIndex = visibleTasks.indexOf(task);
-      if (currentTask.boardID !== board.id){
-        setCurrentTask(currentTask.boardID = board.id);
+      const currentIndex = newTodoTasks.indexOf(currentTask);
+      const dropIndex = newTodoTasks.indexOf(task);
+      if (currentTask.boardID !== board.id) {
+        currentTask.boardID = board.id
       }
-      visibleTasks.splice(currentIndex, 1);
-      visibleTasks.splice(dropIndex, 0, currentTask);
-      visibleTasks.sort((a, b) => a.boardID.localeCompare(b.boardID))
-      setCurrentTask(null);
-      setCurrentBoard(null);
+      newTodoTasks.splice(currentIndex, 1);
+      newTodoTasks.splice(dropIndex, 0, currentTask);
+      newTodoTasks.sort((a, b) => a.boardID.localeCompare(b.boardID));
+      setTodoTasks(newTodoTasks);
     }
   };
 
   const dropOnBoardHandler = (e, board) => {
-      if (currentTask === null || currentBoard === null) {
-        return;
-      }
-      if (e.target.className !== "TodoAppBox") {
-        setCurrentTask(currentTask.boardID = board.id);
-        visibleTasks.push(currentTask);
-        const currentIndex = visibleTasks.indexOf(currentTask);
-        visibleTasks.splice(currentIndex, 1);
-        visibleTasks.sort((a, b) => a.boardID.localeCompare(b.boardID))
-        setCurrentTask(null);
-        setCurrentBoard(null);
-      }
-    };
+    if (currentTask === null || currentBoard === null) {
+      return;
+    }
+    const newTodoTasks = [...todoTasks];
+    if (e.target.className !== "TodoAppBox") {
+      currentTask.boardID = board.id
+      newTodoTasks.push(currentTask);
+      const currentIndex = newTodoTasks.indexOf(currentTask);
+      newTodoTasks.splice(currentIndex, 1);
+      newTodoTasks.sort((a, b) => a.boardID.localeCompare(b.boardID));
+      setTodoTasks(newTodoTasks);
+    }
+  };
+
   return (
     <>
       <h1>Todos</h1>
