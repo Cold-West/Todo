@@ -6,37 +6,13 @@ type TodoAppTaskProps = {
   task: TaskType;
   remove: () => void;
   onCheckClicked: () => void;
-  onDragOver: (e) => void;
-  onDragLeave: (e) => void;
-  onDragStart: (e) => void;
-  onDragEnd: (e) => void;
-  onDrop: (e) => void;
-  boardId: string;
 };
 
 export const TodoAppTask = (props: TodoAppTaskProps) => {
-  const {
-    task,
-    remove,
-    onCheckClicked,
-    onDragOver,
-    onDragLeave,
-    onDragEnd,
-    onDragStart,
-    onDrop,
-    boardId,
-  } = props;
+  const { task, remove, onCheckClicked } = props;
   const [startDate, setStartDate] = useState<Date | null>(task.date);
   return (
-    <div
-      onDragOver={onDragOver}
-      onDragLeave={onDragLeave}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      onDrop={onDrop}
-      draggable={true}
-      className="TodoAppBox"
-    >
+    <div className="TodoAppBox">
       <div>
         <input
           type="checkbox"
@@ -48,7 +24,6 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
       <span>
         <h2>{task.title}</h2>
         <p>{task.text}</p>
-        <p>Айди борда{boardId}</p>
       </span>
       <div className="rightSide">
         <button className="TodoAppBoxDelete" onClick={remove}>

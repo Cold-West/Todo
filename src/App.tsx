@@ -1,7 +1,7 @@
 import { useMemo, useState, useCallback, useRef } from "react";
 import { TodoAppTask, TodoAppHeader, TodoAppFooter } from "./components";
 import { todoListDefault, boardsDefault } from "./todoListDefault";
-import { FilterType, SorterType, TaskType } from "./types";
+import { BoardType, FilterType, SorterType, TaskType } from "./types";
 import "./App.css";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -47,7 +47,7 @@ export function App() {
         ].sort((a, b) => a.boardID.localeCompare(b.boardID));
       });
     },
-    []
+    [],
   );
 
   const addBoard = () => {
@@ -71,7 +71,7 @@ export function App() {
         }
 
         return task;
-      })
+      }),
     );
   }, []);
 
@@ -87,78 +87,100 @@ export function App() {
   }, []);
 
   const currentTaskRef = useRef<null | TaskType>(null);
-  const currentBoardRef = useRef(null);
-  const [currentTask, setCurrentTask] = useState<null | TaskType>(null);
+  const currentBoardRef = useRef<null | BoardType>(null);
 
-  const [currentBoard, setCurrentBoard] = useState(null);
-
-  const dragOverHandler = (e) => {
+  const dragOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (e.target.className == "TodoAppBox") {
-      e.target.style.boxShadow = "0 4px 3px gray";
+    const target = e.target as HTMLDivElement;
+    if (target.className == "TodoAppBox") {
+      target.style.boxShadow = "0 4px 3px gray";
     }
   };
 
-  const dragLeaveHandler = (e) => {
-    e.target.style.boxShadow = "none";
+  const dragLeaveHandler = (e: React.DragEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    target.style.boxShadow = "none";
   };
 
-  const dragStartHandler = (e, task: TaskType, board) => {
-    setCurrentTask(task);
-    setCurrentBoard(board);
+  const dragStartHandler = (
+    e: React.DragEvent<HTMLDivElement>,
+    task: TaskType,
+    board: BoardType,
+  ) => {
+    currentTaskRef.current = task;
+    currentBoardRef.current = board;
   };
 
-  const dragBoardStartHandler = (e, board) => {
-    setCurrentBoard(board);
+  const dragBoardStartHandler = (
+    e: React.DragEvent<HTMLDivElement>,
+    board: BoardType,
+  ) => {
+    currentBoardRef.current = board;
   };
 
-  const dragEndHandler = (e) => {
-    e.target.style.boxShadow = "none";
+  const dragEndHandler = (e: React.DragEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    target.style.boxShadow = "none";
+    currentTaskRef.current = null;
+    currentBoardRef.current = null;
   };
 
-  const dropHandler = (e, task: TaskType, board) => {
-    e.target.style.boxShadow = "none";
+  const dropHandler = (
+    e: React.DragEvent<HTMLDivElement>,
+    task: TaskType,
+    board: BoardType,
+  ) => {
+    const target = e.target as HTMLDivElement;
+    target.style.boxShadow = "none";
+    const currentTask = currentTaskRef.current;
+    const currentBoard = currentBoardRef.current;
     const newTodoTasks = [...todoTasks];
     if (currentTask === null || currentBoard === null) {
       return;
     }
+    const currentIndex = newTodoTasks.indexOf(currentTask);
     if (currentTask.boardID !== board.id) {
       currentTask.boardID = board.id;
-      const currentIndex = newTodoTasks.indexOf(currentTask);
       newTodoTasks.splice(currentIndex, 1);
       const dropIndex = newTodoTasks.indexOf(task);
       newTodoTasks.splice(dropIndex, 0, currentTask);
-    }
-    else{
-    const currentIndex = newTodoTasks.indexOf(currentTask);
-    const dropIndex = newTodoTasks.indexOf(task);
-    newTodoTasks.splice(currentIndex, 1);
-    newTodoTasks.splice(dropIndex, 0, currentTask);
+    } else {
+      const dropIndex = newTodoTasks.indexOf(task);
+      newTodoTasks.splice(currentIndex, 1);
+      newTodoTasks.splice(dropIndex, 0, currentTask);
     }
     newTodoTasks.sort((a, b) => a.boardID.localeCompare(b.boardID));
-    setCurrentTask(null)
     setTodoTasks(newTodoTasks);
   };
 
-  const dropOnBoardHandler = (e, board) => {
+  const dropOnBoardHandler = (
+    e: React.DragEvent<HTMLDivElement>,
+    board: BoardType,
+  ) => {
+    const target = e.target as HTMLDivElement;
+    const currentTask = currentTaskRef.current;
+    const currentBoard = currentBoardRef.current;
+
     if (currentBoard === null) {
       return;
     }
-    if (currentTask === null){
-      const currentIndex = boards.indexOf(currentBoard);
-      const dropIndex = boards.indexOf(board);
-      boards.splice(currentIndex, 1);
-      boards.splice(dropIndex, 0, currentBoard);
-      setCurrentBoard(null);
+
+    if (currentTask === null) {
+      const newBoards = [...boards];
+      const currentIndex = newBoards.indexOf(currentBoard);
+      const dropIndex = newBoards.indexOf(board);
+      newBoards.splice(currentIndex, 1);
+      newBoards.splice(dropIndex, 0, currentBoard);
+      setBoards(newBoards);
     }
+
     const newTodoTasks = [...todoTasks];
-    if (e.target.className !== "TodoAppBox" && currentTask !== null) {
+    if (target.className !== "TodoAppBox" && currentTask !== null) {
       currentTask.boardID = board.id;
       newTodoTasks.push(currentTask);
       const currentIndex = newTodoTasks.indexOf(currentTask);
       newTodoTasks.splice(currentIndex, 1);
       newTodoTasks.sort((a, b) => a.boardID.localeCompare(b.boardID));
-      setCurrentTask(null)
       setTodoTasks(newTodoTasks);
     }
   };
@@ -181,28 +203,31 @@ export function App() {
                 className="board"
                 draggable={true}
                 onDragOver={(e) => dragOverHandler(e)}
+                onDragEnd={(e) => dragEndHandler(e)}
                 onDrop={(e) => dropOnBoardHandler(e, board)}
-                onDragStart={(e)=> dragBoardStartHandler(e, board)}
+                onDragStart={(e) => dragBoardStartHandler(e, board)}
               >
                 <h1>{board.title}</h1>
                 {visibleTasks.map((task) => {
                   if (task.boardID === board.id)
                     return (
-                      <TodoAppTask
-                        remove={() => removeTodo(task.id)}
-                        onCheckClicked={() => checkClicked(task.id)}
-                        boardId={board.id}
-                        task={task}
-                        key={task.id}
+                      <div
+                        draggable={true}
                         onDragOver={(e) => dragOverHandler(e)}
                         onDragLeave={(e) => dragLeaveHandler(e)}
                         onDragStart={(e) => dragStartHandler(e, task, board)}
                         onDragEnd={(e) => dragEndHandler(e)}
                         onDrop={(e) => dropHandler(e, task, board)}
-                      />
+                      >
+                        <TodoAppTask
+                          remove={() => removeTodo(task.id)}
+                          onCheckClicked={() => checkClicked(task.id)}
+                          task={task}
+                          key={task.id}
+                        />
+                      </div>
                     );
                 })}
-                <h1>{board.id}</h1>
               </div>
             ))}
           </div>
