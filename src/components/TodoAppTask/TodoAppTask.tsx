@@ -16,7 +16,7 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
       <div>
         <input
           type="checkbox"
-          className="TodoAppBoxCheck"   
+          className="TodoAppBoxCheck"
           checked={task.check}
           onChange={onCheckClicked}
         />

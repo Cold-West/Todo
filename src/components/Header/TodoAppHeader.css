@@ -4,7 +4,7 @@ header {
   display: flex;
   height: 100px;
   align-items: center;
-  margin-bottom: 1px;
+  margin-bottom: 10px;
   background-color: rgba(0, 200, 200, 0.1);
 }
 .TodoAppCheckAll {
@@ -33,7 +33,7 @@ form {
   background-color: rgba(0, 255, 200, 0.1);
   outline: 0;
 }
-.headerDatePickerInput{
+.headerDatePickerInput {
   background-color: rgba(0, 255, 255, 0);
   color: rgb(0, 90, 90);
   font-size: 13px;
@@ -42,10 +42,10 @@ form {
   width: 70px;
   cursor: pointer;
 }
-.datePickerInput:focus{
+.datePickerInput:focus {
   outline: 0;
 }
-.headerInputs{
+.headerInputs {
   height: 100%;
   width: 100%;
 }
