@@ -41,7 +41,7 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
           </button>
         </div>
       </div>
-      {task.text}
+      <div className="TaskText">{task.text}</div>
     </div>
   );
 };

@@ -15,6 +15,7 @@ import {
   TaskType,
 } from "./types";
 import "./App.css";
+import"./DefaultColors.css";
 import "react-datepicker/dist/react-datepicker.css";
 
 export function App() {
@@ -141,12 +142,12 @@ export function App() {
             )}
             onDrop={dropHandler}
           />
-        </div>
-        <TodoAppFooter
+          <TodoAppFooter
           onFilterChange={setFilters}
           onSortingChange={sortByName}
           create={createNewTodo}
         />
+        </div>
       </div>
     </>
   );
