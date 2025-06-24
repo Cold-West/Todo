@@ -9,6 +9,12 @@ export type TaskType = {
 export type BoardType = {
   title: string;
   id: string;
+  color: string;
+};
+export const checkIfBoard = (
+  input: TaskType | BoardType,
+): input is TaskType => {
+  return Object.prototype.hasOwnProperty.call(input, "boardID");
 };
 export enum FilterType {
   ALL = "All",
@@ -20,4 +26,5 @@ export enum SorterType {
   OFF = "OFF",
   aTOb = "aTOb",
   bTOa = "bTOa",
+  date = "date",
 }

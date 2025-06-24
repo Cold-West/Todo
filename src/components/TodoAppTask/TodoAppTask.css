@@ -1,19 +1,34 @@
 .TodoAppBox {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
   width: 100%;
-  min-height: 60px;
-  border-bottom: 1px solid teal;
-  font-size: 20px;
-  background-color: rgba(0, 255, 255, 0.1);
-  overflow-wrap: break-word;
+  min-height: 64px;
+  background-color: #f5f5f5;
+  color: #104456;
+  margin: 5px;
+  padding: 15px;
+  padding-right: 0;
+  font-size: 14px;
+}
+.TodoAppBox:hover {
+  background-color: #ffffff;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+}
+.TodoAppBoxTop {
+  display: flex;
+  flex-direction: row;
+  height: 48px;
+}
+.inputDiv {
+  height: 48px;
+  margin-right: 10px;
+  width: 20px;
+  padding-top: 12px;
 }
 .TodoAppBoxCheck {
   appearance: none;
-  margin: 0 10px;
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   cursor: pointer;
   border: 1px solid teal;
   border-radius: 100%;
@@ -21,44 +36,34 @@
 .TodoAppBoxCheck:checked {
   background-color: teal;
 }
-.rightSide {
-  display: flex;
-  flex-direction: column;
-  margin-left: auto;
-  margin-right: 5px;
-  height: 100%;
-}
-.TodoAppBoxDelete {
-  margin-left: auto;
-  width: 20px;
-  height: 60%;
-  background: 0;
-  border: 0;
-  color: red;
+.TaskTitle {
   font-size: 25px;
-  cursor: pointer;
-  opacity: 0;
-  float: right;
-  padding-bottom: 10px;
-}
-.TodoAppBox:hover .TodoAppBoxDelete {
-  opacity: 1;
 }
 .datePickerInput {
   background-color: rgba(0, 255, 255, 0);
-  color: rgb(0, 90, 90);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   border: none;
-  width: 70px;
   cursor: pointer;
+  color: #2089ac;
 }
 .datePickerInput:focus {
   outline: 0;
 }
-h2 {
-  font-size: 25px;
+.rightSide {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  margin-right: 5px;
+  height: 30px;
 }
-p {
-  font-size: 15px;
+.TodoAppBoxDelete {
+  margin-left: auto;
+  width: 85px;
+  height: 100%;
+  background: 0;
+  border: 0;
+  font-size: 12px;
+  cursor: pointer;
+  color: #9d9d9d;
 }

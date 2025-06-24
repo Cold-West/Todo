@@ -1,1 +1,1 @@
-export * from "./DragWrapper"
+export * from "./DragWrapper";

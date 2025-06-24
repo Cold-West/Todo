@@ -1,12 +1,19 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useRef } from "react";
 import {
   TodoAppTask,
   TodoAppHeader,
   TodoAppFooter,
   DragWrapper,
+  NavBar,
 } from "./components";
 import { todoListDefault, boardsDefault } from "./todoListDefault";
-import { BoardType, FilterType, SorterType, TaskType } from "./types";
+import {
+  BoardType,
+  checkIfBoard,
+  FilterType,
+  SorterType,
+  TaskType,
+} from "./types";
 import "./App.css";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -17,7 +24,7 @@ export function App() {
 
   const [sorters, setSorters] = useState<SorterType>(SorterType.OFF);
 
-  const [boards, setBoards] = useState(boardsDefault);
+  const [currentBoard, setCurrentBoard] = useState("1");
 
   const filteredTasks = useMemo(() => {
     if (filters === FilterType.ACTIVE) {
@@ -39,27 +46,32 @@ export function App() {
     return filteredTasks;
   }, [filteredTasks, sorters]);
 
-  const todoActiveCounter = useMemo(() => {
-    return todoTasks.filter((t) => t.check !== true).length;
-  }, [todoTasks]);
+  const changeBoadr = useCallback((board: BoardType) => {
+    setCurrentBoard(board.id);
+  }, []);
 
-  const createNewTodo = useCallback(
-    (title: string, text: string, date: Date | null) => {
-      setTodoTasks((prev) => {
-        return [
-          ...prev,
-          { title, text, id: Date.now(), check: false, date, boardID: "1" },
-        ].sort((a, b) => a.boardID.localeCompare(b.boardID));
-      });
+  const navBarCounter = useCallback(
+    (board: BoardType) => {
+      return todoTasks.filter((t) => t.boardID === board.id).length;
     },
-    []
+    [todoTasks]
   );
 
-  const addBoard = () => {
-    setBoards((prev) => {
-      return [...prev, { id: String(Date.now()), title: "test" }];
+  const createNewTodo = useCallback(() => {
+    setTodoTasks((prev) => {
+      return [
+        ...prev,
+        {
+          title: "Сделать дело",
+          text: "",
+          id: Date.now(),
+          check: false,
+          date: new Date(),
+          boardID: currentBoard,
+        },
+      ];
     });
-  };
+  }, [currentBoard]);
 
   const removeTodo = useCallback((id: number) => {
     setTodoTasks((prev) => prev.filter((t) => t.id !== id));
@@ -79,13 +91,6 @@ export function App() {
       })
     );
   }, []);
-
-  const toggleChecks = useCallback(() => {
-    if (todoActiveCounter == 0) {
-      setTodoTasks((prev) => prev.map((task) => ({ ...task, check: false })));
-    } else
-      setTodoTasks((prev) => prev.map((task) => ({ ...task, check: true })));
-  }, [todoActiveCounter]);
 
   const sortByName = useCallback((sort: SorterType) => {
     setSorters(sort);
@@ -113,72 +118,35 @@ export function App() {
     [todoTasks]
   );
 
-  const dropOnBoardHandler = useCallback(
-    (startItem: TaskType | BoardType, endItem: BoardType) => {
-      const newTodoTasks = [...todoTasks];
-      const checkIfBoard = (input: TaskType | BoardType): input is TaskType => {
-        return Object.prototype.hasOwnProperty.call(input, "boardID");
-      };
-      if (checkIfBoard(startItem)) {
-        startItem.boardID = endItem.id;
-        newTodoTasks.push(startItem);
-        const currentIndex = newTodoTasks.indexOf(startItem);
-        newTodoTasks.splice(currentIndex, 1);
-        newTodoTasks.sort((a, b) => a.boardID.localeCompare(b.boardID));
-        setTodoTasks(newTodoTasks);
-      } else {
-        const newBoards = [...boards];
-        const currentIndex = newBoards.indexOf(startItem);
-        const dropIndex = newBoards.indexOf(endItem);
-        newBoards.splice(currentIndex, 1);
-        newBoards.splice(dropIndex, 0, startItem);
-        setBoards(newBoards);
-      }
-    },
-    [todoTasks, boards]
-  );
-
   return (
     <>
-      <h1>Todos</h1>
       <div className="page">
-        <div className="TodoApp">
-          <button
-            type="button"
-            className="boardButton"
-            onClick={addBoard}
-          ></button>
-          <TodoAppHeader check={toggleChecks} create={createNewTodo} />
-
-          <div className="boardSpace">
-            <DragWrapper
-              boardData={boards}
-              renderBoards={(board, children) => (
-                <div className="board">
-                  <h1>{board.title}</h1>
-                  {children}
-                </div>
-              )}
-              taskData={visibleTasks}
-              renderTasks={(task) => (
-                <TodoAppTask
-                  remove={() => removeTodo(task.id)}
-                  onCheckClicked={() => checkClicked(task.id)}
-                  task={task}
-                  key={task.id}
-                />
-              )}
-              onDrop={dropHandler}
-              onDropBoard={dropOnBoardHandler}
-            />
-          </div>
-
-          <TodoAppFooter
-            counter={todoActiveCounter}
-            onFilterChange={setFilters}
-            onSortingChange={sortByName}
+        <NavBar
+          testClick={(board) => changeBoadr(board)}
+          currentBoard={currentBoard}
+          counter={(board) => navBarCounter(board)}
+        />
+        <div className="TaskList">
+          <DragWrapper
+            taskData={visibleTasks.filter(
+              (task) => task.boardID === currentBoard
+            )}
+            renderTasks={(task) => (
+              <TodoAppTask
+                remove={() => removeTodo(task.id)}
+                onCheckClicked={() => checkClicked(task.id)}
+                task={task}
+                key={task.id}
+              />
+            )}
+            onDrop={dropHandler}
           />
         </div>
+        <TodoAppFooter
+          onFilterChange={setFilters}
+          onSortingChange={sortByName}
+          create={createNewTodo}
+        />
       </div>
     </>
   );

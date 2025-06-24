@@ -13,29 +13,35 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
   const [startDate, setStartDate] = useState<Date | null>(task.date);
   return (
     <div className="TodoAppBox">
-      <div>
-        <input
-          type="checkbox"
-          className="TodoAppBoxCheck"
-          checked={task.check}
-          onChange={onCheckClicked}
-        />
+      <div className="TodoAppBoxTop">
+        <div className="inputDiv">
+          <input
+            type="checkbox"
+            className="TodoAppBoxCheck"
+            checked={task.check}
+            onChange={onCheckClicked}
+          />
+        </div>
+        <div>
+          <h2 className="TaskTitle">{task.title}</h2>
+          <DatePicker
+            closeOnScroll={(e) => e.target === document}
+            className="datePickerInput"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            dateFormat="MMMM d"
+          />
+        </div>
+        <div className="rightSide">
+          <button className="TodoAppBoxDelete" onClick={remove}>
+            Редактировать
+          </button>
+          <button className="TodoAppBoxDelete" onClick={remove}>
+            Удалить
+          </button>
+        </div>
       </div>
-      <span>
-        <h2>{task.title}</h2>
-        <p>{task.text}</p>
-      </span>
-      <div className="rightSide">
-        <button className="TodoAppBoxDelete" onClick={remove}>
-          ×
-        </button>
-        <DatePicker
-          closeOnScroll={(e) => e.target === document}
-          className="datePickerInput"
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-        />
-      </div>
+      {task.text}
     </div>
   );
 };
