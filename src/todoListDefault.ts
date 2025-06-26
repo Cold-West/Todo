@@ -2,7 +2,7 @@ import { TaskType } from "./types";
 
 export const todoListDefault: TaskType[] = [
   {
-    title: "Сделать дело",
+    title: "Сделать Дело",
     text: "Не забыть проверить это Еще вот то важно",
     id: 1,
     check: true,
@@ -26,7 +26,7 @@ export const todoListDefault: TaskType[] = [
     boardID: "1",
   },
   {
-    title: "Дело без описания",
+    title: "без описания",
     text: "",
     id: 4,
     check: false,
@@ -34,7 +34,7 @@ export const todoListDefault: TaskType[] = [
     boardID: "1",
   },
   {
-    title: "Сделать дело",
+    title: "Название для фильтра",
     text: "Lorem ipsum dolor sit amet adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
     id: 5,
     check: false,
@@ -42,7 +42,7 @@ export const todoListDefault: TaskType[] = [
     boardID: "1",
   },
   {
-    title: "Сделать дело",
+    title: "Текст",
     text: "Lorem ipsum dolor sit amet adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
     id: 6,
     check: false,

@@ -6,21 +6,32 @@ type TodoFooterProps = {
   onFilterChange: (filterType: FilterType) => void;
   onSortingChange: (sortingType: SorterType) => void;
   create: () => void;
+  onChange: (e) => void;
+  searchValue: string;
 };
 
 export const TodoAppFooter = (props: TodoFooterProps) => {
-  const { onFilterChange, onSortingChange, create } = props;
+  const { onFilterChange, onSortingChange, create, searchValue, onChange } =
+    props;
 
   const filterValue = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       onSortingChange(event.target.value as SorterType);
     },
-    [onSortingChange],
+    [onSortingChange]
   );
   return (
     <footer className="TodoFooter">
-      <button className="footerAddTask" onClick={() => create()}>Добавить задачу</button>
-      <input type="text" className="footerInput" placeholder="Фильтр..." />
+      <button className="footerAddTask" onClick={() => create()}>
+        Добавить задачу
+      </button>
+      <input
+        type="text"
+        className="footerInput"
+        placeholder="Фильтр..."
+        onChange={onChange}
+        value={searchValue}
+      />
       <nav className="footerFilter">
         <select className="footerSelector" onChange={filterValue}>
           <option value={SorterType.OFF} key="OFF">

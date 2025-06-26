@@ -33,3 +33,8 @@ body {
 .TaskList::-webkit-scrollbar {
   display: none;
 }
+.AppNoTasks{
+  text-align: center;
+  color: var(--Text-Color);
+  margin-top: 10px;
+}

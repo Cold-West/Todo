@@ -52,7 +52,7 @@
   text-overflow: ellipsis;
 }
 .navTitleAdd {
-  color: var(--Side-Panel-Background-Color);
+  color: var(--Idle-Color);
   font-size: 14px;
 }
 .navAddIcon {

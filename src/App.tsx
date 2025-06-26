@@ -15,7 +15,7 @@ import {
   TaskType,
 } from "./types";
 import "./App.css";
-import"./DefaultColors.css";
+import "./DefaultColors.css";
 import "react-datepicker/dist/react-datepicker.css";
 
 export function App() {
@@ -25,17 +25,28 @@ export function App() {
 
   const [sorters, setSorters] = useState<SorterType>(SorterType.OFF);
 
+  const [search, setSearch] = useState("");
+
   const [currentBoard, setCurrentBoard] = useState("1");
+
+  const searchTasks = useMemo(() => {
+    if (search) {
+      return todoTasks.filter((task) =>
+        task.title.toLowerCase().includes(search) || task.text.toLowerCase().includes(search)
+      );
+    }
+    return todoTasks;
+  }, [search, todoTasks]);
 
   const filteredTasks = useMemo(() => {
     if (filters === FilterType.ACTIVE) {
-      return todoTasks.filter((t) => t.check !== true);
+      return searchTasks.filter((t) => t.check !== true);
     }
     if (filters === FilterType.COMPLETED) {
-      return todoTasks.filter((t) => t.check == true);
+      return searchTasks.filter((t) => t.check == true);
     }
-    return todoTasks;
-  }, [filters, todoTasks]);
+    return searchTasks;
+  }, [filters, searchTasks]);
 
   const visibleTasks = useMemo(() => {
     if (sorters === SorterType.aTOb) {
@@ -128,25 +139,32 @@ export function App() {
           counter={(board) => navBarCounter(board)}
         />
         <div className="TaskList">
-          <DragWrapper
-            taskData={visibleTasks.filter(
-              (task) => task.boardID === currentBoard
-            )}
-            renderTasks={(task) => (
-              <TodoAppTask
-                remove={() => removeTodo(task.id)}
-                onCheckClicked={() => checkClicked(task.id)}
-                task={task}
-                key={task.id}
-              />
-            )}
-            onDrop={dropHandler}
-          />
+          {visibleTasks.filter((task) => task.boardID === currentBoard)
+            .length ? (
+            <DragWrapper
+              taskData={visibleTasks.filter(
+                (task) => task.boardID === currentBoard
+              )}
+              renderTasks={(task) => (
+                <TodoAppTask
+                  remove={() => removeTodo(task.id)}
+                  onCheckClicked={() => checkClicked(task.id)}
+                  task={task}
+                  key={task.id}
+                />
+              )}
+              onDrop={dropHandler}
+            />
+          ) : (
+            <h1 className="AppNoTasks">Нет задач</h1>
+          )}
           <TodoAppFooter
-          onFilterChange={setFilters}
-          onSortingChange={sortByName}
-          create={createNewTodo}
-        />
+            searchValue={search}
+            onChange={(e) => setSearch(e.target.value.toLowerCase())}
+            onFilterChange={setFilters}
+            onSortingChange={sortByName}
+            create={createNewTodo}
+          />
         </div>
       </div>
     </>
