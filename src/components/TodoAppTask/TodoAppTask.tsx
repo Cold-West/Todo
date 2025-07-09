@@ -2,6 +2,8 @@ import "./TodoAppTask.css";
 import { TaskType } from "../../types";
 import DatePicker from "react-datepicker";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
 type TodoAppTaskProps = {
   task: TaskType;
   remove: () => void;
@@ -24,8 +26,8 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
         </div>
         <div>
           <h2 className="TaskTitle">{task.title}</h2>
+          <FontAwesomeIcon icon={faClock} className="TaskDateIcon" />
           <DatePicker
-            closeOnScroll={(e) => e.target === document}
             className="datePickerInput"
             selected={startDate}
             onChange={(date) => setStartDate(date)}

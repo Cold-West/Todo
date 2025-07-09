@@ -27,6 +27,7 @@
   align-items: center;
   font-size: 14px;
   font-weight: 400;
+  gap: 10px;
 }
 .navBoard:hover {
   background: var(--Side-Panel-Hover-Color);
@@ -41,7 +42,6 @@
   line-height: 20px;
   text-align: center;
   color: var(--Main-Background-Color);
-  margin-right: 10px;
   border-radius: 4px;
   font-weight: 400;
 }

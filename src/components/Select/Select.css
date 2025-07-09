@@ -1,0 +1,75 @@
+.SelectWrapper {
+  width: 260px;
+  height: 32px;
+  background: var(--Main-Background-Color);
+  font-weight: 400;
+  font-size: 12px;
+}
+.SelectButton {
+  padding: 8px 12px;
+  width: 260px;
+  height: 32px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 4px;
+}
+.SelectButton:hover {
+  background: var(--Input-Background-Color);
+  outline: 1px solid var(--Primary-Color);
+}
+.SelectButtonActive{
+  background: var(--Input-Background-Color);
+  outline: 1px solid var(--Primary-Color);
+}
+.SelectPlaceHolder{
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+.SelectContent {
+  margin-top: 5px;
+  position: absolute;
+  background: var(--Input-Background-Color);
+  width: 260px;
+  max-height: 160px;
+  overflow-y: overlay;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+}
+.SelectContent:hover{
+  outline: 1px solid var(--Primary-Color);
+}
+.SelectContent::-webkit-scrollbar {
+  display: none;
+}
+.SelectVisible{
+  opacity: 1;
+  visibility: visible;
+}
+.SelectOption {
+  height: 32px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+.SelectOption:hover {
+  background: var(--Main-Background-Color);
+}
+.SelectIcon {
+  width: 15px;
+  min-width: 15px;
+  height: 16px;
+  border-radius: 2px;
+}
+.SelectText {
+  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

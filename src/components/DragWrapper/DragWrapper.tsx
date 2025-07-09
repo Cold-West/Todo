@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { TaskType } from "../../types";
 
 type DragWrapper = {
@@ -11,32 +11,32 @@ export const DragWrapper = (props: DragWrapper) => {
 
   const startTask = useRef<false | TaskType>(false);
 
-  const dragStartHandler = (
+  const dragStartHandler = useCallback((
     _e: React.DragEvent<HTMLDivElement>,
     task: TaskType,
   ) => {
     startTask.current = task;
-  };
+  },[]);
 
-  const dragOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragOverHandler = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const target = e.target as HTMLDivElement;
     if (target.className == "TodoAppBox") {
       target.style.boxShadow = "0 4px 3px gray";
     }
-  };
+  },[]);
 
-  const dragLeaveHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragLeaveHandler = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
     target.style.boxShadow = "none";
-  };
+  },[]);
 
-  const dragEndHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragEndHandler = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
     target.style.boxShadow = "none";
-  };
+  },[]);
 
-  const dropHandler = (
+  const dropHandler = useCallback((
     e: React.DragEvent<HTMLDivElement>,
     dropTask: TaskType,
   ) => {
@@ -52,7 +52,7 @@ export const DragWrapper = (props: DragWrapper) => {
     onDrop(startTaskValue, dropTask);
 
     startTask.current = false;
-  };
+  },[onDrop]);
 
   return (
     <>

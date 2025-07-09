@@ -1,0 +1,22 @@
+.Modal{
+    position:fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: none;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+.ModalActive{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ModalContent{
+    padding: 24px 32px;
+    background: var(--Main-Background-Color);
+    min-width: 600px;
+    min-height: 372px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+}

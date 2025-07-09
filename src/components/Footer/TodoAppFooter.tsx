@@ -22,7 +22,7 @@ export const TodoAppFooter = (props: TodoFooterProps) => {
   );
   return (
     <footer className="TodoFooter">
-      <button className="footerAddTask" onClick={() => create()}>
+      <button className="footerAddTask" onClick={create}>
         Добавить задачу
       </button>
       <input

@@ -7,8 +7,7 @@
   color: #104456;
   padding: 15px;
   font-size: 14px;
-  gap: 8px;
-  
+  gap: 4px;
 }
 .TodoAppBox:hover {
   background-color: var(--Input-Background-Color);
@@ -17,13 +16,13 @@
 .TodoAppBoxTop {
   display: flex;
   flex-direction: row;
-  height: 48px;
+  height: 54px;
+  gap: 10px;
 }
 .inputDiv {
-  height: 48px;
-  margin-right: 10px;
+  height: 54px;
   width: 20px;
-  padding-top: 12px;
+  padding-top: 17px;
 }
 .TodoAppBoxCheck {
   appearance: none;
@@ -44,10 +43,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.TaskDateIcon{
+  color: var(--Primary-Color);
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+}
 .datePickerInput {
   background-color: inherit;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   border: none;
   cursor: pointer;
   color: var(--Primary-Color);

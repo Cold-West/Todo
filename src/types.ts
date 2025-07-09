@@ -6,6 +6,14 @@ export type TaskType = {
   date: Date | null;
   boardID: string;
 };
+export type ModalTaskType = {
+  title: string;
+  text: string;
+  check: boolean;
+  date: Date | null;
+  boardID: string;
+};
+
 export type BoardType = {
   title: string;
   id: string;

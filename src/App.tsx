@@ -1,16 +1,17 @@
-import { useMemo, useState, useCallback, useRef } from "react";
+import { useMemo, useState, useCallback } from "react";
 import {
   TodoAppTask,
-  TodoAppHeader,
   TodoAppFooter,
   DragWrapper,
   NavBar,
+  Modal,
+  ModalTask,
 } from "./components";
-import { todoListDefault, boardsDefault } from "./todoListDefault";
+import { boardsDefault, todoListDefault } from "./todoListDefault";
 import {
   BoardType,
-  checkIfBoard,
   FilterType,
+  ModalTaskType,
   SorterType,
   TaskType,
 } from "./types";
@@ -21,6 +22,8 @@ import "react-datepicker/dist/react-datepicker.css";
 export function App() {
   const [todoTasks, setTodoTasks] = useState(todoListDefault);
 
+  const [boards, setBoards] = useState(boardsDefault);
+
   const [filters, setFilters] = useState<FilterType>(FilterType.ALL);
 
   const [sorters, setSorters] = useState<SorterType>(SorterType.OFF);
@@ -29,10 +32,14 @@ export function App() {
 
   const [currentBoard, setCurrentBoard] = useState("1");
 
+  const [modal, setModal] = useState(false);
+
   const searchTasks = useMemo(() => {
     if (search) {
-      return todoTasks.filter((task) =>
-        task.title.toLowerCase().includes(search) || task.text.toLowerCase().includes(search)
+      return todoTasks.filter(
+        (task) =>
+          task.title.toLowerCase().includes(search) ||
+          task.text.toLowerCase().includes(search)
       );
     }
     return todoTasks;
@@ -69,21 +76,21 @@ export function App() {
     [todoTasks]
   );
 
-  const createNewTodo = useCallback(() => {
+  const createNewTodo = useCallback((modalTask: ModalTaskType) => {
     setTodoTasks((prev) => {
       return [
         ...prev,
         {
-          title: "Сделать дело",
-          text: "",
+          title: modalTask.title,
+          text: modalTask.text,
+          check: modalTask.check,
+          date: modalTask.date,
+          boardID: modalTask.boardID,
           id: Date.now(),
-          check: false,
-          date: new Date(),
-          boardID: currentBoard,
         },
       ];
     });
-  }, [currentBoard]);
+  }, []);
 
   const removeTodo = useCallback((id: number) => {
     setTodoTasks((prev) => prev.filter((t) => t.id !== id));
@@ -133,37 +140,48 @@ export function App() {
   return (
     <>
       <div className="page">
+        <Modal visible={modal} setVisible={setModal}>
+          <ModalTask
+            create={createNewTodo}
+            setVisible={setModal}
+            boards={boards}
+          />
+        </Modal>
         <NavBar
+          boards={boards}
+          setBoards={setBoards}
           testClick={(board) => changeBoadr(board)}
           currentBoard={currentBoard}
           counter={(board) => navBarCounter(board)}
         />
-        <div className="TaskList">
-          {visibleTasks.filter((task) => task.boardID === currentBoard)
-            .length ? (
-            <DragWrapper
-              taskData={visibleTasks.filter(
-                (task) => task.boardID === currentBoard
-              )}
-              renderTasks={(task) => (
-                <TodoAppTask
-                  remove={() => removeTodo(task.id)}
-                  onCheckClicked={() => checkClicked(task.id)}
-                  task={task}
-                  key={task.id}
-                />
-              )}
-              onDrop={dropHandler}
-            />
-          ) : (
-            <h1 className="AppNoTasks">Нет задач</h1>
-          )}
+        <div className="rightPanel">
+          <div className="TaskList">
+            {visibleTasks.filter((task) => task.boardID === currentBoard)
+              .length ? (
+              <DragWrapper
+                taskData={visibleTasks.filter(
+                  (task) => task.boardID === currentBoard
+                )}
+                renderTasks={(task) => (
+                  <TodoAppTask
+                    remove={() => removeTodo(task.id)}
+                    onCheckClicked={() => checkClicked(task.id)}
+                    task={task}
+                    key={task.id}
+                  />
+                )}
+                onDrop={dropHandler}
+              />
+            ) : (
+              <h1 className="AppNoTasks">Нет задач</h1>
+            )}
+          </div>
           <TodoAppFooter
             searchValue={search}
             onChange={(e) => setSearch(e.target.value.toLowerCase())}
             onFilterChange={setFilters}
             onSortingChange={sortByName}
-            create={createNewTodo}
+            create={() => setModal(true)}
           />
         </div>
       </div>

@@ -1,26 +1,27 @@
-import { useCallback, useState } from "react";
-import { boardsDefault } from "../../todoListDefault";
+import { useCallback } from "react";
 import "./NavBar.css";
 import { BoardType } from "../../types";
 type NavBarProps = {
+  boards:BoardType[];
+  setBoards;
   testClick: (board: BoardType) => void;
   currentBoard: string;
   counter: (board: BoardType) => number;
 };
 
 export const NavBar = (props: NavBarProps) => {
-  const { testClick, currentBoard, counter } = props;
+  const { testClick, currentBoard, counter, boards, setBoards } = props;
 
-  const [boards, setBoards] = useState(boardsDefault);
+  
 
   const createNewBoard = useCallback(() => {
-    setBoards((prev) => {
+    setBoards((prev:BoardType[]) => {
       return [
         ...prev,
         { id: String(Date.now()), title: "test", color: "#104456" },
       ];
     });
-  }, []);
+  }, [setBoards]);
   return (
     <nav className="navBarLeft">
       <h1 className="navTitle">Секции Задач</h1>

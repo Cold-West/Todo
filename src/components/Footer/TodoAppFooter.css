@@ -6,8 +6,7 @@
   align-items: center;
   background-color: var(--Main-Background-Color);
   border-top: 2px solid var(--Side-Panel-Background-Color);
-  position: fixed;
-  bottom: 0;
+  margin-left: 5px;
 }
 .footerAddTask{
   height: 32px;

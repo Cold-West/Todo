@@ -1,4 +1,4 @@
-import { TaskType } from "./types";
+import { ModalTaskType, TaskType } from "./types";
 
 export const todoListDefault: TaskType[] = [
   {
@@ -97,3 +97,11 @@ export const boardsDefault = [
   { id: "3", title: "Еще длинный текст для примера обрезки", color: "#89AC7F" },
   { id: "4", title: "Новый раздел", color: "#104456" },
 ];
+
+export const INITIAL_MODALTASK_STATE: ModalTaskType = {
+    boardID: "1",
+    title: "",
+    text: "",
+    check: false,
+    date: new Date(),
+  };
