@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 type TodoAppTaskProps = {
   task: TaskType;
   remove: () => void;
@@ -13,15 +14,16 @@ type TodoAppTaskProps = {
 export const TodoAppTask = (props: TodoAppTaskProps) => {
   const { task, remove, onCheckClicked } = props;
   const [startDate, setStartDate] = useState<Date | null>(task.date);
+
+
   return (
     <div className="TodoAppBox">
       <div className="TodoAppBoxTop">
         <div className="inputDiv">
-          <input
-            type="checkbox"
-            className="TodoAppBoxCheck"
-            checked={task.check}
-            onChange={onCheckClicked}
+          <FontAwesomeIcon
+            icon={task.check ? faCircleCheck : faCircle}
+            className={`${task.check ? "FontBoxCheck" : "FontBoxUnCheck"} `}
+            onClick={onCheckClicked}
           />
         </div>
         <div>

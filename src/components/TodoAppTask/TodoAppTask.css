@@ -24,17 +24,17 @@
   width: 20px;
   padding-top: 17px;
 }
-.TodoAppBoxCheck {
-  appearance: none;
-  height: 20px;
+.FontBoxCheck{
+  color: var(--Custom-Color-2);
   width: 20px;
+  height: 20px;
   cursor: pointer;
-  border: 2px solid var(--Idle-Color);
-  border-radius: 100%;
 }
-.TodoAppBoxCheck:checked {
-  border: 2px solid var(--Custom-Color-2);
-  background-color: var(--Custom-Color-2);
+.FontBoxUnCheck{
+  color: var(--Idle-Color);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }
 .TaskTitle {
   font-size: 25px;

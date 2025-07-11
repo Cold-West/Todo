@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "./Select.css";
 import { BoardType } from "../../types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 type SelectProps = {
   selectable: BoardType[];
   onChangeId: (id:string) => void;
@@ -43,10 +45,12 @@ export const Select = (props: SelectProps) => {
           <div className="SelectPlaceHolder">
             <div className="SelectIcon" style={{ background: selectValue.color }} />
             <div className="SelectText">{selectValue.title}</div>
+            
           </div>
         ) : (
           "Выберите секцию..."
         )}
+        <FontAwesomeIcon icon={faAngleDown} className="SelectArrowIcon"/>
       </div>
         <div className={`SelectContent ${openSelect ? "SelectVisible" : ""}`}>
           {selectable.map((board) => {
@@ -62,7 +66,7 @@ export const Select = (props: SelectProps) => {
                 <div className="SelectText">{board.title}</div>
               </div>
             );
-          })}
+          })} 
         </div>
     </div>
   );

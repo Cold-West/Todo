@@ -1,9 +1,11 @@
 import { useCallback } from "react";
 import "./NavBar.css";
 import { BoardType } from "../../types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 type NavBarProps = {
   boards:BoardType[];
-  setBoards;
+  setBoards; 
   testClick: (board: BoardType) => void;
   currentBoard: string;
   counter: (board: BoardType) => number;
@@ -39,8 +41,11 @@ export const NavBar = (props: NavBarProps) => {
             )
         )}
         <div className="navBoard" onClick={createNewBoard}>
-          <div className="navAddIcon"></div>
-          <div className="navTitleAdd">Добавить список...</div>
+          <FontAwesomeIcon icon={faPlus} className="navAddIcon"/>
+          <div className="navTitleAdd">
+            
+            Добавить список...
+            </div>
         </div>
       </div>
     </nav>

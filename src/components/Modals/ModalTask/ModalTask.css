@@ -135,14 +135,6 @@
   width: 65%;
   padding-left: 12px;
 }
-.ModalTaskCheckBox{
-  appearance: none;
-  height: 20px;
-  width: 20px;
-  cursor: pointer;
-  border: 2px solid var(--Idle-Color);
-  border-radius: 100%;
-}
 .ModalTaskCheckBox:checked {
   border: 2px solid var(--Custom-Color-2);
   background-color: var(--Custom-Color-2);
@@ -150,6 +142,9 @@
 .ModalTaskButtons{
   display: flex;
   gap: 16px;
+}
+.ModalTaskButtons > *:hover{
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
 }
 .ModalTaskSave{
   width: 96px;

@@ -6,9 +6,10 @@ import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { BoardType, ModalTaskType } from "../../../types";
 import { INITIAL_MODALTASK_STATE } from "../../../todoListDefault";
 import { Select } from "../../Select";
+import { faCircle, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 type ModalTaskProps = {
   create: (modalTask: ModalTaskType) => void;
-  setVisible: (arg0: boolean) => void;
+  setVisible: (arg0: boolean) => void; //хз как тайпить сеты
   boards: BoardType[];
 };
 export const ModalTask = (props: ModalTaskProps) => {
@@ -35,7 +36,7 @@ export const ModalTask = (props: ModalTaskProps) => {
   );
 
   const onChangeDate = useCallback(
-    (Date) =>
+    (Date: Date | null) =>
       setModalTask((prev) => {
         return { ...prev, date: Date };
       }),
@@ -51,7 +52,7 @@ export const ModalTask = (props: ModalTaskProps) => {
   );
 
   const onChangeId = useCallback(
-    (id) =>
+    (id: string) =>
       setModalTask((prev) => {
         return { ...prev, boardID: id };
       }),
@@ -101,7 +102,7 @@ export const ModalTask = (props: ModalTaskProps) => {
         <div className="ModalTaskAdditional">
           <div className="ModalTaskSection">
             <p style={{ paddingLeft: "12px" }}>Секция задач</p>
-            <Select selectable={boards} onChangeId={onChangeId}/>
+            <Select selectable={boards} onChangeId={onChangeId} />
           </div>
           <div className="ModalTaskSection">
             <p style={{ paddingLeft: "12px" }}>Дата выполнения</p>
@@ -119,11 +120,10 @@ export const ModalTask = (props: ModalTaskProps) => {
       </div>
       <div className="ModalTaskFooter">
         <div className="ModalTaskCheck">
-          <input
-            type="checkbox"
-            className="ModalTaskCheckBox"
-            checked={modalTask.check}
-            onChange={onChangeCheck}
+          <FontAwesomeIcon
+            icon={modalTask.check ? faCircleCheck : faCircle}
+            className={`${modalTask.check ? "FontBoxCheck" : "FontBoxUnCheck"} `}
+            onClick={onChangeCheck}
           />
           Дело сделано
         </div>
