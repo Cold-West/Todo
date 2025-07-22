@@ -4,7 +4,6 @@ import {
   TodoAppFooter,
   DragWrapper,
   NavBar,
-  Modal,
   ModalTask,
 } from "./components";
 import { boardsDefault, todoListDefault } from "./todoListDefault";
@@ -140,13 +139,12 @@ export function App() {
   return (
     <>
       <div className="page">
-        <Modal visible={modal} setVisible={setModal}>
           <ModalTask
             create={createNewTodo}
             setVisible={setModal}
+            visible={modal}
             boards={boards}
           />
-        </Modal>
         <NavBar
           boards={boards}
           setBoards={setBoards}

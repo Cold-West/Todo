@@ -3,18 +3,19 @@ import "./ModalTask.css";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { BoardType, ModalTaskType } from "../../../types";
+import { BoardType, InputType, ModalTaskType } from "../../../types";
 import { INITIAL_MODALTASK_STATE } from "../../../todoListDefault";
-import { Select } from "../../Select";
-import { faCircle, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+import { Modal } from "./../Modal";
+import { ButtonPrimary, ButtonSecondary, CheckBox, Input, Select} from "./../../UI";
 type ModalTaskProps = {
   create: (modalTask: ModalTaskType) => void;
-  setVisible: (arg0: boolean) => void; //хз как тайпить сеты
+  setVisible: (arg0: boolean) => void;
   boards: BoardType[];
+  visible: boolean;
 };
 export const ModalTask = (props: ModalTaskProps) => {
-  const { create, setVisible, boards } = props;
-
+  const { create, setVisible, visible, boards } = props;
+  const [selectValue, setSelectValue] = useState<BoardType | null>(null);
   const [modalTask, setModalTask] = useState<ModalTaskType>(
     INITIAL_MODALTASK_STATE
   );
@@ -76,66 +77,70 @@ export const ModalTask = (props: ModalTaskProps) => {
     [create, setVisible, modalTask]
   );
 
-  return (
-    <div className="ModalTask">
-      <div className="ModalTaskBody">
-        <form onSubmit={onSubmit}>
-          <input
-            type="text"
-            placeholder="Title"
-            value={modalTask.title}
-            onChange={onChangeTitle}
-            className="ModalTaskInput ModalTaskTitle"
-          />
-        </form>
-        <div>
-          <h2 className="ModalTaskH2">Описание</h2>
-          <form onSubmit={onSubmit}>
-            <textarea
-              placeholder="text"
-              value={modalTask.text}
-              onChange={onChangeText}
-              className="ModalTaskInput ModalTaskText"
+  if (visible)
+    return (
+      <Modal setVisible={setVisible}>
+        <div className="ModalTask">
+          <div className="ModalTaskBody">
+            <Input
+              onSubmit={onSubmit}
+              value={modalTask.title}
+              onChange={onChangeTitle}
+              plaseholder="Title"
+              className="ModalTaskTitle"
             />
-          </form>
-        </div>
-        <div className="ModalTaskAdditional">
-          <div className="ModalTaskSection">
-            <p style={{ paddingLeft: "12px" }}>Секция задач</p>
-            <Select selectable={boards} onChangeId={onChangeId} />
-          </div>
-          <div className="ModalTaskSection">
-            <p style={{ paddingLeft: "12px" }}>Дата выполнения</p>
-            <div className="ModalTaskDate">
-              <FontAwesomeIcon icon={faClock} className="ModalTaskDateIcon" />
-              <DatePicker
-                className="ModalTaskDatePicker"
-                selected={modalTask.date}
-                onChange={onChangeDate}
-                dateFormat="MMMM d"
+            <div className="ModalTaskTextDiv">
+              <h2 className="ModalTaskH2">Описание</h2>
+              <Input
+                onSubmit={onSubmit}
+                value={modalTask.text}
+                onChange={onChangeText}
+                plaseholder="text"
+                className="ModalTaskText"
+                type={InputType.textarea}
               />
+            </div>
+            <div className="ModalTaskAdditional">
+              <div className="ModalTaskSection">
+                <p style={{ paddingLeft: "12px" }}>Секция задач</p>
+                <Select
+                  options={boards}
+                  onChangeId={onChangeId}
+                  value={selectValue}
+                  setValue={setSelectValue}
+                />
+              </div>
+              <div className="ModalTaskSection">
+                <p style={{ paddingLeft: "12px" }}>Дата выполнения</p>
+                <div className="ModalTaskDate">
+                  <FontAwesomeIcon
+                    icon={faClock}
+                    className="ModalTaskDateIcon"
+                  />
+                  <DatePicker
+                    className="ModalTaskDatePicker"
+                    selected={modalTask.date}
+                    onChange={onChangeDate}
+                    dateFormat="MMMM d"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="ModalTaskFooter">
+            <div className="ModalTaskCheck">
+              <CheckBox check={modalTask.check} onClick={onChangeCheck} />
+              Дело сделано
+            </div>
+            <div className="ModalTaskButtons">
+              <ButtonPrimary
+                onClick={onSubmit}
+                text="Сохранить"
+              ></ButtonPrimary>
+              <ButtonSecondary onClick={onCancel} text="Отмена" />
             </div>
           </div>
         </div>
-      </div>
-      <div className="ModalTaskFooter">
-        <div className="ModalTaskCheck">
-          <FontAwesomeIcon
-            icon={modalTask.check ? faCircleCheck : faCircle}
-            className={`${modalTask.check ? "FontBoxCheck" : "FontBoxUnCheck"} `}
-            onClick={onChangeCheck}
-          />
-          Дело сделано
-        </div>
-        <div className="ModalTaskButtons">
-          <button className="ModalTaskSave" onClick={onSubmit}>
-            Сохранить
-          </button>
-          <button className="ModalTaskCansel" onClick={onCancel}>
-            Отмена
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+      </Modal>
+    );
 };

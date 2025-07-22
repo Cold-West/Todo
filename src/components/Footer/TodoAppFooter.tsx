@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { FilterType, SorterType } from "../../types";
 import "./TodoAppFooter.css";
+import { ButtonPrimary } from "../UI";
 
 type TodoFooterProps = {
   onFilterChange: (filterType: FilterType) => void;
@@ -22,9 +23,7 @@ export const TodoAppFooter = (props: TodoFooterProps) => {
   );
   return (
     <footer className="TodoFooter">
-      <button className="footerAddTask" onClick={create}>
-        Добавить задачу
-      </button>
+      <ButtonPrimary onClick={create} text="Добавить задачу"/>
       <input
         type="text"
         className="footerInput"

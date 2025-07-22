@@ -36,3 +36,8 @@ export enum SorterType {
   bTOa = "bTOa",
   date = "date",
 }
+
+export enum InputType {
+  input = "input",
+  textarea = "textarea"
+}

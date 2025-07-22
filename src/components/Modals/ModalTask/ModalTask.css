@@ -13,41 +13,18 @@
   flex-direction: column;
   gap: 16px;
 }
-.ModalTaskInput {
-  min-height: 40px;
-  width: 100%;
-  font-weight: 400;
-  color: var(--Text-Color);
-  border: none;
-  background: var(--Main-Background-Color);
-  cursor: pointer;
-  resize: none;
-  padding: 4px 12px 4px 12px;
-}
-.ModalTaskInput:hover {
-  background: var(--Input-Background-Color);
-  outline: 1px solid var(--Primary-Color);
-  border-radius: 4px;
-}
-.ModalTaskInput:focus {
-  box-shadow: none;
-  background: var(--Input-Background-Color);
-  outline: 1px solid var(--Primary-Color);
-  border-radius: 4px;
-  color: var(--Text-Color);
-}
-.ModalTaskInput::-webkit-scrollbar {
-  display: none;
-}
 .ModalTaskTitle{
   font-size: 16px;
   font-weight: 700;
 }
-
 .ModalTaskText{
   height: 112px;
 }
-
+.ModalTaskTextDiv{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .ModalTaskH2{
   font-size: 12px;
   font-weight: 700;
@@ -142,18 +119,10 @@
 .ModalTaskButtons{
   display: flex;
   gap: 16px;
+  padding-top: 4px;
 }
 .ModalTaskButtons > *:hover{
   box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
-}
-.ModalTaskSave{
-  width: 96px;
-  text-align: center;
-  background: var(--Primary-Color);
-  border: 1px solid var(--Input-Background-Color);
-  border-radius: 5px;
-  color: var(--Input-Background-Color);
-  cursor: pointer;
 }
 .ModalTaskCansel{
   width: 77px;
