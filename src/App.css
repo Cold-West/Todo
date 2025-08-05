@@ -7,32 +7,38 @@
 }
 body {
   background-color: var(--Main-Background-Color);
+  height: 100vh;
+  width: 100vw;
 }
 #root {
   display: flex;
   flex-direction: row;
   align-items: center;
+  height: 100%;
+  width: 100%;
 }
 .page {
   display: flex;
   flex-direction: row;
   background-color: var(--Main-Background-Color);
   padding-right: 5px;
+  height: 100%;
+  width: 100%;
   max-width: 1310px;/* просто удобнее работать  */
 }
 .rightPanel{
+  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 16px 0 0 5px;
+  justify-content: space-between;
 }
 .TaskList {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  max-height: calc(100vh - 80px); /* хз как тут без vh обойтись*/
-  padding: 5px 5px 0 5px;
+  padding: 5px;
   gap: 10px;
-  overflow-y: scroll;
+  overflow-y:scroll
 }
 .TaskList::-webkit-scrollbar {
   display: none;

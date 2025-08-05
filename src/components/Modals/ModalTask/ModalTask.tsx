@@ -1,12 +1,19 @@
-import { useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import "./ModalTask.css";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { BoardType, InputType, ModalTaskType } from "../../../types";
+import { BoardType, ModalTaskType } from "../../../types";
 import { INITIAL_MODALTASK_STATE } from "../../../todoListDefault";
 import { Modal } from "./../Modal";
-import { ButtonPrimary, ButtonSecondary, CheckBox, Input, Select} from "./../../UI";
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  CheckBox,
+  Input,
+  Select,
+  Textarea,
+} from "./../../UI";
 type ModalTaskProps = {
   create: (modalTask: ModalTaskType) => void;
   setVisible: (arg0: boolean) => void;
@@ -29,7 +36,7 @@ export const ModalTask = (props: ModalTaskProps) => {
   );
 
   const onChangeText = useCallback(
-    (e) =>
+    (e: ChangeEvent<HTMLTextAreaElement>) =>
       setModalTask((prev) => {
         return { ...prev, text: e.target.value };
       }),
@@ -76,7 +83,6 @@ export const ModalTask = (props: ModalTaskProps) => {
     },
     [create, setVisible, modalTask]
   );
-
   if (visible)
     return (
       <Modal setVisible={setVisible}>
@@ -91,18 +97,16 @@ export const ModalTask = (props: ModalTaskProps) => {
             />
             <div className="ModalTaskTextDiv">
               <h2 className="ModalTaskH2">Описание</h2>
-              <Input
+              <Textarea
                 onSubmit={onSubmit}
                 value={modalTask.text}
                 onChange={onChangeText}
-                plaseholder="text"
                 className="ModalTaskText"
-                type={InputType.textarea}
               />
             </div>
             <div className="ModalTaskAdditional">
               <div className="ModalTaskSection">
-                <p style={{ paddingLeft: "12px" }}>Секция задач</p>
+                <p>Секция задач</p>
                 <Select
                   options={boards}
                   onChangeId={onChangeId}
@@ -111,7 +115,7 @@ export const ModalTask = (props: ModalTaskProps) => {
                 />
               </div>
               <div className="ModalTaskSection">
-                <p style={{ paddingLeft: "12px" }}>Дата выполнения</p>
+                <p>Дата выполнения</p>
                 <div className="ModalTaskDate">
                   <FontAwesomeIcon
                     icon={faClock}

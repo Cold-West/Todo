@@ -44,6 +44,9 @@
   width: 260px;
   gap: 4px;
 }
+.ModalTaskSection p {
+  padding-left: 12px;
+}
 .ModalTaskSelect{
   appearance: none;
   width: 225px;

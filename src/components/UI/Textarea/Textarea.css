@@ -1,14 +1,25 @@
-.UIInputForm {
+.UITextareaForm {
   display: flex;
   flex-direction: row-reverse;
   width: 100%;
 }
-.UIInputForm:hover {
+.UITextareaForm:hover {
   background: var(--Input-Background-Color);
   outline: 1px solid var(--Primary-Color);
   border-radius: 4px;
 }
-.UIInput {
+.UITextareaIcon {
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  margin-top: 14px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+.UITextareaIcon:hover {
+  color: var(--Primary-Color);
+}
+.UITextarea {
   min-height: 40px;
   width: 100%;
   font-weight: 400;
@@ -19,24 +30,13 @@
   resize: none;
   padding: 4px 34px 4px 12px;
 }
-.UIInput:focus {
+.UITextarea:focus {
   box-shadow: none;
   background: var(--Input-Background-Color);
   outline: 1px solid var(--Primary-Color);
   border-radius: 4px;
   color: var(--Text-Color);
 }
-.UIInput::-webkit-scrollbar {
+.UITextarea::-webkit-scrollbar {
   display: none;
-}
-.UIInputIcon {
-  width: 12px;
-  height: 12px;
-  position: absolute;
-  margin-top: 14px;
-  margin-right: 12px;
-  cursor: pointer;
-}
-.UIInputIcon:hover {
-  color: var(--Primary-Color);
 }

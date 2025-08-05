@@ -31,7 +31,7 @@ export function App() {
 
   const [currentBoard, setCurrentBoard] = useState("1");
 
-  const [modal, setModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const searchTasks = useMemo(() => {
     if (search) {
@@ -139,12 +139,15 @@ export function App() {
   return (
     <>
       <div className="page">
-          <ModalTask
-            create={createNewTodo}
-            setVisible={setModal}
-            visible={modal}
-            boards={boards}
-          />
+        
+        <ModalTask
+          create={createNewTodo}
+          setVisible={setModalVisible}
+          visible={modalVisible}
+          boards={boards}
+          key={`open: ${modalVisible}`}
+        />
+
         <NavBar
           boards={boards}
           setBoards={setBoards}
@@ -179,7 +182,7 @@ export function App() {
             onChange={(e) => setSearch(e.target.value.toLowerCase())}
             onFilterChange={setFilters}
             onSortingChange={sortByName}
-            create={() => setModal(true)}
+            create={() => setModalVisible(true)}
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Select.css";
-import { BoardType } from "../../types";
+import { BoardType } from "../../../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 type SelectProps = {
@@ -45,20 +45,19 @@ export const Select = (props: SelectProps) => {
         <FontAwesomeIcon icon={faAngleDown} className="SelectArrowIcon" />
       </div>
       <div className="SelectContent">
-        {options.map((board) => {
-          if (openSelect)
-            return (
+        {openSelect && options.map((board) => {
+          return (
+            <div
+              className="SelectOption"
+              onClick={() => onClickOption(board)}
+            >
               <div
-                className="SelectOption"
-                onClick={() => onClickOption(board)}
-              >
-                <div
-                  className="SelectIcon"
-                  style={{ background: board.color }}
-                />
-                <div className="SelectText">{board.title}</div>
-              </div>
-            );
+                className="SelectIcon"
+                style={{ background: board.color }}
+              />
+              <div className="SelectText">{board.title}</div>
+            </div>
+          );
         })}
       </div>
     </div>

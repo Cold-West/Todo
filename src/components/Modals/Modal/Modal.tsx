@@ -4,7 +4,7 @@ type ModalProps = {
   setVisible: (arg0: boolean) => void;
 };
 export const Modal = (props: ModalProps) => {
-  const { children, setVisible } = props;
+  const { children, setVisible} = props;
 
   return (
     <div className={"Modal"} onClick={() => setVisible(false)}>
