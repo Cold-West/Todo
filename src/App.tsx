@@ -35,8 +35,6 @@ export function App() {
 
   const [currentBoard, setCurrentBoard] = useState("1");
 
-  const [modalVisible, setModalVisible] = useState(false);
-
   const [modalValue, setModalValue] = useState<TaskType>(
     INITIAL_MODALTASK_STATE
   );
@@ -150,12 +148,10 @@ export function App() {
   );
 
   const openModal = () => {
-    setModalVisible(true);
     setModalValue(INITIAL_MODALTASK_STATE);
     setModalType("task");
   };
   const openEditModal = (task: TaskType) => {
-    setModalVisible(true);
     setModalValue(task);
     setModalType("edit");
   };
@@ -179,26 +175,26 @@ export function App() {
     );
   }, []);
 
+  const onMoldaClose =()=>{
+    setModalType("");
+  }
+
   return (
     <>
       <div className="page">
         <ModalEditTask
+          onClose={onMoldaClose}
           submit={onEditModal}
-          key={`open: ${modalVisible} edit`}
-          
-          setVisible={setModalVisible}
-          visible={modalVisible}
+          key={`edit ${modalType}`}
           boards={boards}
           value={modalValue}
           modalType={modalType}
         />
 
         <ModalTask
+          onClose={onMoldaClose}
           submit={createNewTodo}
-          key={`open: ${modalVisible} task`}
-
-          setVisible={setModalVisible}
-          visible={modalVisible}
+          key={`task ${modalType}`}
           boards={boards}
           value={modalValue}
           modalType={modalType}

@@ -15,14 +15,13 @@ import {
 } from "./../../UI";
 type ModalTaskProps = {
   submit: (modalTask: ModalTaskType) => void;
-  setVisible: (arg0: boolean) => void;
+  onClose: ()=>void;
   boards: BoardType[];
-  visible: boolean;
   value: ModalTaskType;
   modalType: string;
 };
 export const ModalTask = (props: ModalTaskProps) => {
-  const { submit, setVisible, visible, boards, value, modalType} = props;
+  const { submit, onClose , boards, value, modalType} = props;
   const [modalTask, setModalTask] = useState<ModalTaskType>(value);
   const selectBoard = boards.find((board)=> board.id === value.boardID)
   const [selectValue, setSelectValue] = useState<BoardType | undefined>(selectBoard);
@@ -67,23 +66,18 @@ export const ModalTask = (props: ModalTaskProps) => {
     []
   );
 
-  const onCancel = useCallback(() => {
-    setVisible(false);
-  }, [setVisible]);
-
   const onSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       if (modalTask.title !== "") {
         submit(modalTask);
-        setVisible(false);
       } else alert("Заголовок не может быть пустым");
     },
-    [submit, setVisible, modalTask]
+    [submit, modalTask]
   );
   if (modalType === "task")
     return (
-      <Modal setVisible={setVisible} visible={visible}>
+      <Modal onClose={onClose}>
         <div className="ModalTask">
           <div className="ModalTaskBody">
             <Input
@@ -139,7 +133,7 @@ export const ModalTask = (props: ModalTaskProps) => {
                 onClick={onSubmit}
                 text="Сохранить"
               ></ButtonPrimary>
-              <ButtonSecondary onClick={onCancel} text="Отмена" />
+              <ButtonSecondary onClick={onClose} text="Отмена" />
             </div>
           </div>
         </div>
