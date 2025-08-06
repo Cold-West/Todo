@@ -6,7 +6,7 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 type SelectProps = {
   options: BoardType[];
   onChangeId: (id: string) => void;
-  value: BoardType | null;
+  value: BoardType | undefined;
   setValue: (board: BoardType) => void;
 };
 export const Select = (props: SelectProps) => {

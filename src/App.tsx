@@ -5,12 +5,16 @@ import {
   DragWrapper,
   NavBar,
   ModalTask,
+  ModalEditTask,
 } from "./components";
-import { boardsDefault, todoListDefault } from "./todoListDefault";
+import {
+  boardsDefault,
+  INITIAL_MODALTASK_STATE,
+  todoListDefault,
+} from "./todoListDefault";
 import {
   BoardType,
   FilterType,
-  ModalTaskType,
   SorterType,
   TaskType,
 } from "./types";
@@ -32,6 +36,12 @@ export function App() {
   const [currentBoard, setCurrentBoard] = useState("1");
 
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [modalValue, setModalValue] = useState<TaskType>(
+    INITIAL_MODALTASK_STATE
+  );
+
+  const [modalType, setModalType] = useState("");
 
   const searchTasks = useMemo(() => {
     if (search) {
@@ -75,8 +85,11 @@ export function App() {
     [todoTasks]
   );
 
-  const createNewTodo = useCallback((modalTask: ModalTaskType) => {
+  const createNewTodo = useCallback((modalTask: TaskType) => {
     setTodoTasks((prev) => {
+      if (!modalTask.boardID) {
+        modalTask.boardID = "1";
+      }
       return [
         ...prev,
         {
@@ -136,16 +149,59 @@ export function App() {
     [todoTasks]
   );
 
+  const openModal = () => {
+    setModalVisible(true);
+    setModalValue(INITIAL_MODALTASK_STATE);
+    setModalType("task");
+  };
+  const openEditModal = (task: TaskType) => {
+    setModalVisible(true);
+    setModalValue(task);
+    setModalType("edit");
+  };
+
+  const onEditModal = useCallback((editedTask: TaskType) => {
+    setTodoTasks((prev) =>
+      prev.map((task) => {
+        if (task.id === editedTask.id) {
+          return {
+            title: editedTask.title,
+            text: editedTask.text,
+            check: editedTask.check,
+            date: editedTask.date,
+            boardID: editedTask.boardID,
+            id: editedTask.id,
+          };
+        }
+
+        return task;
+      })
+    );
+  }, []);
+
   return (
     <>
       <div className="page">
-        
-        <ModalTask
-          create={createNewTodo}
+        <ModalEditTask
+          submit={onEditModal}
+          key={`open: ${modalVisible} edit`}
+          
           setVisible={setModalVisible}
           visible={modalVisible}
           boards={boards}
-          key={`open: ${modalVisible}`}
+          value={modalValue}
+          modalType={modalType}
+        />
+
+        <ModalTask
+          submit={createNewTodo}
+          key={`open: ${modalVisible} task`}
+
+          setVisible={setModalVisible}
+          visible={modalVisible}
+          boards={boards}
+          value={modalValue}
+          modalType={modalType}
         />
 
         <NavBar
@@ -166,6 +222,7 @@ export function App() {
                 renderTasks={(task) => (
                   <TodoAppTask
                     remove={() => removeTodo(task.id)}
+                    onEdit={() => openEditModal(task)}
                     onCheckClicked={() => checkClicked(task.id)}
                     task={task}
                     key={task.id}
@@ -182,7 +239,7 @@ export function App() {
             onChange={(e) => setSearch(e.target.value.toLowerCase())}
             onFilterChange={setFilters}
             onSortingChange={sortByName}
-            create={() => setModalVisible(true)}
+            create={openModal}
           />
         </div>
       </div>

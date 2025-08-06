@@ -2,11 +2,12 @@ import "./Modal.css";
 type ModalProps = {
   children: JSX.Element;
   setVisible: (arg0: boolean) => void;
+  visible: boolean
 };
 export const Modal = (props: ModalProps) => {
-  const { children, setVisible} = props;
+  const { children, setVisible, visible} = props;
 
-  return (
+  if (visible) return (
     <div className={"Modal"} onClick={() => setVisible(false)}>
       <div className="ModalContent" onClick={(e) => e.stopPropagation()}>
         {children}

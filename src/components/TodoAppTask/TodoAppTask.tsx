@@ -9,10 +9,11 @@ type TodoAppTaskProps = {
   task: TaskType;
   remove: () => void;
   onCheckClicked: () => void;
+  onEdit: () => void;
 };
 
 export const TodoAppTask = (props: TodoAppTaskProps) => {
-  const { task, remove, onCheckClicked } = props;
+  const { task, remove, onCheckClicked, onEdit } = props;
   const [startDate, setStartDate] = useState<Date | null>(task.date);
 
 
@@ -33,7 +34,7 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
           />
         </div>
         <div className="rightSide">
-          <button className="TodoAppBoxDelete" onClick={remove}>
+          <button className="TodoAppBoxDelete" onClick={onEdit}>
             Редактировать
           </button>
           <button className="TodoAppBoxDelete" onClick={remove}>

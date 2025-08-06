@@ -1,9 +1,9 @@
 import { ChangeEvent, useCallback, useState } from "react";
-import "./ModalTask.css";
+import "./ModalEditTask.css";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { BoardType, ModalTaskType } from "../../../types";
+import { BoardType, TaskType } from "../../../types";
 import { Modal } from "./../Modal";
 import {
   ButtonPrimary,
@@ -14,16 +14,16 @@ import {
   Textarea,
 } from "./../../UI";
 type ModalTaskProps = {
-  submit: (modalTask: ModalTaskType) => void;
+  submit: (modalTask: TaskType) => void;
   setVisible: (arg0: boolean) => void;
   boards: BoardType[];
   visible: boolean;
-  value: ModalTaskType;
+  value: TaskType;
   modalType: string;
 };
-export const ModalTask = (props: ModalTaskProps) => {
+export const ModalEditTask = (props: ModalTaskProps) => {
   const { submit, setVisible, visible, boards, value, modalType} = props;
-  const [modalTask, setModalTask] = useState<ModalTaskType>(value);
+  const [modalTask, setModalTask] = useState<TaskType>(value);
   const selectBoard = boards.find((board)=> board.id === value.boardID)
   const [selectValue, setSelectValue] = useState<BoardType | undefined>(selectBoard);
 
@@ -81,7 +81,7 @@ export const ModalTask = (props: ModalTaskProps) => {
     },
     [submit, setVisible, modalTask]
   );
-  if (modalType === "task")
+  if (modalType === "edit")
     return (
       <Modal setVisible={setVisible} visible={visible}>
         <div className="ModalTask">

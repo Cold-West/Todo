@@ -99,7 +99,7 @@ export const boardsDefault = [
 ];
 
 export const INITIAL_MODALTASK_STATE: ModalTaskType = {
-    boardID: "1",
+    boardID: "",
     title: "",
     text: "",
     check: false,
