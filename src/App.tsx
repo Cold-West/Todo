@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, createContext } from "react";
 import {
   TodoAppTask,
   TodoAppFooter,
@@ -12,15 +12,12 @@ import {
   INITIAL_MODALTASK_STATE,
   todoListDefault,
 } from "./todoListDefault";
-import {
-  BoardType,
-  FilterType,
-  SorterType,
-  TaskType,
-} from "./types";
+import { BoardType, FilterType, SorterType, TaskType } from "./types";
 import "./App.css";
 import "./DefaultColors.css";
 import "react-datepicker/dist/react-datepicker.css";
+
+export const ModalConstext = createContext();
 
 export function App() {
   const [todoTasks, setTodoTasks] = useState(todoListDefault);
@@ -175,31 +172,30 @@ export function App() {
     );
   }, []);
 
-  const onMoldaClose =()=>{
+  const onMoldaClose = () => {
     setModalType("");
-  }
+  };
 
   return (
     <>
       <div className="page">
-        <ModalEditTask
-          onClose={onMoldaClose}
-          submit={onEditModal}
-          key={`edit ${modalType}`}
-          boards={boards}
-          value={modalValue}
-          modalType={modalType}
-        />
+        <ModalConstext.Provider value={modalType}>
+          <ModalEditTask
+            onClose={onMoldaClose}
+            submit={onEditModal}
+            key={`edit ${modalType}`}
+            boards={boards}
+            value={modalValue}
+          />
 
-        <ModalTask
-          onClose={onMoldaClose}
-          submit={createNewTodo}
-          key={`task ${modalType}`}
-          boards={boards}
-          value={modalValue}
-          modalType={modalType}
-        />
-
+          <ModalTask
+            onClose={onMoldaClose}
+            submit={createNewTodo}
+            key={`task ${modalType}`}
+            boards={boards}
+            value={modalValue}
+          />
+        </ModalConstext.Provider>
         <NavBar
           boards={boards}
           setBoards={setBoards}

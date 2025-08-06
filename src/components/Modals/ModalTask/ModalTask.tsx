@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useContext, useState } from "react";
 import "./ModalTask.css";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,15 +13,17 @@ import {
   Select,
   Textarea,
 } from "./../../UI";
+import { ModalConstext } from "../../../App";
 type ModalTaskProps = {
   submit: (modalTask: ModalTaskType) => void;
   onClose: ()=>void;
   boards: BoardType[];
   value: ModalTaskType;
-  modalType: string;
 };
 export const ModalTask = (props: ModalTaskProps) => {
-  const { submit, onClose , boards, value, modalType} = props;
+  const { submit, onClose , boards, value} = props;
+  const modalType = useContext(ModalConstext);
+
   const [modalTask, setModalTask] = useState<ModalTaskType>(value);
   const selectBoard = boards.find((board)=> board.id === value.boardID)
   const [selectValue, setSelectValue] = useState<BoardType | undefined>(selectBoard);
