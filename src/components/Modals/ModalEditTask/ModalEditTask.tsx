@@ -13,18 +13,23 @@ import {
   Select,
   Textarea,
 } from "./../../UI";
-type ModalTaskProps = {
-  submit: (modalTask: TaskType) => void;
-  onClose:()=>void;
+import { ModalProps } from "../types";
+
+export type ModalTaskEditPayload = {
   boards: BoardType[];
-  value: TaskType;
-  modalType: string;
+  task: TaskType;
+  onSubmit: (data: TaskType) => void;
 };
+
+type ModalTaskProps = ModalProps<ModalTaskEditPayload>;
+
 export const ModalEditTask = (props: ModalTaskProps) => {
-  const { submit,onClose, boards, value, modalType} = props;
-  const [modalTask, setModalTask] = useState<TaskType>(value);
-  const selectBoard = boards.find((board)=> board.id === value.boardID)
-  const [selectValue, setSelectValue] = useState<BoardType | undefined>(selectBoard);
+  const { onSubmit, onClose, boards, task } = props;
+  const [modalTask, setModalTask] = useState<TaskType>(task);
+  const selectBoard = boards.find((board) => board.id === task.boardID);
+  const [selectValue, setSelectValue] = useState<BoardType | undefined>(
+    selectBoard
+  );
 
   const onChangeTitle = useCallback(
     (e) =>
@@ -66,77 +71,75 @@ export const ModalEditTask = (props: ModalTaskProps) => {
     []
   );
 
-  const onSubmit = useCallback(
+  const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       if (modalTask.title !== "") {
-        submit(modalTask);
+        onClose();
+        onSubmit(modalTask);
       } else alert("Заголовок не может быть пустым");
     },
-    [submit, modalTask]
+    [onSubmit, modalTask, onClose]
   );
-  if (modalType === "edit")
-    return (
-      <Modal onClose={onClose}>
-        <div className="ModalTask">
-          <div className="ModalTaskBody">
-            <Input
-              onSubmit={onSubmit}
-              value={modalTask.title}
-              onChange={onChangeTitle}
-              plaseholder="Title"
-              className="ModalTaskTitle"
+
+  return (
+    <Modal onClose={onClose}>
+      <div className="ModalTask">
+        <div className="ModalTaskBody">
+          <Input
+            onSubmit={handleSubmit}
+            value={modalTask.title}
+            onChange={onChangeTitle}
+            plaseholder="Title"
+            className="ModalTaskTitle"
+          />
+          <div className="ModalTaskTextDiv">
+            <h2 className="ModalTaskH2">Описание</h2>
+            <Textarea
+              onSubmit={handleSubmit}
+              value={modalTask.text}
+              onChange={onChangeText}
+              className="ModalTaskText"
             />
-            <div className="ModalTaskTextDiv">
-              <h2 className="ModalTaskH2">Описание</h2>
-              <Textarea
-                onSubmit={onSubmit}
-                value={modalTask.text}
-                onChange={onChangeText}
-                className="ModalTaskText"
+          </div>
+          <div className="ModalTaskAdditional">
+            <div className="ModalTaskSection">
+              <p>Секция задач</p>
+              <Select
+                options={boards}
+                onChangeId={onChangeBoardId}
+                value={selectValue}
+                setValue={setSelectValue}
               />
             </div>
-            <div className="ModalTaskAdditional">
-              <div className="ModalTaskSection">
-                <p>Секция задач</p>
-                <Select
-                  options={boards}
-                  onChangeId={onChangeBoardId}
-                  value={selectValue}
-                  setValue={setSelectValue}
+            <div className="ModalTaskSection">
+              <p>Дата выполнения</p>
+              <div className="ModalTaskDate">
+                <FontAwesomeIcon icon={faClock} className="ModalTaskDateIcon" />
+                <DatePicker
+                  className="ModalTaskDatePicker"
+                  selected={modalTask.date}
+                  onChange={onChangeDate}
+                  dateFormat="MMMM d"
                 />
               </div>
-              <div className="ModalTaskSection">
-                <p>Дата выполнения</p>
-                <div className="ModalTaskDate">
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    className="ModalTaskDateIcon"
-                  />
-                  <DatePicker
-                    className="ModalTaskDatePicker"
-                    selected={modalTask.date}
-                    onChange={onChangeDate}
-                    dateFormat="MMMM d"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="ModalTaskFooter">
-            <div className="ModalTaskCheck">
-              <CheckBox check={modalTask.check} onClick={onChangeCheck} />
-              Дело сделано
-            </div>
-            <div className="ModalTaskButtons">
-              <ButtonPrimary
-                onClick={onSubmit}
-                text="Сохранить"
-              ></ButtonPrimary>
-              <ButtonSecondary onClick={onClose} text="Отмена" />
             </div>
           </div>
         </div>
-      </Modal>
-    );
+        <div className="ModalTaskFooter">
+          <div className="ModalTaskCheck">
+            <CheckBox check={modalTask.check} onClick={onChangeCheck} />
+            Дело сделано
+          </div>
+          <div className="ModalTaskButtons">
+            <ButtonPrimary
+              onClick={handleSubmit}
+              text="Сохранить"
+            ></ButtonPrimary>
+            <ButtonSecondary onClick={onClose} text="Отмена" />
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
 };

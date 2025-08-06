@@ -3,7 +3,7 @@ import "./ModalTask.css";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { BoardType, ModalTaskType } from "../../../types";
+import { BoardType, ModalTaskType, TaskType } from "../../../types";
 import { Modal } from "./../Modal";
 import {
   ButtonPrimary,
@@ -13,17 +13,21 @@ import {
   Select,
   Textarea,
 } from "./../../UI";
-type ModalTaskProps = {
-  submit: (modalTask: ModalTaskType) => void;
-  onClose: ()=>void;
-  boards: BoardType[];
-  value: ModalTaskType;
-  modalType: string;
-};
+import { INITIAL_MODALTASK_STATE } from "../../../todoListDefault";
+import { ModalProps } from "../types";
+
+
+export type ModalTaskPayload = {
+  boards: BoardType[],
+	submit: (data: TaskType) => void;
+}
+
+type ModalTaskProps = ModalProps<ModalTaskPayload>
+
 export const ModalTask = (props: ModalTaskProps) => {
-  const { submit, onClose , boards, value, modalType} = props;
-  const [modalTask, setModalTask] = useState<ModalTaskType>(value);
-  const selectBoard = boards.find((board)=> board.id === value.boardID)
+  const { submit, onClose , boards } = props;
+  const [modalTask, setModalTask] = useState<ModalTaskType>(INITIAL_MODALTASK_STATE);
+  const selectBoard = boards.find((board)=> board.id === modalTask.boardID)
   const [selectValue, setSelectValue] = useState<BoardType | undefined>(selectBoard);
 
   const onChangeTitle = useCallback(
@@ -70,13 +74,14 @@ export const ModalTask = (props: ModalTaskProps) => {
     (e: React.FormEvent) => {
       e.preventDefault();
       if (modalTask.title !== "") {
-        submit(modalTask);
+        onClose();
+        submit({ ...modalTask, id: Date.now() });
       } else alert("Заголовок не может быть пустым");
     },
-    [submit, modalTask]
+    [submit, modalTask, onClose]
   );
-  if (modalType === "task")
-    return (
+
+  return (
       <Modal onClose={onClose}>
         <div className="ModalTask">
           <div className="ModalTaskBody">

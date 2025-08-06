@@ -4,12 +4,9 @@ import {
   TodoAppFooter,
   DragWrapper,
   NavBar,
-  ModalTask,
-  ModalEditTask,
 } from "./components";
 import {
   boardsDefault,
-  INITIAL_MODALTASK_STATE,
   todoListDefault,
 } from "./todoListDefault";
 import {
@@ -21,6 +18,7 @@ import {
 import "./App.css";
 import "./DefaultColors.css";
 import "react-datepicker/dist/react-datepicker.css";
+import { useModalContext } from "./components/Modals";
 
 export function App() {
   const [todoTasks, setTodoTasks] = useState(todoListDefault);
@@ -34,12 +32,6 @@ export function App() {
   const [search, setSearch] = useState("");
 
   const [currentBoard, setCurrentBoard] = useState("1");
-
-  const [modalValue, setModalValue] = useState<TaskType>(
-    INITIAL_MODALTASK_STATE
-  );
-
-  const [modalType, setModalType] = useState("");
 
   const searchTasks = useMemo(() => {
     if (search) {
@@ -147,15 +139,6 @@ export function App() {
     [todoTasks]
   );
 
-  const openModal = () => {
-    setModalValue(INITIAL_MODALTASK_STATE);
-    setModalType("task");
-  };
-  const openEditModal = (task: TaskType) => {
-    setModalValue(task);
-    setModalType("edit");
-  };
-
   const onEditModal = useCallback((editedTask: TaskType) => {
     setTodoTasks((prev) =>
       prev.map((task) => {
@@ -175,31 +158,11 @@ export function App() {
     );
   }, []);
 
-  const onMoldaClose =()=>{
-    setModalType("");
-  }
+  const { openModal } = useModalContext()
 
   return (
     <>
       <div className="page">
-        <ModalEditTask
-          onClose={onMoldaClose}
-          submit={onEditModal}
-          key={`edit ${modalType}`}
-          boards={boards}
-          value={modalValue}
-          modalType={modalType}
-        />
-
-        <ModalTask
-          onClose={onMoldaClose}
-          submit={createNewTodo}
-          key={`task ${modalType}`}
-          boards={boards}
-          value={modalValue}
-          modalType={modalType}
-        />
-
         <NavBar
           boards={boards}
           setBoards={setBoards}
@@ -218,7 +181,7 @@ export function App() {
                 renderTasks={(task) => (
                   <TodoAppTask
                     remove={() => removeTodo(task.id)}
-                    onEdit={() => openEditModal(task)}
+                    onEdit={() => openModal({ type: 'ModalTaskEdit', payload: { boards, task, onSubmit: onEditModal } })}
                     onCheckClicked={() => checkClicked(task.id)}
                     task={task}
                     key={task.id}
@@ -235,7 +198,7 @@ export function App() {
             onChange={(e) => setSearch(e.target.value.toLowerCase())}
             onFilterChange={setFilters}
             onSortingChange={sortByName}
-            create={openModal}
+            create={() => openModal({ type: 'ModalTask', payload: { boards, submit: createNewTodo } })}
           />
         </div>
       </div>
