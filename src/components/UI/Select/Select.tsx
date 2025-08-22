@@ -1,26 +1,27 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import "./Select.css";
-import { BoardType } from "../../../types";
+import { BoardColorsType, BoardType } from "../../../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 type SelectProps = {
-  options: BoardType[];
-  onChangeId: (id: string) => void;
-  value: BoardType | undefined;
-  setValue: (board: BoardType) => void;
+  options: BoardType[] | BoardColorsType[];
+  onChangeValue: (optionValue: BoardType | BoardColorsType) => void;
+  value: BoardType | BoardColorsType | undefined;
 };
 export const Select = (props: SelectProps) => {
-  const { options, onChangeId, value, setValue } = props;
+  const { options, onChangeValue, value } = props;
   const [openSelect, setOpenSelect] = useState(false);
 
-  const onClickOption = (board: BoardType) => {
-    setValue(board);
-    setOpenSelect(false);
-    onChangeId(board.id);
-  };
-  const onOpen = () => {
+  const onClickOption = useCallback(
+    (optionValue: BoardType | BoardColorsType) => {
+      setOpenSelect(false);
+      onChangeValue(optionValue);
+    },
+    [onChangeValue]
+  );
+  const onOpen = useCallback(() => {
     setOpenSelect(!openSelect);
-  };
+  }, [openSelect]);
 
   return (
     <div className="SelectWrapper">
@@ -45,20 +46,23 @@ export const Select = (props: SelectProps) => {
         <FontAwesomeIcon icon={faAngleDown} className="SelectArrowIcon" />
       </div>
       <div className="SelectContent">
-        {openSelect && options.map((board) => {
-          return (
-            <div
-              className="SelectOption"
-              onClick={() => onClickOption(board)}
-            >
-              <div
-                className="SelectIcon"
-                style={{ background: board.color }}
-              />
-              <div className="SelectText">{board.title}</div>
-            </div>
-          );
-        })}
+        {options
+          ? openSelect &&
+            options.map((options) => {
+              return (
+                <div
+                  className="SelectOption"
+                  onClick={() => onClickOption(options)}
+                >
+                  <div
+                    className="SelectIcon"
+                    style={{ background: options.color }}
+                  />
+                  <div className="SelectText">{options.title}</div>
+                </div>
+              );
+            })
+          : null}
       </div>
     </div>
   );

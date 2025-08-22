@@ -1,6 +1,4 @@
 .SelectCloseWrapper {
-  max-width: 600px;
-  max-height: 386px;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -9,14 +7,12 @@
   margin: auto;
 }
 .SelectWrapper {
-  width: 260px;
   background: var(--Main-Background-Color);
   font-weight: 400;
   font-size: 12px;
 }
 .SelectButton {
   padding: 8px 12px;
-  width: 260px;
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;

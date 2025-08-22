@@ -6,23 +6,16 @@ export type TaskType = {
   date: Date | null;
   boardID: string;
 };
-export type ModalTaskType = {
+
+export type BoardColorsType = {
+  color: string;
   title: string;
-  text: string;
-  check: boolean;
-  date: Date | null;
-  boardID: string;
-};
+}
 
 export type BoardType = {
   title: string;
   id: string;
   color: string;
-};
-export const checkIfBoard = (
-  input: TaskType | BoardType,
-): input is TaskType => {
-  return Object.prototype.hasOwnProperty.call(input, "boardID");
 };
 export enum FilterType {
   ALL = "All",

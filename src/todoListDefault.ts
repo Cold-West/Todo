@@ -1,4 +1,4 @@
-import { ModalTaskType, TaskType } from "./types";
+import { BoardColorsType, BoardType, TaskType } from "./types";
 
 export const todoListDefault: TaskType[] = [
   {
@@ -98,10 +98,24 @@ export const boardsDefault = [
   { id: "4", title: "Новый раздел", color: "#104456" },
 ];
 
-export const INITIAL_MODALTASK_STATE: ModalTaskType = {
+export const INITIAL_MODALTASK_STATE: TaskType = {
     boardID: "",
     title: "",
     text: "",
     check: false,
     date: new Date(),
+    id: 1,
   };
+  export const INITIAL_MODALBOARD_STATE: BoardType ={
+    title:"",
+    id:"1",
+    color: "#2089AC",
+  }
+export const boardColors: BoardColorsType[] = [
+  {color: "#2089AC", title:"Голубой"},
+  {color: "#104456", title:"Синий"},
+  {color: "#B5B577", title:"Желтый"},
+  {color: "#89AC7F", title:"Зеленый"},
+  {color: "#D85B5D", title:"Красный"},
+  {color: "#977846", title:"Коричневый"},
+]

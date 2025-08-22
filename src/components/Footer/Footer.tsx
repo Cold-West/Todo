@@ -1,18 +1,18 @@
 import { useCallback } from "react";
 import { FilterType, SorterType } from "../../types";
-import "./TodoAppFooter.css";
+import "./Footer.css";
 import { ButtonPrimary } from "../UI";
 
 type TodoFooterProps = {
   onFilterChange: (filterType: FilterType) => void;
   onSortingChange: (sortingType: SorterType) => void;
-  create: () => void;
+  createTask: () => void;
   onChange: (e) => void;
   searchValue: string;
 };
 
-export const TodoAppFooter = (props: TodoFooterProps) => {
-  const { onFilterChange, onSortingChange, create, searchValue, onChange } =
+export const Footer = (props: TodoFooterProps) => {
+  const { onFilterChange, onSortingChange, createTask, searchValue, onChange } =
     props;
 
   const filterValue = useCallback(
@@ -22,8 +22,8 @@ export const TodoAppFooter = (props: TodoFooterProps) => {
     [onSortingChange]
   );
   return (
-    <footer className="TodoFooter">
-      <ButtonPrimary onClick={create} text="Добавить задачу"/>
+    <footer className="Footer">
+      <ButtonPrimary onClick={createTask} text="Добавить задачу"/>
       <input
         type="text"
         className="footerInput"

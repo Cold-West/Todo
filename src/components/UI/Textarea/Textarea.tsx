@@ -8,7 +8,6 @@ type InputProps = {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   className?: string;
-  type?: string;
 };
 export const Textarea = (props: InputProps) => {
   const { onSubmit, value, onChange, className } = props;
@@ -37,7 +36,7 @@ export const Textarea = (props: InputProps) => {
         onChange={onChange}
         className={`UITextarea ${className}`}
         ref={inputRef}
-      ></textarea>
+      />
     </form>
   );
 };

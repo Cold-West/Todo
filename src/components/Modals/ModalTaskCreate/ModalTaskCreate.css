@@ -1,6 +1,6 @@
 .ModalTask {
-  width: 536px;
   display: flex;
+  padding: 24px 32px;
   flex-direction: column;
   gap: 32px;
   color: var(--Text-Color);

@@ -17,7 +17,7 @@ body {
   height: 100%;
   width: 100%;
 }
-.page {
+.AppPage {
   display: flex;
   flex-direction: row;
   background-color: var(--Main-Background-Color);
@@ -26,21 +26,21 @@ body {
   width: 100%;
   max-width: 1310px;/* просто удобнее работать  */
 }
-.rightPanel{
+.AppRightPanel{
   width: 100%;
   display: flex;
   flex-direction: column;
   padding: 16px 0 0 5px;
   justify-content: space-between;
 }
-.TaskList {
+.AppTaskList {
   display: flex;
   flex-direction: column;
   padding: 5px;
   gap: 10px;
   overflow-y:scroll
 }
-.TaskList::-webkit-scrollbar {
+.AppTaskList::-webkit-scrollbar {
   display: none;
 }
 .AppNoTasks{

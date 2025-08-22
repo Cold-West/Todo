@@ -1,3 +1,4 @@
+import { JSX } from "react";
 import "./Modal.css";
 type ModalProps = {
   children: JSX.Element;

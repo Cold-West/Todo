@@ -1,26 +1,26 @@
-import "./TodoAppTask.css";
+import "./Task.css";
 import { TaskType } from "../../types";
 import DatePicker from "react-datepicker";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { CheckBox } from "../UI";
-type TodoAppTaskProps = {
+type TaskProps = {
   task: TaskType;
-  remove: () => void;
+  onRemove: () => void;
   onCheckClicked: () => void;
   onEdit: () => void;
 };
 
-export const TodoAppTask = (props: TodoAppTaskProps) => {
-  const { task, remove, onCheckClicked, onEdit } = props;
+export const Task = (props: TaskProps) => {
+  const { task, onRemove, onCheckClicked, onEdit } = props;
   const [startDate, setStartDate] = useState<Date | null>(task.date);
 
 
   return (
-    <div className="TodoAppBox">
-      <div className="TodoAppBoxTop">
-        <div className="inputDiv">
+    <div className="TaskBox">
+      <div className="TaskTop">
+        <div className="TaskCheck">
           <CheckBox check={task.check} onClick={onCheckClicked}/>
         </div>
         <div>
@@ -33,11 +33,11 @@ export const TodoAppTask = (props: TodoAppTaskProps) => {
             dateFormat="MMMM d"
           />
         </div>
-        <div className="rightSide">
-          <button className="TodoAppBoxDelete" onClick={onEdit}>
+        <div className="TaskRightSide">
+          <button className="TaskButton" onClick={onEdit}>
             Редактировать
           </button>
-          <button className="TodoAppBoxDelete" onClick={remove}>
+          <button className="TaskButton" onClick={onRemove}>
             Удалить
           </button>
         </div>

@@ -6,10 +6,9 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 type InputProps = {
   onSubmit: (e: React.FormEvent) => void;
   value: string;
-  onChange: (e: React.ChangeEvent) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   plaseholder: string;
   className?: string;
-  type?: string;
 };
 export const Input = (props: InputProps) => {
   const { onSubmit, value, onChange, plaseholder, className } = props;
@@ -35,7 +34,6 @@ export const Input = (props: InputProps) => {
       <input
         onFocus={onFocus}
         onBlur={onBlur}
-        type="text"
         placeholder={plaseholder}
         value={value}
         onChange={onChange}

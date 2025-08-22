@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { JSX, useCallback, useRef } from "react";
 import { TaskType } from "../../types";
 
 type DragWrapper = {

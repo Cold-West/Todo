@@ -1,0 +1,56 @@
+.ModalBorad {
+  width: 600px;
+  height: 220px;
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  color: var(--Text-Color);
+  font-size: 16px;
+  font-weight: 700;
+  gap: 32px;
+}
+.ModalBoradBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ModalBoardTitle {
+  font-size: 16px;
+  font-weight: 700;
+}
+.ModalBoardSmartListColor{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ModalBoardH1 {
+  font-size: 16px;
+  font-weight: 700;
+  padding: 8px 12px;
+}
+.ModalBoardH2 {
+  font-size: 12px;
+  font-weight: 700;
+  padding-left: 12px;
+}
+.ModalBoardSmartList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 0px;
+}
+.ModalBoardSelectBox {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+.ModalBoardEditFooter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.ModalButtons{
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}

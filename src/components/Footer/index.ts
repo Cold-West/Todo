@@ -1,1 +1,1 @@
-export * from "./TodoAppFooter";
+export * from "./Footer";

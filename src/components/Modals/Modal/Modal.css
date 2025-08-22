@@ -11,9 +11,6 @@
     align-items: center;
 }
 .ModalContent{
-    padding: 24px 32px;
     background: var(--Main-Background-Color);
-    min-width: 600px;
-    min-height: 372px;
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
 }

@@ -1,23 +1,16 @@
-import { useMemo, useState, useCallback, createContext } from "react";
+import { useMemo, useState, useCallback } from "react";
 import {
-  TodoAppTask,
-  TodoAppFooter,
+  Task,
+  Footer,
   DragWrapper,
   NavBar,
-  ModalTask,
-  ModalEditTask,
+  useModalContext,
 } from "./components";
-import {
-  boardsDefault,
-  INITIAL_MODALTASK_STATE,
-  todoListDefault,
-} from "./todoListDefault";
+import { boardColors, boardsDefault, todoListDefault } from "./todoListDefault";
 import { BoardType, FilterType, SorterType, TaskType } from "./types";
 import "./App.css";
 import "./DefaultColors.css";
 import "react-datepicker/dist/react-datepicker.css";
-
-export const ModalConstext = createContext();
 
 export function App() {
   const [todoTasks, setTodoTasks] = useState(todoListDefault);
@@ -31,12 +24,6 @@ export function App() {
   const [search, setSearch] = useState("");
 
   const [currentBoard, setCurrentBoard] = useState("1");
-
-  const [modalValue, setModalValue] = useState<TaskType>(
-    INITIAL_MODALTASK_STATE
-  );
-
-  const [modalType, setModalType] = useState("");
 
   const searchTasks = useMemo(() => {
     if (search) {
@@ -69,60 +56,11 @@ export function App() {
     return filteredTasks;
   }, [filteredTasks, sorters]);
 
-  const changeBoadr = useCallback((board: BoardType) => {
-    setCurrentBoard(board.id);
-  }, []);
-
-  const navBarCounter = useCallback(
-    (board: BoardType) => {
-      return todoTasks.filter((t) => t.boardID === board.id).length;
-    },
-    [todoTasks]
-  );
-
-  const createNewTodo = useCallback((modalTask: TaskType) => {
-    setTodoTasks((prev) => {
-      if (!modalTask.boardID) {
-        modalTask.boardID = "1";
-      }
-      return [
-        ...prev,
-        {
-          title: modalTask.title,
-          text: modalTask.text,
-          check: modalTask.check,
-          date: modalTask.date,
-          boardID: modalTask.boardID,
-          id: Date.now(),
-        },
-      ];
-    });
-  }, []);
-
-  const removeTodo = useCallback((id: number) => {
-    setTodoTasks((prev) => prev.filter((t) => t.id !== id));
-  }, []);
-
-  const checkClicked = useCallback((id: number) => {
-    setTodoTasks((prev) =>
-      prev.map((task) => {
-        if (task.id === id) {
-          return {
-            ...task,
-            check: !task.check,
-          };
-        }
-
-        return task;
-      })
-    );
-  }, []);
-
   const sortByName = useCallback((sort: SorterType) => {
     setSorters(sort);
   }, []);
 
-  const dropHandler = useCallback(
+  const DNDdropHandler = useCallback(
     (startItem: TaskType, endItem: TaskType) => {
       const newTodoTasks = [...todoTasks];
       const currentIndex = newTodoTasks.indexOf(startItem);
@@ -144,16 +82,100 @@ export function App() {
     [todoTasks]
   );
 
-  const openModal = () => {
-    setModalValue(INITIAL_MODALTASK_STATE);
-    setModalType("task");
-  };
-  const openEditModal = (task: TaskType) => {
-    setModalValue(task);
-    setModalType("edit");
-  };
+  const onBoardCreate = useCallback(
+    (modalBoard: BoardType) => {
+      setBoards((prev: BoardType[]) => {
+        return [
+          ...prev,
+          {
+            id: String(Date.now()),
+            title: modalBoard.title,
+            color: modalBoard.color,
+          },
+        ];
+      });
+    },
+    [setBoards]
+  );
 
-  const onEditModal = useCallback((editedTask: TaskType) => {
+  const onBoardEdit = useCallback((editedBoard: BoardType) => {
+    setBoards((prev) =>
+      prev.map((board) => {
+        if (board.id === editedBoard.id) {
+          return {
+            title: editedBoard.title,
+            color: editedBoard.color,
+            id: editedBoard.id,
+          };
+        }
+
+        return board;
+      })
+    );
+  }, []);
+
+  const onBoardRemove = useCallback(
+    (id: string) => {
+      setBoards((prev) => prev.filter((b) => b.id !== id));
+      if (currentBoard === id) {
+        if (boards[0].id === id) {
+          setCurrentBoard(boards[1].id);
+        } else setCurrentBoard(boards[0].id);
+      }
+    },
+    [currentBoard, boards]
+  );
+
+  const onBoardListChange = useCallback((board: BoardType) => {
+    setCurrentBoard(board.id);
+  }, []);
+
+  const navBarIconCounter = useCallback(
+    (board: BoardType) => {
+      return todoTasks.filter((t) => t.boardID === board.id).length;
+    },
+    [todoTasks]
+  );
+
+  const onTaskCheck = useCallback((id: number) => {
+    setTodoTasks((prev) =>
+      prev.map((task) => {
+        if (task.id === id) {
+          return {
+            ...task,
+            check: !task.check,
+          };
+        }
+
+        return task;
+      })
+    );
+  }, []);
+
+  const onTaskCreate = useCallback((modalTask: TaskType) => {
+    setTodoTasks((prev) => {
+      if (!modalTask.boardID) {
+        modalTask.boardID = currentBoard;
+      }
+      return [
+        ...prev,
+        {
+          title: modalTask.title,
+          text: modalTask.text,
+          check: modalTask.check,
+          date: modalTask.date,
+          boardID: modalTask.boardID,
+          id: Date.now(),
+        },
+      ];
+    });
+  }, [currentBoard]);
+
+  const onTaskRemove = useCallback((id: number) => {
+    setTodoTasks((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const onTaskEdit = useCallback((editedTask: TaskType) => {
     setTodoTasks((prev) =>
       prev.map((task) => {
         if (task.id === editedTask.id) {
@@ -172,39 +194,39 @@ export function App() {
     );
   }, []);
 
-  const onMoldaClose = () => {
-    setModalType("");
-  };
+  const { openModal } = useModalContext();
 
   return (
     <>
-      <div className="page">
-        <ModalConstext.Provider value={modalType}>
-          <ModalEditTask
-            onClose={onMoldaClose}
-            submit={onEditModal}
-            key={`edit ${modalType}`}
-            boards={boards}
-            value={modalValue}
-          />
-
-          <ModalTask
-            onClose={onMoldaClose}
-            submit={createNewTodo}
-            key={`task ${modalType}`}
-            boards={boards}
-            value={modalValue}
-          />
-        </ModalConstext.Provider>
+      <div className="AppPage">
         <NavBar
           boards={boards}
-          setBoards={setBoards}
-          testClick={(board) => changeBoadr(board)}
+          onEdit={(board) =>
+            openModal({
+              type: "ModalBoardEdit",
+              payload: {
+                onSubmit: onBoardEdit,
+                onRemove: onBoardRemove,
+                boardColors,
+                board,
+              },
+            })
+          }
+          createBoard={() =>
+            openModal({
+              type: "ModalBoardCreate",
+              payload: {
+                onSubmit: onBoardCreate,
+                boardColors,
+              },
+            })
+          }
+          boardChange={(board) => onBoardListChange(board)}
           currentBoard={currentBoard}
-          counter={(board) => navBarCounter(board)}
+          counter={(board) => navBarIconCounter(board)}
         />
-        <div className="rightPanel">
-          <div className="TaskList">
+        <div className="AppRightPanel">
+          <div className="AppTaskList">
             {visibleTasks.filter((task) => task.boardID === currentBoard)
               .length ? (
               <DragWrapper
@@ -212,26 +234,36 @@ export function App() {
                   (task) => task.boardID === currentBoard
                 )}
                 renderTasks={(task) => (
-                  <TodoAppTask
-                    remove={() => removeTodo(task.id)}
-                    onEdit={() => openEditModal(task)}
-                    onCheckClicked={() => checkClicked(task.id)}
+                  <Task
+                    onRemove={() => onTaskRemove(task.id)}
+                    onEdit={() =>
+                      openModal({
+                        type: "ModalTaskEdit",
+                        payload: { boards, task, onSubmit: onTaskEdit },
+                      })
+                    }
+                    onCheckClicked={() => onTaskCheck(task.id)}
                     task={task}
                     key={task.id}
                   />
                 )}
-                onDrop={dropHandler}
+                onDrop={DNDdropHandler}
               />
             ) : (
               <h1 className="AppNoTasks">Нет задач</h1>
             )}
           </div>
-          <TodoAppFooter
+          <Footer
             searchValue={search}
             onChange={(e) => setSearch(e.target.value.toLowerCase())}
             onFilterChange={setFilters}
             onSortingChange={sortByName}
-            create={openModal}
+            createTask={() =>
+              openModal({
+                type: "ModalTaskCreate",
+                payload: { boards, currentBoard, onSubmit: onTaskCreate },
+              })
+            }
           />
         </div>
       </div>
