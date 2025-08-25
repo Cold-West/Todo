@@ -65,7 +65,7 @@ export const ModalBoardEdit = (props: ModalBoardEditProps) => {
               options={boardColors}
               onChangeValue={onColorChange}
               value={selectValue}
-            ></Select>
+            />
           </div>
         </div>
         <div className="ModalBoardEditFooter">
