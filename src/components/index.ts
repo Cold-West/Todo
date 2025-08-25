@@ -1,4 +1,3 @@
-export * from "./Task";
 export * from "./Footer";
 export * from "./DragWrapper";
 export * from "./NavBar";
