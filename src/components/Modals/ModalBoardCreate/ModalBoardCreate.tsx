@@ -16,9 +16,7 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
   const [modalBoard, setModalBoard] = useState<BoardType>(
     INITIAL_MODALBOARD_STATE
   );
-  const [selectValue, setSelectValue] = useState<BoardColorsType | undefined>(
-    
-  );
+  const [selectValue, setSelectValue] = useState<BoardColorsType | undefined>();
 
   const onModalSubmit = useCallback(
     (e: React.FormEvent) => {
@@ -38,12 +36,12 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
     []
   );
 
-  const onColorChange = useCallback((boardColor:BoardColorsType)=>{
+  const onColorChange = useCallback((boardColor: BoardColorsType) => {
     setSelectValue(boardColor);
-    setModalBoard((prev)=>{
-      return {...prev, color: boardColor.color}
-    })
-  },[])
+    setModalBoard((prev) => {
+      return { ...prev, color: boardColor.color };
+    });
+  }, []);
   return (
     <Modal onClose={onClose}>
       <div className="ModalBorad">
@@ -57,7 +55,11 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
           ></Input>
           <div className="ModalBoardSmartListColor">
             <h2 className="ModalBoardH2">Цвет умного листа</h2>
-            <Select options={boardColors} onChangeValue={onColorChange} value={selectValue}></Select>
+            <Select
+              options={boardColors}
+              onChangeValue={onColorChange}
+              value={selectValue}
+            ></Select>
           </div>
         </div>
         <div className="ModalBoardFooter">

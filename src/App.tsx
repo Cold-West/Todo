@@ -1,11 +1,5 @@
 import { useMemo, useState, useCallback } from "react";
-import {
-  Task,
-  Footer,
-  DragWrapper,
-  NavBar,
-  useModalContext,
-} from "./components";
+import { Footer, NavBar, useModalContext, TaskList } from "./components";
 import { boardColors, boardsDefault, todoListDefault } from "./todoListDefault";
 import { BoardType, FilterType, SorterType, TaskType } from "./types";
 import "./App.css";
@@ -132,9 +126,31 @@ export function App() {
 
   const navBarIconCounter = useCallback(
     (board: BoardType) => {
-      return todoTasks.filter((t) => t.boardID === board.id).length;
+      return visibleTasks.filter((t) => t.boardID === board.id).length;
     },
-    [todoTasks]
+    [visibleTasks]
+  );
+
+  const onTaskCreate = useCallback(
+    (modalTask: TaskType) => {
+      setTodoTasks((prev) => {
+        if (!modalTask.boardID) {
+          modalTask.boardID = currentBoard;
+        }
+        return [
+          ...prev,
+          {
+            title: modalTask.title,
+            text: modalTask.text,
+            check: modalTask.check,
+            date: modalTask.date,
+            boardID: modalTask.boardID,
+            id: Date.now(),
+          },
+        ];
+      });
+    },
+    [currentBoard]
   );
 
   const onTaskCheck = useCallback((id: number) => {
@@ -152,24 +168,20 @@ export function App() {
     );
   }, []);
 
-  const onTaskCreate = useCallback((modalTask: TaskType) => {
-    setTodoTasks((prev) => {
-      if (!modalTask.boardID) {
-        modalTask.boardID = currentBoard;
-      }
-      return [
-        ...prev,
-        {
-          title: modalTask.title,
-          text: modalTask.text,
-          check: modalTask.check,
-          date: modalTask.date,
-          boardID: modalTask.boardID,
-          id: Date.now(),
-        },
-      ];
-    });
-  }, [currentBoard]);
+  const onTaskDateChange = useCallback((Date: Date | null, id: number) => {
+    setTodoTasks((prev) =>
+      prev.map((task) => {
+        if (task.id === id) {
+          return {
+            ...task,
+            date: Date,
+          };
+        }
+
+        return task;
+      })
+    );
+  }, []);
 
   const onTaskRemove = useCallback((id: number) => {
     setTodoTasks((prev) => prev.filter((t) => t.id !== id));
@@ -226,33 +238,20 @@ export function App() {
           counter={(board) => navBarIconCounter(board)}
         />
         <div className="AppRightPanel">
-          <div className="AppTaskList">
-            {visibleTasks.filter((task) => task.boardID === currentBoard)
-              .length ? (
-              <DragWrapper
-                taskData={visibleTasks.filter(
-                  (task) => task.boardID === currentBoard
-                )}
-                renderTasks={(task) => (
-                  <Task
-                    onRemove={() => onTaskRemove(task.id)}
-                    onEdit={() =>
-                      openModal({
-                        type: "ModalTaskEdit",
-                        payload: { boards, task, onSubmit: onTaskEdit },
-                      })
-                    }
-                    onCheckClicked={() => onTaskCheck(task.id)}
-                    task={task}
-                    key={task.id}
-                  />
-                )}
-                onDrop={DNDdropHandler}
-              />
-            ) : (
-              <h1 className="AppNoTasks">Нет задач</h1>
-            )}
-          </div>
+          <TaskList
+            visibleTasks={visibleTasks}
+            currentBoard={currentBoard}
+            onRemove={(id: number) => onTaskRemove(id)}
+            onCheckClicked={(id: number) => onTaskCheck(id)}
+            onDateChange={(date: Date | null, id) => onTaskDateChange(date, id)}
+            onDrop={DNDdropHandler}
+            onEdit={(task: TaskType) =>
+              openModal({
+                type: "ModalTaskEdit",
+                payload: { boards, task, onSubmit: onTaskEdit },
+              })
+            }
+          />
           <Footer
             searchValue={search}
             onChange={(e) => setSearch(e.target.value.toLowerCase())}

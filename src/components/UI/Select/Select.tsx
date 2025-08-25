@@ -1,19 +1,22 @@
 import { useCallback, useState } from "react";
 import "./Select.css";
-import { BoardColorsType, BoardType } from "../../../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-type SelectProps = {
-  options: BoardType[] | BoardColorsType[];
-  onChangeValue: (optionValue: BoardType | BoardColorsType) => void;
-  value: BoardType | BoardColorsType | undefined;
+interface TValue {
+  color: string;
+  title: string;
+}
+type SelectProps<T> = {
+  options: T[];
+  onChangeValue: (optionValue: T) => void;
+  value: T | undefined;
 };
-export const Select = (props: SelectProps) => {
+export const Select = <T extends TValue, >(props: SelectProps<T>) => {
   const { options, onChangeValue, value } = props;
   const [openSelect, setOpenSelect] = useState(false);
 
   const onClickOption = useCallback(
-    (optionValue: BoardType | BoardColorsType) => {
+    (optionValue: T) => {
       setOpenSelect(false);
       onChangeValue(optionValue);
     },
@@ -41,7 +44,7 @@ export const Select = (props: SelectProps) => {
             <div className="SelectText">{value.title}</div>
           </div>
         ) : (
-          "Выберите секцию..."
+          "Выберите цвет..."
         )}
         <FontAwesomeIcon icon={faAngleDown} className="SelectArrowIcon" />
       </div>

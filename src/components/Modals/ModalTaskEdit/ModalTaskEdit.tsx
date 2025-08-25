@@ -63,7 +63,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
     [modalTask.check]
   );
 
-  const onChangeBoardId = useCallback((board: BoardType) => {
+  const onChangeBoardId = useCallback((board: BoardType ) => {
     setSelectValue(board);
     setModalTask((prev) => {
       return { ...prev, boardID: board.id };

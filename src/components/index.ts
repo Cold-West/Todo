@@ -5,3 +5,4 @@ export * from "./NavBar";
 export * from "./Modals";
 export * from "./UI"
 export * from "./Modals/ModalContext"
+export * from "./TaskList"

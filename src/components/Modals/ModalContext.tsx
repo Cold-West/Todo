@@ -51,7 +51,7 @@ export const ModalContextProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <ModalContext.Provider value={{ openModal }}>
+    <ModalContext value={{ openModal }}>
       {modalState?.type === "ModalTaskCreate" && (
         <ModalTaskCreate {...modalState.payload} {...commonProps} />
       )}
@@ -65,6 +65,6 @@ export const ModalContextProvider = ({ children }: { children: ReactNode }) => {
         <ModalBoardEdit {...modalState.payload} {...commonProps} />
       )}
       {children}
-    </ModalContext.Provider>
+    </ModalContext>
   );
 };

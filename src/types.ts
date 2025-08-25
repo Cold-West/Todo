@@ -10,13 +10,14 @@ export type TaskType = {
 export type BoardColorsType = {
   color: string;
   title: string;
-}
+};
 
 export type BoardType = {
   title: string;
   id: string;
   color: string;
 };
+
 export enum FilterType {
   ALL = "All",
   ACTIVE = "Active",
@@ -32,5 +33,5 @@ export enum SorterType {
 
 export enum InputType {
   input = "input",
-  textarea = "textarea"
+  textarea = "textarea",
 }
