@@ -5,26 +5,23 @@ import { CheckBox } from "../UI";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 import "./TaskList.css"
+import { useAppDispatch } from "../../app/hooks";
+import { onTaskCheck, onTaskDateChange, onTaskRemove } from "../../redux/taskList/taskListSlice";
 
 type TaskListProps = {
   visibleTasks: TaskType[];
   currentBoard: string;
-  onRemove: (id: number) => void;
-  onCheckClicked: (id: number) => void;
   onEdit: (task: TaskType) => void;
   onDrop: (startItem: TaskType, endItem: TaskType) => void;
-  onDateChange: (date: Date | null, id: number) => void;
 };
 export const TaskList = (props: TaskListProps) => {
   const {
     visibleTasks,
     currentBoard,
-    onRemove,
-    onCheckClicked,
     onEdit,
     onDrop,
-    onDateChange,
   } = props;
+  const dispatch = useAppDispatch();
   return (
     <div className="AppTaskList">
       {visibleTasks.filter((task) => task.boardID === currentBoard).length ? (
@@ -38,7 +35,7 @@ export const TaskList = (props: TaskListProps) => {
                 <div className="TaskCheck">
                   <CheckBox
                     check={task.check}
-                    onClick={() => onCheckClicked(task.id)}
+                    onClick={() => dispatch(onTaskCheck(task.id))}
                   />
                 </div>
                 <div>
@@ -47,7 +44,7 @@ export const TaskList = (props: TaskListProps) => {
                   <DatePicker
                     className="datePickerInput"
                     selected={task.date}
-                    onChange={(date)=>onDateChange(date, task.id)}
+                    onChange={(date)=>dispatch(onTaskDateChange(date, task.id))}
                     dateFormat="MMMM d"
                   />
                 </div>
@@ -57,7 +54,7 @@ export const TaskList = (props: TaskListProps) => {
                   </button>
                   <button
                     className="TaskButton"
-                    onClick={() => onRemove(task.id)}
+                    onClick={() => dispatch(onTaskRemove(task.id))}
                   >
                     Удалить
                   </button>

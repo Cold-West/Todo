@@ -8,22 +8,24 @@ import { Modal } from "../Modal";
 import { Button, CheckBox, Input, Select } from "../../UI";
 import { ModalProps } from "../types";
 import { INITIAL_MODALTASK_STATE } from "../../../todoListDefault";
+import { useAppDispatch } from "../../../app/hooks";
+import { onTaskCreate } from "../../../redux/taskList/taskListSlice";
 
 export type ModalTaskCreatePayload = {
   boards: BoardType[];
-  onSubmit: (data: TaskType) => void;
-  currentBoard: string;
+  currentBoard: string
 };
 
 type ModalTaskCreateProps = ModalProps<ModalTaskCreatePayload>;
 
 export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
-  const { onSubmit, onClose, boards, currentBoard } = props;
-  const [modalTask, setModalTask] = useState<TaskType>(INITIAL_MODALTASK_STATE);
-  const selectBoard = boards.find((board) => board.id === currentBoard);
+  const { onClose, boards, currentBoard } = props;
+  const [modalTask, setModalTask] = useState<TaskType>({...INITIAL_MODALTASK_STATE, boardID:currentBoard});
+  const selectBoard = boards.find((board) => board.id === modalTask.boardID);
   const [selectValue, setSelectValue] = useState<BoardType | undefined>(
     selectBoard
   );
+  const dispatch = useAppDispatch();
 
   const onChangeTitle = useCallback(
     (Title: string) =>
@@ -69,10 +71,10 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
       e.preventDefault();
       if (modalTask.title !== "") {
         onClose();
-        onSubmit(modalTask);
+        dispatch(onTaskCreate(modalTask));
       } else alert("Заголовок не может быть пустым");
     },
-    [onSubmit, onClose, modalTask]
+    [ onClose, modalTask, dispatch]
   );
   return (
     <Modal onClose={onClose}>

@@ -7,22 +7,24 @@ import { BoardType, TaskType } from "../../../types";
 import { Modal } from "../Modal";
 import { Button, CheckBox, Input, Select } from "../../UI";
 import { ModalProps } from "../types";
+import { useAppDispatch } from "../../../app/hooks";
+import { onTaskEdit } from "../../../redux/taskList/taskListSlice";
 
 export type ModalTaskEditPayload = {
   boards: BoardType[];
   task: TaskType;
-  onSubmit: (data: TaskType) => void;
 };
 type ModalTaskEditProps = ModalProps<ModalTaskEditPayload>;
 
 export const ModalTaskEdit = (props: ModalTaskEditProps) => {
-  const { onSubmit, onClose, boards, task } = props;
+  const { onClose, boards, task } = props;
 
   const [modalTask, setModalTask] = useState<TaskType>(task);
   const selectBoard = boards.find((board) => board.id === task.boardID);
   const [selectValue, setSelectValue] = useState<BoardType | undefined>(
     selectBoard
   );
+   const dispatch = useAppDispatch();
 
   const onChangeTitle = useCallback(
     (Title: string) =>
@@ -68,10 +70,10 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       e.preventDefault();
       if (modalTask.title !== "") {
         onClose();
-        onSubmit(modalTask);
+        dispatch(onTaskEdit(modalTask));
       } else alert("Заголовок не может быть пустым");
     },
-    [onSubmit, modalTask, onClose]
+    [dispatch, modalTask, onClose]
   );
   return (
     <Modal onClose={onClose}>
