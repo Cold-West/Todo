@@ -1,0 +1,55 @@
+.Footer {
+  min-height: 64px;
+  width: calc(100% - 8px);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--Main-Background-Color);
+  border-top: 2px solid var(--Side-Panel-Background-Color);
+  margin: 0 4px;
+  padding-right: 5px;
+}
+.footerAddTask:hover {
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+}
+.footerAddTask:active{
+  background-color: var(--Text-Color);
+}
+.footerInput {
+  width: 255px;
+  height: 32px;
+  padding-left: 15px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--Idle-Color);
+  border: 1px solid var(--Idle-Color);
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: auto;
+}
+.footerInput:hover {
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+}
+.footerInput:focus {
+  box-shadow: none;
+  outline: 0;
+  border: 2px solid var(--Primary-Color);
+  padding-left: 14px;
+  color: var(--Text-Color);
+}
+.footerFilter {
+  margin-left: 10px;
+  margin-right: 15px;
+}
+.footerSelector {
+  background-color: rgba(0, 200, 200, 0.1);
+  color: teal;
+  border: none;
+}
+.footerNavButton {
+  color: teal;
+  border: 0;
+  background: 0;
+  margin-left: 10px;
+  cursor: pointer;
+}

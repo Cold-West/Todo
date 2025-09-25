@@ -1,0 +1,88 @@
+.navLeft {
+  height: 100vh;
+  min-width: 300px;
+  background-color: var(--Side-Panel-Background-Color);
+  overflow-y: scroll;
+  padding-top: 10px;
+}
+.navLeft::-webkit-scrollbar {
+  display: none;
+}
+.navTitle {
+  padding-left: 16px;
+  padding-top: 16px;
+  color: var(--Text-Color);
+  font-size: 20px;
+}
+.navSection {
+  margin-top: 8px;
+}
+.navBoard {
+  display: flex;
+  padding: 8px 16px;
+  height: 40px;
+  cursor: pointer;
+  color: var(--Text-Color);
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  justify-content: space-between;
+  gap: 4px;
+}
+.navBoard:hover {
+  background: var(--Side-Panel-Hover-Color);
+}
+.navActive {
+  background: var(--Main-Background-Color);
+  font-weight: 700;
+}
+.navBoardBox {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+.navSectionIcon {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  color: var(--Main-Background-Color);
+  border-radius: 4px;
+  font-weight: 400;
+}
+.navBoardTitle {
+  max-width: 235px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.navBoard:hover .navBoardTitle {
+  max-width: 215px;
+}
+.navModalEditIcon {
+  opacity: 0;
+  width: 12px;
+  height: 12px;
+  color: var(--Idle-Color);
+}
+.navBoard:hover .navModalEditIcon {
+  opacity: 1;
+}
+.navAdd{
+  display: flex;
+  flex-direction: row;
+  justify-content:left;
+  gap: 12px;
+}
+.navTitleAdd {
+  color: var(--Idle-Color);
+  font-size: 14px;
+}
+.navAddIcon {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  color: var(--Idle-Color);
+  border-radius: 4px;
+}

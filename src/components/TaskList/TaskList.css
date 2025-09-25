@@ -1,0 +1,75 @@
+.TaskBox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 64px;
+  background-color: var(--Main-Background-Color);
+  color: #104456;
+  padding: 15px;
+  font-size: 14px;
+  gap: 4px;
+}
+.TaskBox:hover {
+  background-color: var(--Input-Background-Color);
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+}
+.TaskTop {
+  display: flex;
+  flex-direction: row;
+  height: 54px;
+  gap: 10px;
+}
+.TaskCheck {
+  height: 54px;
+  width: 20px;
+  padding-top: 17px;
+}
+.TaskTitle {
+  font-size: 25px;
+  max-width: 600px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.TaskDateIcon{
+  color: var(--Primary-Color);
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+}
+.datePickerInput {
+  background-color: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  border: none;
+  cursor: pointer;
+  color: var(--Primary-Color);
+}
+.datePickerInput:focus {
+  outline: 0;
+}
+.TaskRightSide {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  height: 30px;
+  gap: 16px;
+}
+.TaskButton {
+  margin-left: auto;
+  width: fit-content;
+  height: 100%;
+  background: 0;
+  border: 0;
+  font-size: 12px;
+  cursor: pointer;
+  color: #9d9d9d;
+}
+.TaskText {
+  overflow: hidden;
+  padding-right: 10px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}

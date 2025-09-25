@@ -1,0 +1,136 @@
+.ModalTask {
+  display: flex;
+  padding: 24px 32px;
+  flex-direction: column;
+  gap: 32px;
+  color: var(--Text-Color);
+  font-size: 16px;
+  font-weight: 700;
+}
+.ModalTaskBody{
+  min-height: 270px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ModalTaskTitle{
+  font-size: 16px;
+  font-weight: 700;
+}
+.ModalTaskText{
+  height: 112px;
+}
+.ModalTaskTextDiv{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ModalTaskH2{
+  font-size: 12px;
+  font-weight: 700;
+  padding-left: 12px;
+}
+.ModalTaskAdditional{
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  width: 536px;
+  height: 52px;
+  font-size: 12px;
+}
+.ModalTaskSection{
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  gap: 4px;
+}
+.ModalTaskSection p {
+  padding-left: 12px;
+}
+.ModalTaskSelect{
+  appearance: none;
+  width: 225px;
+  color: var(--Text-Color);
+  padding: 2px;
+}
+.ModalTaskSelect:focus{
+  outline: 2px solid var(--Primary-Color);
+}
+.ModalTaskOption{
+  width: 250px;
+  color: var(--Text-Color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ModalTest{
+  display: flex;
+  flex-direction: row;
+  vertical-align: middle;
+  text-align: center;
+}
+.ModalTaskDate{
+  height: 32px;
+  width: 260px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+}
+.ModalTaskDate:hover{
+  background: var(--Input-Background-Color);
+  outline: 1px solid var(--Primary-Color);
+  border-radius: 4px;
+}
+.ModalTaskDateIcon{
+  color: var(--Primary-Color);
+}
+.ModalTaskDatePicker {
+  width: 232px;
+  height: 32px;
+  background-color: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--Primary-Color);
+}
+.ModalTaskDatePicker:focus{
+  outline: 0;
+}
+.ModalTaskFooter{
+  display: flex;
+  flex-direction: row;
+  gap:10px;
+}
+.ModalTaskCheck{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  color: var(--Custom-Color-2);
+  height: 36px;
+  width: 65%;
+  padding-left: 12px;
+}
+.ModalTaskCheckBox:checked {
+  border: 2px solid var(--Custom-Color-2);
+  background-color: var(--Custom-Color-2);
+}
+.ModalTaskButtons{
+  display: flex;
+  gap: 16px;
+  padding-top: 4px;
+}
+.ModalTaskButtons > *:hover{
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+}
+.ModalTaskCansel{
+  width: 77px;
+  border: 1px solid var(--Text-Color);
+  border-radius: 5px;
+  color: var(--Text-Color);
+  cursor: pointer;
+}

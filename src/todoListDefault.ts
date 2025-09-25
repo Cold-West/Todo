@@ -1,10 +1,121 @@
-import { TaskType } from "./types";
+import { BoardColorsType, BoardType, TaskType } from "./types";
 
 export const todoListDefault: TaskType[] = [
-  { title: "1", text: "aaaa", id: 1, check: true, date: new Date() },
-  { title: "2", text: "bbbb", id: 2, check: true, date: new Date() },
-  { title: "3", text: "cccc", id: 3, check: true, date: new Date() },
-  { title: "4", text: "aaaa", id: 4, check: false, date: new Date() },
-  { title: "5", text: "bbbb", id: 5, check: false, date: new Date() },
-  { title: "6", text: "cccc", id: 6, check: false, date: new Date() },
+  {
+    title: "Сделать Дело",
+    text: "Не забыть проверить это Еще вот то важно",
+    id: 1,
+    check: true,
+    date: new Date(),
+    boardID: "1",
+  },
+  {
+    title: "Сделать дело (:hover)",
+    text: "Lorem ipsum dolor sit amet adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
+    id: 2,
+    check: true,
+    date: new Date(),
+    boardID: "1",
+  },
+  {
+    title: "Сделать дело",
+    text: "Маленькое описание",
+    id: 3,
+    check: true,
+    date: new Date(),
+    boardID: "1",
+  },
+  {
+    title: "без описания",
+    text: "",
+    id: 4,
+    check: false,
+    date: new Date(),
+    boardID: "1",
+  },
+  {
+    title: "Название для фильтра",
+    text: "Lorem ipsum dolor sit amet adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
+    id: 5,
+    check: false,
+    date: new Date(),
+    boardID: "1",
+  },
+  {
+    title: "Текст",
+    text: "Lorem ipsum dolor sit amet adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
+    id: 6,
+    check: false,
+    date: new Date(),
+    boardID: "1",
+  },
+  {
+    title: "Сделать дело",
+    text: "Lorem ipsum dolor sit amet adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
+    id: 7,
+    check: false,
+    date: new Date(),
+    boardID: "1",
+  },
+  {
+    title: "Сделать дело",
+    text: "Lorem ipsum dolor sit amet adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
+    id: 8,
+    check: false,
+    date: new Date(),
+    boardID: "1",
+  },
+  {
+    title: "Сделать дело",
+    text: "Lorem ipsum dolor sit amet adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
+    id: 9,
+    check: false,
+    date: new Date(),
+    boardID: "1",
+  },
+  {
+    title: "5",
+    text: "bbbb",
+    id: 10,
+    check: false,
+    date: new Date(),
+    boardID: "2",
+  },
+  {
+    title: "6",
+    text: "cccc",
+    id: 11,
+    check: false,
+    date: new Date(),
+    boardID: "2",
+  },
 ];
+
+export const boardsDefault = [
+  { id: "1", title: "Задачи для души", color: "#2089AC" },
+  { id: "2", title: "Трудные, тяжелые и сложные задачи", color: "#D85B5D" },
+  { id: "3", title: "Еще длинный текст для примера обрезки", color: "#89AC7F" },
+  { id: "4", title: "Новый раздел", color: "#104456" },
+];
+
+export const INITIAL_MODALTASK_STATE: TaskType = {
+    boardID: "",
+    title: "",
+    text: "",
+    check: false,
+    date: new Date(),
+    id: 1,
+  };
+  export const INITIAL_MODALBOARD_STATE: BoardType ={
+    title:"",
+    id:"1",
+    color: "#2089AC",
+  }
+export const boardColors: BoardColorsType[] = [
+  {color: "#2089AC", title:"Голубой"},
+  {color: "#104456", title:"Синий"},
+  {color: "#B5B577", title:"Желтый"},
+  {color: "#89AC7F", title:"Зеленый"},
+  {color: "#D85B5D", title:"Красный"},
+  {color: "#977846", title:"Коричневый"},
+]

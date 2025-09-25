@@ -1,0 +1,12 @@
+.UICheckedBox {
+  color: var(--Custom-Color-2);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.UIUnCheckedBox {
+  color: var(--Idle-Color);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
