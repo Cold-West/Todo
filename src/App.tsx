@@ -1,13 +1,14 @@
 import { useMemo, useState, useCallback } from "react";
 import { Footer, NavBar, useModalContext, TaskList } from "./components";
-import { boardColors, boardsDefault, todoListDefault } from "./todoListDefault";
+import { boardColors, boardsDefault } from "./todoListDefault";
 import { BoardType, FilterType, SorterType, TaskType } from "./types";
 import "./App.css";
 import "./DefaultColors.css";
 import "react-datepicker/dist/react-datepicker.css";
+import { useAppSelector } from "./app/hooks";
 
 export function App() {
-  const [todoTasks, setTodoTasks] = useState(todoListDefault);
+  const todoTasks = useAppSelector((state)=> state.Tasks.value)
 
   const [boards, setBoards] = useState(boardsDefault);
 
@@ -131,81 +132,6 @@ export function App() {
     [visibleTasks]
   );
 
-  const onTaskCreate = useCallback(
-    (modalTask: TaskType) => {
-      setTodoTasks((prev) => {
-        if (!modalTask.boardID) {
-          modalTask.boardID = currentBoard;
-        }
-        return [
-          ...prev,
-          {
-            title: modalTask.title,
-            text: modalTask.text,
-            check: modalTask.check,
-            date: modalTask.date,
-            boardID: modalTask.boardID,
-            id: Date.now(),
-          },
-        ];
-      });
-    },
-    [currentBoard]
-  );
-
-  const onTaskCheck = useCallback((id: number) => {
-    setTodoTasks((prev) =>
-      prev.map((task) => {
-        if (task.id === id) {
-          return {
-            ...task,
-            check: !task.check,
-          };
-        }
-
-        return task;
-      })
-    );
-  }, []);
-
-  const onTaskDateChange = useCallback((Date: Date | null, id: number) => {
-    setTodoTasks((prev) =>
-      prev.map((task) => {
-        if (task.id === id) {
-          return {
-            ...task,
-            date: Date,
-          };
-        }
-
-        return task;
-      })
-    );
-  }, []);
-
-  const onTaskRemove = useCallback((id: number) => {
-    setTodoTasks((prev) => prev.filter((t) => t.id !== id));
-  }, []);
-
-  const onTaskEdit = useCallback((editedTask: TaskType) => {
-    setTodoTasks((prev) =>
-      prev.map((task) => {
-        if (task.id === editedTask.id) {
-          return {
-            title: editedTask.title,
-            text: editedTask.text,
-            check: editedTask.check,
-            date: editedTask.date,
-            boardID: editedTask.boardID,
-            id: editedTask.id,
-          };
-        }
-
-        return task;
-      })
-    );
-  }, []);
-
   const { openModal } = useModalContext();
 
   return (
@@ -241,14 +167,11 @@ export function App() {
           <TaskList
             visibleTasks={visibleTasks}
             currentBoard={currentBoard}
-            onRemove={(id: number) => onTaskRemove(id)}
-            onCheckClicked={(id: number) => onTaskCheck(id)}
-            onDateChange={(date: Date | null, id) => onTaskDateChange(date, id)}
             onDrop={DNDdropHandler}
             onEdit={(task: TaskType) =>
               openModal({
                 type: "ModalTaskEdit",
-                payload: { boards, task, onSubmit: onTaskEdit },
+                payload: { boards, task, },
               })
             }
           />
@@ -260,7 +183,7 @@ export function App() {
             createTask={() =>
               openModal({
                 type: "ModalTaskCreate",
-                payload: { boards, currentBoard, onSubmit: onTaskCreate },
+                payload: { boards, currentBoard},
               })
             }
           />
