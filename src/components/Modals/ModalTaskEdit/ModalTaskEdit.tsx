@@ -1,18 +1,11 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import "./ModalTaskEdit.css";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { BoardType, TaskType } from "../../../types";
 import { Modal } from "../Modal";
-import {
-  ButtonPrimary,
-  ButtonSecondary,
-  CheckBox,
-  Input,
-  Select,
-  Textarea,
-} from "../../UI";
+import { Button, CheckBox, Input, Select } from "../../UI";
 import { ModalProps } from "../types";
 
 export type ModalTaskEditPayload = {
@@ -32,17 +25,17 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
   );
 
   const onChangeTitle = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) =>
+    (Title: string) =>
       setModalTask((prev) => {
-        return { ...prev, title: e.target.value };
+        return { ...prev, title: Title };
       }),
     []
   );
 
   const onChangeText = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement>) =>
+    (Text: string) =>
       setModalTask((prev) => {
-        return { ...prev, text: e.target.value };
+        return { ...prev, text: Text };
       }),
     []
   );
@@ -63,7 +56,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
     [modalTask.check]
   );
 
-  const onChangeBoardId = useCallback((board: BoardType ) => {
+  const onChangeBoardId = useCallback((board: BoardType) => {
     setSelectValue(board);
     setModalTask((prev) => {
       return { ...prev, boardID: board.id };
@@ -90,14 +83,16 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
             onChange={onChangeTitle}
             plaseholder="Title"
             className="ModalTaskTitle"
+            variant="input"
           />
           <div className="ModalTaskTextDiv">
             <h2 className="ModalTaskH2">Описание</h2>
-            <Textarea
+            <Input
               onSubmit={onModalSubmit}
               value={modalTask.text}
               onChange={onChangeText}
               className="ModalTaskText"
+              variant="textarea"
             />
           </div>
           <div className="ModalTaskAdditional">
@@ -129,11 +124,12 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
             Дело сделано
           </div>
           <div className="ModalTaskButtons">
-            <ButtonPrimary
+            <Button
               onClick={onModalSubmit}
               text="Сохранить"
-            ></ButtonPrimary>
-            <ButtonSecondary onClick={onClose} text="Отмена" />
+              variant="primary"
+            />
+            <Button onClick={onClose} text="Отмена" variant="secondary" />
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import { ChangeEvent, useCallback, useState } from "react";
-import { ButtonPrimary, ButtonSecondary, Input, Select } from "../../UI";
+import { useCallback, useState } from "react";
+import { Button, Input, Select } from "../../UI";
 import { Modal } from "../Modal";
 import { ModalProps } from "../types";
 import "./ModalBoardEdit.css";
@@ -7,7 +7,7 @@ import { BoardColorsType, BoardType } from "../../../types";
 
 export type ModalBoardEditPayload = {
   onSubmit: (modalBoard: BoardType) => void;
-  onRemove: (id:string)=> void;
+  onRemove: (id: string) => void;
   boardColors: BoardColorsType[];
   board: BoardType;
 };
@@ -30,14 +30,14 @@ export const ModalBoardEdit = (props: ModalBoardEditProps) => {
     },
     [modalBoard, onSubmit, onClose]
   );
-  const onModalBoardRemove = (id:string) =>{
+  const onModalBoardRemove = (id: string) => {
     onClose();
     onRemove(id);
-  }
+  };
   const onTitleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) =>
+    (Title: string) =>
       setModalBoard((prev) => {
-        return { ...prev, title: e.target.value };
+        return { ...prev, title: Title };
       }),
     []
   );
@@ -58,7 +58,8 @@ export const ModalBoardEdit = (props: ModalBoardEditProps) => {
             value={modalBoard.title}
             className="ModalBoardTitle"
             plaseholder="Title"
-          ></Input>
+            variant="input"
+          />
           <div className="ModalBoardSmartListColor">
             <h2 className="ModalBoardH2">Цвет умного листа</h2>
             <Select
@@ -69,10 +70,18 @@ export const ModalBoardEdit = (props: ModalBoardEditProps) => {
           </div>
         </div>
         <div className="ModalBoardEditFooter">
-          <ButtonPrimary text="Удалить секцию" onClick={()=>onModalBoardRemove(board.id)}/>
+          <Button
+            text="Удалить секцию"
+            onClick={() => onModalBoardRemove(board.id)}
+            variant="primary"
+          />
           <div className="ModalButtons">
-            <ButtonPrimary text="Сохранить" onClick={onModalSubmit} />
-            <ButtonSecondary text="Отмена" onClick={onClose} />
+            <Button
+              text="Сохранить"
+              onClick={onModalSubmit}
+              variant="primary"
+            />
+            <Button text="Отмена" onClick={onClose} variant="secondary" />
           </div>
         </div>
       </div>

@@ -6,18 +6,19 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 type InputProps = {
   onSubmit: (e: React.FormEvent) => void;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  plaseholder: string;
+  onChange: (text: string) => void;
+  plaseholder?: string;
   className?: string;
+  variant?: "input" | "textarea";
 };
 export const Input = (props: InputProps) => {
-  const { onSubmit, value, onChange, plaseholder, className } = props;
+  const { onSubmit, value, onChange, plaseholder, className, variant } = props;
 
   const [focused, setFocused] = useState(false);
   const onFocus = () => setFocused(true);
   const onBlur = () => setFocused(false);
 
-  const inputRef = useRef<null | HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement & HTMLInputElement>(null);
   const onClickFocus = () => {
     if (focused) inputRef.current?.blur();
     else inputRef.current?.focus();
@@ -31,15 +32,26 @@ export const Input = (props: InputProps) => {
         onClick={onClickFocus}
         onMouseDown={(e) => e.preventDefault()}
       />
-      <input
-        onFocus={onFocus}
-        onBlur={onBlur}
-        placeholder={plaseholder}
-        value={value}
-        onChange={onChange}
-        className={`UIInput ${className}`}
-        ref={inputRef}
-      />
+      {variant === "textarea" ? (
+        <textarea
+          onFocus={onFocus}
+          onBlur={onBlur}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={`UITextarea ${className}`}
+          ref={inputRef}
+        />
+      ) : (
+        <input
+          onFocus={onFocus}
+          onBlur={onBlur}
+          placeholder={plaseholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={`UIInput ${className}`}
+          ref={inputRef}
+        />
+      )}
     </form>
   );
 };

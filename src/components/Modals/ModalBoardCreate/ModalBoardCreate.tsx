@@ -1,5 +1,5 @@
-import { ChangeEvent, useCallback, useState } from "react";
-import { ButtonPrimary, ButtonSecondary, Input, Select } from "../../UI";
+import { useCallback, useState } from "react";
+import { Button, Input, Select } from "../../UI";
 import { Modal } from "../Modal";
 import { ModalProps } from "../types";
 import "./ModalBoardCreate.css";
@@ -29,9 +29,9 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
     [modalBoard, onSubmit, onClose]
   );
   const onTitleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) =>
+    (Text: string) =>
       setModalBoard((prev) => {
-        return { ...prev, title: e.target.value };
+        return { ...prev, title: Text };
       }),
     []
   );
@@ -52,6 +52,7 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
             value={modalBoard?.title}
             className="ModalBoardTitle"
             plaseholder="Title"
+            variant="input"
           ></Input>
           <div className="ModalBoardSmartListColor">
             <h2 className="ModalBoardH2">Цвет умного листа</h2>
@@ -64,8 +65,12 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
         </div>
         <div className="ModalBoardFooter">
           <div className="ModalButtons">
-            <ButtonPrimary text="Сохранить" onClick={onModalSubmit} />
-            <ButtonSecondary text="Отмена" onClick={onClose} />
+            <Button
+              text="Сохранить"
+              onClick={onModalSubmit}
+              variant="primary"
+            />
+            <Button text="Отмена" onClick={onClose} variant="secondary" />
           </div>
         </div>
       </div>

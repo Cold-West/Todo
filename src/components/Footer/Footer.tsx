@@ -1,13 +1,13 @@
-import { useCallback } from "react";
+import { ChangeEvent, useCallback } from "react";
 import { FilterType, SorterType } from "../../types";
 import "./Footer.css";
-import { ButtonPrimary } from "../UI";
+import { Button } from "../UI";
 
 type TodoFooterProps = {
   onFilterChange: (filterType: FilterType) => void;
   onSortingChange: (sortingType: SorterType) => void;
   createTask: () => void;
-  onChange: (e) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   searchValue: string;
 };
 
@@ -23,7 +23,7 @@ export const Footer = (props: TodoFooterProps) => {
   );
   return (
     <footer className="Footer">
-      <ButtonPrimary onClick={createTask} text="Добавить задачу"/>
+      <Button onClick={createTask} text="Добавить задачу" variant="primary" />
       <input
         type="text"
         className="footerInput"

@@ -1,18 +1,11 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import "./ModalTaskCreate.css";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { BoardType, TaskType } from "../../../types";
 import { Modal } from "../Modal";
-import {
-  ButtonPrimary,
-  ButtonSecondary,
-  CheckBox,
-  Input,
-  Select,
-  Textarea,
-} from "../../UI";
+import { Button, CheckBox, Input, Select } from "../../UI";
 import { ModalProps } from "../types";
 import { INITIAL_MODALTASK_STATE } from "../../../todoListDefault";
 
@@ -25,7 +18,7 @@ export type ModalTaskCreatePayload = {
 type ModalTaskCreateProps = ModalProps<ModalTaskCreatePayload>;
 
 export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
-  const { onSubmit, onClose, boards,currentBoard } = props;
+  const { onSubmit, onClose, boards, currentBoard } = props;
   const [modalTask, setModalTask] = useState<TaskType>(INITIAL_MODALTASK_STATE);
   const selectBoard = boards.find((board) => board.id === currentBoard);
   const [selectValue, setSelectValue] = useState<BoardType | undefined>(
@@ -33,17 +26,17 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
   );
 
   const onChangeTitle = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) =>
+    (Title: string) =>
       setModalTask((prev) => {
-        return { ...prev, title: e.target.value };
+        return { ...prev, title: Title };
       }),
     []
   );
 
   const onChangeText = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement>) =>
+    (Text: string) =>
       setModalTask((prev) => {
-        return { ...prev, text: e.target.value };
+        return { ...prev, text: Text };
       }),
     []
   );
@@ -91,14 +84,16 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
             onChange={onChangeTitle}
             plaseholder="Title"
             className="ModalTaskTitle"
+            variant="input"
           />
           <div className="ModalTaskTextDiv">
             <h2 className="ModalTaskH2">Описание</h2>
-            <Textarea
+            <Input
               onSubmit={onModalSubmit}
               value={modalTask.text}
               onChange={onChangeText}
               className="ModalTaskText"
+              variant="textarea"
             />
           </div>
           <div className="ModalTaskAdditional">
@@ -130,11 +125,12 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
             Дело сделано
           </div>
           <div className="ModalTaskButtons">
-            <ButtonPrimary
+            <Button
               onClick={onModalSubmit}
               text="Сохранить"
-            ></ButtonPrimary>
-            <ButtonSecondary onClick={onClose} text="Отмена" />
+              variant="primary"
+            />
+            <Button onClick={onClose} text="Отмена" variant="secondary" />
           </div>
         </div>
       </div>

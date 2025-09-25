@@ -1,6 +1,4 @@
-export * from "./ButtonPrimary"
-export * from "./ButtonSecondary"
+export * from "./Button"
 export * from "./CheckBox"
 export * from "./Input"
 export * from "./Select"
-export * from "./Textarea"
