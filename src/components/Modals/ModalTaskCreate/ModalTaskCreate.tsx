@@ -8,29 +8,34 @@ import { Modal } from "../Modal";
 import { Button, CheckBox, Input, Select } from "../../UI";
 import { ModalProps } from "../types";
 import { INITIAL_MODALTASK_STATE } from "../../../todoListDefault";
+import { useAppDispatch } from "../../../app/hooks";
+import { TaskCreate } from "../../../redux/taskList/taskListSlice";
 
 export type ModalTaskCreatePayload = {
   boards: BoardType[];
-  onSubmit: (data: TaskType) => void;
   currentBoard: string;
 };
 
 type ModalTaskCreateProps = ModalProps<ModalTaskCreatePayload>;
 
 export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
-  const { onSubmit, onClose, boards, currentBoard } = props;
-  const [modalTask, setModalTask] = useState<TaskType>(INITIAL_MODALTASK_STATE);
-  const selectBoard = boards.find((board) => board.id === currentBoard);
+  const { onClose, boards, currentBoard } = props;
+  const [modalTask, setModalTask] = useState<TaskType>({
+    ...INITIAL_MODALTASK_STATE,
+    boardID: currentBoard,
+  });
+  const selectBoard = boards.find((board) => board.id === modalTask.boardID);
   const [selectValue, setSelectValue] = useState<BoardType | undefined>(
-    selectBoard
+    selectBoard,
   );
+  const dispatch = useAppDispatch();
 
   const onChangeTitle = useCallback(
     (Title: string) =>
       setModalTask((prev) => {
         return { ...prev, title: Title };
       }),
-    []
+    [],
   );
 
   const onChangeText = useCallback(
@@ -38,7 +43,7 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
       setModalTask((prev) => {
         return { ...prev, text: Text };
       }),
-    []
+    [],
   );
 
   const onChangeDate = useCallback(
@@ -46,7 +51,7 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
       setModalTask((prev) => {
         return { ...prev, date: Date };
       }),
-    []
+    [],
   );
 
   const onChangeCheck = useCallback(
@@ -54,7 +59,7 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
       setModalTask((prev) => {
         return { ...prev, check: !modalTask.check };
       }),
-    [modalTask.check]
+    [modalTask.check],
   );
 
   const onChangeBoardId = useCallback((board: BoardType) => {
@@ -69,10 +74,10 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
       e.preventDefault();
       if (modalTask.title !== "") {
         onClose();
-        onSubmit(modalTask);
+        dispatch(TaskCreate(modalTask));
       } else alert("Заголовок не может быть пустым");
     },
-    [onSubmit, onClose, modalTask]
+    [onClose, modalTask, dispatch],
   );
   return (
     <Modal onClose={onClose}>

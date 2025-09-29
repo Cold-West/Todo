@@ -4,20 +4,21 @@ import { Modal } from "../Modal";
 import { ModalProps } from "../types";
 import "./ModalBoardEdit.css";
 import { BoardColorsType, BoardType } from "../../../types";
+import { useAppDispatch } from "../../../app/hooks";
+import { BoardEdit, BoardRemove, TaskRemoveOnBoard } from "../../../redux";
 
 export type ModalBoardEditPayload = {
-  onSubmit: (modalBoard: BoardType) => void;
-  onRemove: (id: string) => void;
   boardColors: BoardColorsType[];
   board: BoardType;
 };
 type ModalBoardEditProps = ModalProps<ModalBoardEditPayload>;
 export const ModalBoardEdit = (props: ModalBoardEditProps) => {
-  const { onSubmit, onClose, onRemove, boardColors, board } = props;
+  const { onClose, boardColors, board } = props;
+  const dispatch = useAppDispatch();
   const [modalBoard, setModalBoard] = useState<BoardType>(board);
   const selectColor = boardColors.find((bc) => bc.color === board.color);
   const [selectValue, setSelectValue] = useState<BoardColorsType | undefined>(
-    selectColor
+    selectColor,
   );
 
   const onModalSubmit = useCallback(
@@ -25,21 +26,22 @@ export const ModalBoardEdit = (props: ModalBoardEditProps) => {
       e.preventDefault();
       if (modalBoard.title !== "") {
         onClose();
-        onSubmit(modalBoard);
+        dispatch(BoardEdit(modalBoard));
       } else alert("Заголовок не может быть пустым");
     },
-    [modalBoard, onSubmit, onClose]
+    [modalBoard, dispatch, onClose],
   );
   const onModalBoardRemove = (id: string) => {
     onClose();
-    onRemove(id);
+    dispatch(TaskRemoveOnBoard(id));
+    dispatch(BoardRemove(id));
   };
   const onTitleChange = useCallback(
     (Title: string) =>
       setModalBoard((prev) => {
         return { ...prev, title: Title };
       }),
-    []
+    [],
   );
 
   const onColorChange = useCallback((boardColor: BoardColorsType) => {

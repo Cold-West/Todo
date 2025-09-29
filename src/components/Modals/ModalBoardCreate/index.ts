@@ -1,1 +1,1 @@
-export * from "./ModalBoardCreate"
+export * from "./ModalBoardCreate";

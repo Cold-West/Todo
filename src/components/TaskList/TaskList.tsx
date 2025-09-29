@@ -4,33 +4,28 @@ import { DragWrapper } from "../DragWrapper";
 import { CheckBox } from "../UI";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
-import "./TaskList.css"
+import "./TaskList.css";
+import { useAppDispatch } from "../../app/hooks";
+import {
+  TaskCheck,
+  TaskDateChange,
+  TaskRemove,
+} from "../../redux/taskList/taskListSlice";
 
 type TaskListProps = {
   visibleTasks: TaskType[];
   currentBoard: string;
-  onRemove: (id: number) => void;
-  onCheckClicked: (id: number) => void;
   onEdit: (task: TaskType) => void;
-  onDrop: (startItem: TaskType, endItem: TaskType) => void;
-  onDateChange: (date: Date | null, id: number) => void;
 };
 export const TaskList = (props: TaskListProps) => {
-  const {
-    visibleTasks,
-    currentBoard,
-    onRemove,
-    onCheckClicked,
-    onEdit,
-    onDrop,
-    onDateChange,
-  } = props;
+  const { visibleTasks, currentBoard, onEdit } = props;
+  const dispatch = useAppDispatch();
   return (
     <div className="AppTaskList">
       {visibleTasks.filter((task) => task.boardID === currentBoard).length ? (
         <DragWrapper
           taskData={visibleTasks.filter(
-            (task) => task.boardID === currentBoard
+            (task) => task.boardID === currentBoard,
           )}
           renderTasks={(task) => (
             <div className="TaskBox">
@@ -38,7 +33,7 @@ export const TaskList = (props: TaskListProps) => {
                 <div className="TaskCheck">
                   <CheckBox
                     check={task.check}
-                    onClick={() => onCheckClicked(task.id)}
+                    onClick={() => dispatch(TaskCheck(task.id))}
                   />
                 </div>
                 <div>
@@ -47,7 +42,7 @@ export const TaskList = (props: TaskListProps) => {
                   <DatePicker
                     className="datePickerInput"
                     selected={task.date}
-                    onChange={(date)=>onDateChange(date, task.id)}
+                    onChange={(date) => dispatch(TaskDateChange(date, task.id))}
                     dateFormat="MMMM d"
                   />
                 </div>
@@ -57,7 +52,7 @@ export const TaskList = (props: TaskListProps) => {
                   </button>
                   <button
                     className="TaskButton"
-                    onClick={() => onRemove(task.id)}
+                    onClick={() => dispatch(TaskRemove(task.id))}
                   >
                     Удалить
                   </button>
@@ -66,7 +61,6 @@ export const TaskList = (props: TaskListProps) => {
               <div className="TaskText">{task.text}</div>
             </div>
           )}
-          onDrop={onDrop}
         />
       ) : (
         <h1 className="AppNoTasks">Нет задач</h1>

@@ -19,7 +19,7 @@ export const Footer = (props: TodoFooterProps) => {
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       onSortingChange(event.target.value as SorterType);
     },
-    [onSortingChange]
+    [onSortingChange],
   );
   return (
     <footer className="Footer">

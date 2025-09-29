@@ -14,7 +14,7 @@ type NavBarProps = {
 export const NavBar = (props: NavBarProps) => {
   const { boardChange, currentBoard, counter, boards, createBoard, onEdit } =
     props;
-  const onBoardEdit = (board: BoardType, e:React.MouseEvent) => {
+  const onBoardEdit = (board: BoardType, e: React.MouseEvent) => {
     e.stopPropagation();
     onEdit(board);
   };

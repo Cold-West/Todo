@@ -2,6 +2,6 @@ export * from "./Footer";
 export * from "./DragWrapper";
 export * from "./NavBar";
 export * from "./Modals";
-export * from "./UI"
-export * from "./Modals/ModalContext"
-export * from "./TaskList"
+export * from "./UI";
+export * from "./Modals/ModalContext";
+export * from "./TaskList";

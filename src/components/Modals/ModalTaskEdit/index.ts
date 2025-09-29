@@ -1,1 +1,1 @@
-export * from "./ModalTaskEdit"
+export * from "./ModalTaskEdit";

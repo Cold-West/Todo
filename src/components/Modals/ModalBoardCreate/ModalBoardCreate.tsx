@@ -5,16 +5,18 @@ import { ModalProps } from "../types";
 import "./ModalBoardCreate.css";
 import { BoardColorsType, BoardType } from "../../../types";
 import { INITIAL_MODALBOARD_STATE } from "../../../todoListDefault";
+import { useAppDispatch } from "../../../app/hooks";
+import { BoardCreate } from "../../../redux";
 
 export type ModalBoardCreatePayload = {
-  onSubmit: (modalBoard: BoardType) => void;
   boardColors: BoardColorsType[];
 };
 type ModalBoardCreateProps = ModalProps<ModalBoardCreatePayload>;
 export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
-  const { onSubmit, onClose, boardColors } = props;
+  const { onClose, boardColors } = props;
+  const dispatch = useAppDispatch();
   const [modalBoard, setModalBoard] = useState<BoardType>(
-    INITIAL_MODALBOARD_STATE
+    INITIAL_MODALBOARD_STATE,
   );
   const [selectValue, setSelectValue] = useState<BoardColorsType | undefined>();
 
@@ -23,17 +25,17 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
       e.preventDefault();
       if (modalBoard.title !== "") {
         onClose();
-        onSubmit(modalBoard);
+        dispatch(BoardCreate(modalBoard));
       } else alert("Заголовок не может быть пустым");
     },
-    [modalBoard, onSubmit, onClose]
+    [modalBoard, dispatch, onClose],
   );
   const onTitleChange = useCallback(
     (Text: string) =>
       setModalBoard((prev) => {
         return { ...prev, title: Text };
       }),
-    []
+    [],
   );
 
   const onColorChange = useCallback((boardColor: BoardColorsType) => {
