@@ -1,1 +1,1 @@
-export * from "./ModalBoardEdit"
+export * from "./ModalBoardEdit";

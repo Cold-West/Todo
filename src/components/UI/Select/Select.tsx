@@ -11,7 +11,7 @@ type SelectProps<T> = {
   onChangeValue: (optionValue: T) => void;
   value: T | undefined;
 };
-export const Select = <T extends TValue, >(props: SelectProps<T>) => {
+export const Select = <T extends TValue>(props: SelectProps<T>) => {
   const { options, onChangeValue, value } = props;
   const [openSelect, setOpenSelect] = useState(false);
 
@@ -20,7 +20,7 @@ export const Select = <T extends TValue, >(props: SelectProps<T>) => {
       setOpenSelect(false);
       onChangeValue(optionValue);
     },
-    [onChangeValue]
+    [onChangeValue],
   );
   const onOpen = useCallback(() => {
     setOpenSelect(!openSelect);

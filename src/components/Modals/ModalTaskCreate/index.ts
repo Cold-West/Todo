@@ -1,1 +1,1 @@
-export * from "./ModalTaskCreate"
+export * from "./ModalTaskCreate";

@@ -9,7 +9,10 @@ import {
 import { ModalTaskCreate, ModalTaskCreatePayload } from "./ModalTaskCreate";
 import { ModalTaskEdit, ModalTaskEditPayload } from "./ModalTaskEdit";
 import { ModalBoardCreate, ModalBoardCreatePayload } from "./ModalBoardCreate";
-import { ModalBoardEdit, ModalBoardEditPayload } from "./ModalBoardEdit/ModalBoardEdit";
+import {
+  ModalBoardEdit,
+  ModalBoardEditPayload,
+} from "./ModalBoardEdit/ModalBoardEdit";
 
 const ModalContext = createContext<ModalContextType>({} as never);
 

@@ -5,22 +5,31 @@ import { TaskType } from "../../types";
 const initialState = { value: todoListDefault };
 
 type DateChange = Pick<TaskType, "id" | "date">;
+type DND = {
+  endItem: TaskType;
+  startItem: TaskType;
+};
 
 export const taskListSlice = createSlice({
   name: "Tasks",
   initialState,
 
   reducers: {
-    onTaskRemove: (state, action: PayloadAction<number>) => {
+    TaskRemove: (state, action: PayloadAction<number>) => {
       state.value = state.value.filter((task) => task.id !== action.payload);
     },
-    onTaskCheck: (state, action: PayloadAction<number>) => {
+    TaskRemoveOnBoard: (state, action: PayloadAction<string>) => {
+      state.value = state.value.filter(
+        (task) => task.boardID !== action.payload,
+      );
+    },
+    TaskCheck: (state, action: PayloadAction<number>) => {
       const task = state.value.find((task) => task.id === action.payload);
       if (task) {
         task.check = !task.check;
       }
     },
-    onTaskDateChange: {
+    TaskDateChange: {
       reducer(state, action: PayloadAction<DateChange>) {
         const task = state.value.find((task) => task.id === action.payload.id);
         if (task) {
@@ -33,30 +42,48 @@ export const taskListSlice = createSlice({
         };
       },
     },
-    onTaskCreate: (state, action: PayloadAction<TaskType>) => {
+    TaskCreate: (state, action: PayloadAction<TaskType>) => {
       action.payload.id = Date.now();
       state.value.push(action.payload);
     },
-    onTaskEdit: (state, action: PayloadAction<TaskType>) => {
-      const oldTask = state.value.find((task) => task.id === action.payload.id);
-      if (oldTask) {
-        oldTask.boardID = action.payload.boardID;
-        oldTask.check = action.payload.check;
-        oldTask.date = action.payload.date;
-        oldTask.id = action.payload.id;
-        oldTask.text = action.payload.text;
-        oldTask.title = action.payload.title;
+    TaskEdit: (state, action: PayloadAction<TaskType>) => {
+      const oldTaskIndex = state.value.findIndex(
+        (task) => task.id === action.payload.id,
+      );
+      if (oldTaskIndex !== -1) {
+        state.value[oldTaskIndex] = action.payload;
       }
+    },
+    DNDdropHandler: {
+      reducer(state, action: PayloadAction<DND>) {
+        const startItem = action.payload.startItem;
+        const endItem = action.payload.endItem;
+        const currentIndex = state.value.findIndex(
+          (task) => task.id === startItem.id,
+        );
+        const dropIndex = state.value.findIndex(
+          (task) => task.id === endItem.id,
+        );
+        state.value.splice(currentIndex, 1);
+        state.value.splice(dropIndex, 0, startItem);
+      },
+      prepare(startItem: TaskType, endItem: TaskType) {
+        return {
+          payload: { startItem, endItem },
+        };
+      },
     },
   },
 });
 
 export const {
-  onTaskRemove,
-  onTaskCheck,
-  onTaskDateChange,
-  onTaskCreate,
-  onTaskEdit,
+  TaskRemove,
+  TaskCheck,
+  TaskDateChange,
+  TaskCreate,
+  TaskEdit,
+  DNDdropHandler,
+  TaskRemoveOnBoard,
 } = taskListSlice.actions;
 
-export default taskListSlice.reducer;
+export const taskListReducer = taskListSlice.reducer;

@@ -8,7 +8,7 @@ import { Modal } from "../Modal";
 import { Button, CheckBox, Input, Select } from "../../UI";
 import { ModalProps } from "../types";
 import { useAppDispatch } from "../../../app/hooks";
-import { onTaskEdit } from "../../../redux/taskList/taskListSlice";
+import { TaskEdit } from "../../../redux";
 
 export type ModalTaskEditPayload = {
   boards: BoardType[];
@@ -22,16 +22,16 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
   const [modalTask, setModalTask] = useState<TaskType>(task);
   const selectBoard = boards.find((board) => board.id === task.boardID);
   const [selectValue, setSelectValue] = useState<BoardType | undefined>(
-    selectBoard
+    selectBoard,
   );
-   const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const onChangeTitle = useCallback(
     (Title: string) =>
       setModalTask((prev) => {
         return { ...prev, title: Title };
       }),
-    []
+    [],
   );
 
   const onChangeText = useCallback(
@@ -39,7 +39,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       setModalTask((prev) => {
         return { ...prev, text: Text };
       }),
-    []
+    [],
   );
 
   const onChangeDate = useCallback(
@@ -47,7 +47,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       setModalTask((prev) => {
         return { ...prev, date: Date };
       }),
-    []
+    [],
   );
 
   const onChangeCheck = useCallback(
@@ -55,7 +55,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       setModalTask((prev) => {
         return { ...prev, check: !modalTask.check };
       }),
-    [modalTask.check]
+    [modalTask.check],
   );
 
   const onChangeBoardId = useCallback((board: BoardType) => {
@@ -70,10 +70,10 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       e.preventDefault();
       if (modalTask.title !== "") {
         onClose();
-        dispatch(onTaskEdit(modalTask));
+        dispatch(TaskEdit(modalTask));
       } else alert("Заголовок не может быть пустым");
     },
-    [dispatch, modalTask, onClose]
+    [dispatch, modalTask, onClose],
   );
   return (
     <Modal onClose={onClose}>
