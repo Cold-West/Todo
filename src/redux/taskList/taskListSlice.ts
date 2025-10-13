@@ -20,7 +20,7 @@ export const taskListSlice = createSlice({
     },
     TaskRemoveOnBoard: (state, action: PayloadAction<string>) => {
       state.value = state.value.filter(
-        (task) => task.boardID !== action.payload,
+        (task) => task.boardID !== action.payload
       );
     },
     TaskCheck: (state, action: PayloadAction<number>) => {
@@ -48,7 +48,7 @@ export const taskListSlice = createSlice({
     },
     TaskEdit: (state, action: PayloadAction<TaskType>) => {
       const oldTaskIndex = state.value.findIndex(
-        (task) => task.id === action.payload.id,
+        (task) => task.id === action.payload.id
       );
       if (oldTaskIndex !== -1) {
         state.value[oldTaskIndex] = action.payload;
@@ -59,10 +59,10 @@ export const taskListSlice = createSlice({
         const startItem = action.payload.startItem;
         const endItem = action.payload.endItem;
         const currentIndex = state.value.findIndex(
-          (task) => task.id === startItem.id,
+          (task) => task.id === startItem.id
         );
         const dropIndex = state.value.findIndex(
-          (task) => task.id === endItem.id,
+          (task) => task.id === endItem.id
         );
         state.value.splice(currentIndex, 1);
         state.value.splice(dropIndex, 0, startItem);

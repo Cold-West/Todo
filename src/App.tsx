@@ -1,20 +1,21 @@
 import { useMemo, useState, useCallback, useEffect } from "react";
 import { Footer, NavBar, useModalContext, TaskList } from "./components";
 import { boardColors } from "./todoListDefault";
-import { BoardType, FilterType, SorterType, TaskType } from "./types";
+import { BoardType, TaskType } from "./types";
 import "./App.css";
 import "./DefaultColors.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { useAppSelector } from "./app/hooks";
+import { StatusFilters, StatusSorters } from "./redux";
 
 export function App() {
   const todoTasks = useAppSelector((state) => state.Tasks.value);
 
   const boards = useAppSelector((state) => state.Boards.value);
 
-  const [filters, setFilters] = useState<FilterType>(FilterType.ALL);
+  const filters = useAppSelector((state)=> state.Filters.statusFilter) 
 
-  const [sorters, setSorters] = useState<SorterType>(SorterType.OFF);
+  const sorters = useAppSelector((state)=> state.Filters.statusSorter)
 
   const [search, setSearch] = useState("");
 
@@ -42,47 +43,34 @@ export function App() {
   }, [search, todoTasks]);
 
   const filteredTasks = useMemo(() => {
-    if (filters === FilterType.ACTIVE) {
+    if (filters === StatusFilters.Active) {
       return searchTasks.filter((t) => t.check !== true);
     }
-    if (filters === FilterType.COMPLETED) {
+    if (filters === StatusFilters.Completed) {
       return searchTasks.filter((t) => t.check == true);
     }
     return searchTasks;
   }, [filters, searchTasks]);
 
   const visibleTasks = useMemo(() => {
-    if (sorters === SorterType.aTOb) {
+    if (sorters === StatusSorters.aTOb) {
       return [...filteredTasks].sort((a, b) => a.title.localeCompare(b.title));
     }
-    if (sorters === SorterType.bTOa) {
+    if (sorters === StatusSorters.bTOa) {
       return [...filteredTasks].sort((a, b) => b.title.localeCompare(a.title));
     }
     return filteredTasks;
   }, [filteredTasks, sorters]);
 
-  const sortByName = useCallback((sort: SorterType) => {
-    setSorters(sort);
-  }, []);
-
   const onBoardListChange = useCallback((board: BoardType) => {
     setCurrentBoard(board.id);
   }, []);
-
-  const navBarIconCounter = useCallback(
-    (board: BoardType) => {
-      return visibleTasks.filter((t) => t.boardID === board.id).length;
-    },
-    [visibleTasks],
-  );
-
   const { openModal } = useModalContext();
 
   return (
     <>
       <div className="AppPage">
         <NavBar
-          boards={boards}
           onEdit={(board) =>
             openModal({
               type: "ModalBoardEdit",
@@ -102,7 +90,6 @@ export function App() {
           }
           boardChange={(board) => onBoardListChange(board)}
           currentBoard={currentBoard}
-          counter={(board) => navBarIconCounter(board)}
         />
         <div className="AppRightPanel">
           <TaskList
@@ -118,8 +105,6 @@ export function App() {
           <Footer
             searchValue={search}
             onChange={(e) => setSearch(e.target.value.toLowerCase())}
-            onFilterChange={setFilters}
-            onSortingChange={sortByName}
             createTask={() =>
               openModal({
                 type: "ModalTaskCreate",

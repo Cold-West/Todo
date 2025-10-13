@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { boardsReducer, taskListReducer } from "../redux";
+import { boardsReducer, filterReducer, taskListReducer } from "../redux";
 export const store = configureStore({
   reducer: {
     Tasks: taskListReducer,
     Boards: boardsReducer,
+    Filters: filterReducer,
   },
 });
 

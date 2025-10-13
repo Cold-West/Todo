@@ -2,22 +2,30 @@ import "./NavBar.css";
 import { BoardType } from "../../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useCallback } from "react";
+import { useAppSelector } from "../../app/hooks";
 type NavBarProps = {
-  boards: BoardType[];
   createBoard: () => void;
   boardChange: (board: BoardType) => void;
   currentBoard: string;
   onEdit: (board: BoardType) => void;
-  counter: (board: BoardType) => number;
 };
 
 export const NavBar = (props: NavBarProps) => {
-  const { boardChange, currentBoard, counter, boards, createBoard, onEdit } =
-    props;
+  const { boardChange, currentBoard, createBoard, onEdit } = props;
+  const todoTasks = useAppSelector((state) => state.Tasks.value);
+  const boards = useAppSelector((state)=> state.Boards.value)
   const onBoardEdit = (board: BoardType, e: React.MouseEvent) => {
     e.stopPropagation();
     onEdit(board);
   };
+  const navBarIconCounter = useCallback(
+    (board: BoardType) => {
+      return todoTasks.filter((t) => t.boardID === board.id).length;
+    },
+    [todoTasks]
+  );
+
   return (
     <nav className="navLeft">
       <h1 className="navTitle">Секции Задач</h1>
@@ -32,7 +40,7 @@ export const NavBar = (props: NavBarProps) => {
                 className="navSectionIcon"
                 style={{ background: board.color }}
               >
-                {counter(board)}
+                {navBarIconCounter(board)}
               </div>
               <div className="navBoardTitle">{board.title}</div>
             </div>
