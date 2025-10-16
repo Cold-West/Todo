@@ -1,6 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { todoListDefault } from "../../todoListDefault";
 import { TaskType } from "../../types";
+import { StatusFilters, StatusSorters } from "../filters";
+import { RootState } from "../../app/store";
 
 const initialState = { value: todoListDefault };
 
@@ -87,3 +89,54 @@ export const {
 } = taskListSlice.actions;
 
 export const taskListReducer = taskListSlice.reducer;
+
+const selectTasks = (state: RootState) => state.Tasks.value;
+const selectFilter = (state: RootState) => state.Filters.statusFilter;
+const selectSorter = (state: RootState) => state.Filters.statusSorter;
+const selectSearch = (state: RootState) => state.Filters.statusSearch;
+
+export const visibleTasksSelector = createSelector(
+  [selectTasks, selectFilter, selectSorter, selectSearch],
+  (Tasks, currentFilter, currentSorter, currentSearch) => {
+    const getFilteredTasks = () => {
+      if (currentFilter === StatusFilters.Active) {
+        return Tasks.filter((t: TaskType) => !t.check);
+      }
+      if (currentFilter === StatusFilters.Completed) {
+        return Tasks.filter((t: TaskType) => t.check);
+      }
+      return Tasks;
+    };
+
+    const filteredTasks = getFilteredTasks();
+
+    const getSortedTasks = () => {
+      if (currentSorter === StatusSorters.aTOb) {
+        return [...filteredTasks].sort((a: TaskType, b: TaskType) =>
+          a.title.localeCompare(b.title)
+        );
+      }
+      if (currentSorter === StatusSorters.bTOa) {
+        return [...filteredTasks].sort((a: TaskType, b: TaskType) =>
+          b.title.localeCompare(a.title)
+        );
+      }
+      return filteredTasks;
+    };
+
+    const sortedTasks = getSortedTasks();
+
+    const getSearchedTasks = () => {
+      if (currentSearch) {
+        return sortedTasks.filter(
+          (task: TaskType) =>
+            task.title.toLowerCase().includes(currentSearch) ||
+            task.text.toLowerCase().includes(currentSearch)
+        );
+      }
+      return sortedTasks;
+    };
+
+    return getSearchedTasks();
+  }
+);

@@ -6,20 +6,18 @@ import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { BoardType, TaskType } from "../../../types";
 import { Modal } from "../Modal";
 import { Button, CheckBox, Input, Select } from "../../UI";
-import { ModalProps } from "../types";
 import { INITIAL_MODALTASK_STATE } from "../../../todoListDefault";
-import { useAppDispatch } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { TaskCreate } from "../../../redux/taskList/taskListSlice";
 
-export type ModalTaskCreatePayload = {
-  boards: BoardType[];
-  currentBoard: string;
+type ModalTaskCreateProps = {
+  onClose:()=> void;
 };
 
-type ModalTaskCreateProps = ModalProps<ModalTaskCreatePayload>;
-
 export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
-  const { onClose, boards, currentBoard } = props;
+  const { onClose } = props;
+  const boards = useAppSelector((state)=> state.Boards.value)
+  const currentBoard = useAppSelector((state)=> state.Boards.currentBoard)
   const [modalTask, setModalTask] = useState<TaskType>({
     ...INITIAL_MODALTASK_STATE,
     boardID: currentBoard,

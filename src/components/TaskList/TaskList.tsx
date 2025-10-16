@@ -5,27 +5,29 @@ import { CheckBox } from "../UI";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 import "./TaskList.css";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
+  visibleTasksSelector,
   TaskCheck,
   TaskDateChange,
   TaskRemove,
 } from "../../redux/taskList/taskListSlice";
+import { useSelector } from "react-redux";
+import { useModalContext } from "../Modals";
 
-type TaskListProps = {
-  visibleTasks: TaskType[];
-  currentBoard: string;
-  onEdit: (task: TaskType) => void;
-};
-export const TaskList = (props: TaskListProps) => {
-  const { visibleTasks, currentBoard, onEdit } = props;
+export const TaskList = () => {
+  const currentBoard = useAppSelector((state) => state.Boards.currentBoard);
   const dispatch = useAppDispatch();
+  const visibleTasks = useSelector(visibleTasksSelector);
+
+  const { openModal } = useModalContext();
   return (
     <div className="AppTaskList">
-      {visibleTasks.filter((task) => task.boardID === currentBoard).length ? (
+      {visibleTasks.filter((task: TaskType) => task.boardID === currentBoard)
+        .length ? (
         <DragWrapper
           taskData={visibleTasks.filter(
-            (task) => task.boardID === currentBoard,
+            (task: TaskType) => task.boardID === currentBoard
           )}
           renderTasks={(task) => (
             <div className="TaskBox">
@@ -47,7 +49,15 @@ export const TaskList = (props: TaskListProps) => {
                   />
                 </div>
                 <div className="TaskRightSide">
-                  <button className="TaskButton" onClick={() => onEdit(task)}>
+                  <button
+                    className="TaskButton"
+                    onClick={() =>
+                      openModal({
+                        type: "ModalTaskEdit",
+                        payload: { task },
+                      })
+                    }
+                  >
                     Редактировать
                   </button>
                   <button

@@ -7,17 +7,17 @@ import { BoardType, TaskType } from "../../../types";
 import { Modal } from "../Modal";
 import { Button, CheckBox, Input, Select } from "../../UI";
 import { ModalProps } from "../types";
-import { useAppDispatch } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { TaskEdit } from "../../../redux";
 
 export type ModalTaskEditPayload = {
-  boards: BoardType[];
   task: TaskType;
 };
 type ModalTaskEditProps = ModalProps<ModalTaskEditPayload>;
 
 export const ModalTaskEdit = (props: ModalTaskEditProps) => {
-  const { onClose, boards, task } = props;
+  const { onClose, task } = props;
+  const boards = useAppSelector((state)=> state.Boards.value)
 
   const [modalTask, setModalTask] = useState<TaskType>(task);
   const selectBoard = boards.find((board) => board.id === task.boardID);

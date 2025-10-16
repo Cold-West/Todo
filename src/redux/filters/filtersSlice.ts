@@ -11,10 +11,11 @@ export const StatusSorters = {
   aTOb: "aTOb",
   bTOa: "bTOa",
   date: "date",
-}
+};
 const initialState = {
   statusFilter: StatusFilters.All,
-  statusSorter: StatusSorters.OFF
+  statusSorter: StatusSorters.OFF,
+  statusSearch: "",
 };
 
 export const filterSlice = createSlice({
@@ -22,14 +23,18 @@ export const filterSlice = createSlice({
   initialState,
 
   reducers: {
-    statusFilterChanged: (state, action: PayloadAction<string>)=>{
+    statusFilterChanged: (state, action: PayloadAction<string>) => {
       state.statusFilter = action.payload;
     },
-    statusSorterChanged: (state, action: PayloadAction<string>)=>{
+    statusSorterChanged: (state, action: PayloadAction<string>) => {
       state.statusSorter = action.payload;
-    }
+    },
+    statusSearchChanged: (state, action: PayloadAction<string>) => {
+      state.statusSearch = action.payload;
+    },
   },
 });
 
-export const { statusFilterChanged, statusSorterChanged } = filterSlice.actions;
+export const { statusFilterChanged, statusSorterChanged, statusSearchChanged } =
+  filterSlice.actions;
 export const filterReducer = filterSlice.reducer;

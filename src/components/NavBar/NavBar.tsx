@@ -3,22 +3,27 @@ import { BoardType } from "../../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useCallback } from "react";
-import { useAppSelector } from "../../app/hooks";
-type NavBarProps = {
-  createBoard: () => void;
-  boardChange: (board: BoardType) => void;
-  currentBoard: string;
-  onEdit: (board: BoardType) => void;
-};
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { BoardListChange } from "../../redux";
+import { useModalContext } from "../Modals";
 
-export const NavBar = (props: NavBarProps) => {
-  const { boardChange, currentBoard, createBoard, onEdit } = props;
+export const NavBar = () => {
+  
+  const dispatch = useAppDispatch();
+  const currentBoard = useAppSelector((state) => state.Boards.currentBoard);
   const todoTasks = useAppSelector((state) => state.Tasks.value);
-  const boards = useAppSelector((state)=> state.Boards.value)
+  const boards = useAppSelector((state) => state.Boards.value);
+
+  const { openModal } = useModalContext();
+
   const onBoardEdit = (board: BoardType, e: React.MouseEvent) => {
     e.stopPropagation();
-    onEdit(board);
+    openModal({
+      type: "ModalBoardEdit",
+      payload: { board },
+    });
   };
+  
   const navBarIconCounter = useCallback(
     (board: BoardType) => {
       return todoTasks.filter((t) => t.boardID === board.id).length;
@@ -32,7 +37,7 @@ export const NavBar = (props: NavBarProps) => {
       <div className="navSection">
         {boards.map((board) => (
           <div
-            onClick={() => boardChange(board)}
+            onClick={() => dispatch(BoardListChange(board.id))}
             className={`navBoard ${currentBoard === board.id ? "navActive" : ""}`}
           >
             <div className="navBoardBox">
@@ -51,7 +56,14 @@ export const NavBar = (props: NavBarProps) => {
             />
           </div>
         ))}
-        <div className="navBoard navAdd" onClick={createBoard}>
+        <div
+          className="navBoard navAdd"
+          onClick={() =>
+            openModal({
+              type: "ModalBoardCreate"
+            })
+          }
+        >
           <FontAwesomeIcon icon={faPlus} className="navAddIcon" />
           <div className="navTitleAdd">Добавить список...</div>
         </div>

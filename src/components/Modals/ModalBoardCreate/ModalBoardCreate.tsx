@@ -1,19 +1,17 @@
 import { useCallback, useState } from "react";
 import { Button, Input, Select } from "../../UI";
 import { Modal } from "../Modal";
-import { ModalProps } from "../types";
 import "./ModalBoardCreate.css";
 import { BoardColorsType, BoardType } from "../../../types";
-import { INITIAL_MODALBOARD_STATE } from "../../../todoListDefault";
+import { boardColors, INITIAL_MODALBOARD_STATE } from "../../../todoListDefault";
 import { useAppDispatch } from "../../../app/hooks";
 import { BoardCreate } from "../../../redux";
 
-export type ModalBoardCreatePayload = {
-  boardColors: BoardColorsType[];
+type ModalBoardCreateProps = {
+  onClose: ()=> void;
 };
-type ModalBoardCreateProps = ModalProps<ModalBoardCreatePayload>;
 export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
-  const { onClose, boardColors } = props;
+  const { onClose } = props;
   const dispatch = useAppDispatch();
   const [modalBoard, setModalBoard] = useState<BoardType>(
     INITIAL_MODALBOARD_STATE,

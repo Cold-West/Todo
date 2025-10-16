@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { boardsDefault } from "../../todoListDefault";
 import { BoardType } from "../../types";
 
-const initialState = { value: boardsDefault };
+const initialState = { value: boardsDefault, currentBoard: "1" };
 
 export const boardsSlice = createSlice({
   name: "Boards",
@@ -15,7 +15,7 @@ export const boardsSlice = createSlice({
     },
     BoardEdit: (state, action: PayloadAction<BoardType>) => {
       const oldBoardIndex = state.value.findIndex(
-        (task) => task.id === action.payload.id,
+        (task) => task.id === action.payload.id
       );
       if (oldBoardIndex !== -1) {
         state.value[oldBoardIndex] = action.payload;
@@ -23,10 +23,17 @@ export const boardsSlice = createSlice({
     },
     BoardRemove: (state, action: PayloadAction<string>) => {
       state.value = state.value.filter((board) => board.id !== action.payload);
+      if (state.currentBoard === action.payload) {
+        state.currentBoard = "1";
+      }
+    },
+    BoardListChange: (state, action: PayloadAction<string>) => {
+      state.currentBoard = action.payload;
     },
   },
 });
 
-export const { BoardCreate, BoardEdit, BoardRemove } = boardsSlice.actions;
+export const { BoardCreate, BoardEdit, BoardRemove, BoardListChange } =
+  boardsSlice.actions;
 
 export const boardsReducer = boardsSlice.reducer;

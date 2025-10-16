@@ -6,14 +6,14 @@ import "./ModalBoardEdit.css";
 import { BoardColorsType, BoardType } from "../../../types";
 import { useAppDispatch } from "../../../app/hooks";
 import { BoardEdit, BoardRemove, TaskRemoveOnBoard } from "../../../redux";
+import { boardColors } from "../../../todoListDefault";
 
 export type ModalBoardEditPayload = {
-  boardColors: BoardColorsType[];
   board: BoardType;
 };
 type ModalBoardEditProps = ModalProps<ModalBoardEditPayload>;
 export const ModalBoardEdit = (props: ModalBoardEditProps) => {
-  const { onClose, boardColors, board } = props;
+  const { onClose, board } = props;
   const dispatch = useAppDispatch();
   const [modalBoard, setModalBoard] = useState<BoardType>(board);
   const selectColor = boardColors.find((bc) => bc.color === board.color);

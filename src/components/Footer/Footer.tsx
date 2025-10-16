@@ -1,35 +1,47 @@
-import { ChangeEvent, useCallback } from "react";
+import { useCallback } from "react";
 import "./Footer.css";
 import { Button } from "../UI";
-import { useAppDispatch } from "../../app/hooks";
-import { statusFilterChanged, StatusFilters, statusSorterChanged, StatusSorters } from "../../redux";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  statusFilterChanged,
+  StatusFilters,
+  statusSearchChanged,
+  statusSorterChanged,
+  StatusSorters,
+} from "../../redux";
+import { useModalContext } from "../Modals";
 
-type TodoFooterProps = {
-  createTask: () => void;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  searchValue: string;
-};
+export const Footer = () => {
+  const search = useAppSelector((state) => state.Filters.statusSearch);
+  const dispatch = useAppDispatch();
 
-export const Footer = (props: TodoFooterProps) => {
-  const { createTask, searchValue, onChange } =
-    props;
-    const dispatch = useAppDispatch();
+  const { openModal } = useModalContext();
 
   const filterValue = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       dispatch(statusSorterChanged(event.target.value));
     },
-    [dispatch],
+    [dispatch]
   );
   return (
     <footer className="Footer">
-      <Button onClick={createTask} text="Добавить задачу" variant="primary" />
+      <Button
+        onClick={() =>
+          openModal({
+            type: "ModalTaskCreate"
+          })
+        }
+        text="Добавить задачу"
+        variant="primary"
+      />
       <input
         type="text"
         className="footerInput"
         placeholder="Фильтр..."
-        onChange={onChange}
-        value={searchValue}
+        onChange={(e) =>
+          dispatch(statusSearchChanged(e.target.value.toLowerCase()))
+        }
+        value={search}
       />
       <nav className="footerFilter">
         <select className="footerSelector" onChange={filterValue}>
@@ -46,21 +58,21 @@ export const Footer = (props: TodoFooterProps) => {
         <button
           className="footerNavButton"
           value="ALL"
-          onClick={()=> dispatch(statusFilterChanged(StatusFilters.All))}
+          onClick={() => dispatch(statusFilterChanged(StatusFilters.All))}
         >
           All
         </button>
         <button
           className="footerNavButton"
           value="COMPLETED"
-          onClick={()=> dispatch(statusFilterChanged(StatusFilters.Completed))}
+          onClick={() => dispatch(statusFilterChanged(StatusFilters.Completed))}
         >
           Completed
         </button>
         <button
           className="footerNavButton"
           value="ACTIVE"
-          onClick={()=> dispatch(statusFilterChanged(StatusFilters.Active))}
+          onClick={() => dispatch(statusFilterChanged(StatusFilters.Active))}
         >
           Active
         </button>
