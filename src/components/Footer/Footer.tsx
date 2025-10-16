@@ -1,68 +1,80 @@
-import { ChangeEvent, useCallback } from "react";
-import { FilterType, SorterType } from "../../types";
+import { useCallback } from "react";
 import "./Footer.css";
 import { Button } from "../UI";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  statusFilterChanged,
+  StatusFilters,
+  statusSearchChanged,
+  statusSorterChanged,
+  StatusSorters,
+} from "../../redux";
+import { useModalContext } from "../Modals";
 
-type TodoFooterProps = {
-  onFilterChange: (filterType: FilterType) => void;
-  onSortingChange: (sortingType: SorterType) => void;
-  createTask: () => void;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  searchValue: string;
-};
+export const Footer = () => {
+  const search = useAppSelector((state) => state.Filters.statusSearch);
+  const dispatch = useAppDispatch();
 
-export const Footer = (props: TodoFooterProps) => {
-  const { onFilterChange, onSortingChange, createTask, searchValue, onChange } =
-    props;
+  const { openModal } = useModalContext();
 
   const filterValue = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      onSortingChange(event.target.value as SorterType);
+      dispatch(statusSorterChanged(event.target.value));
     },
-    [onSortingChange]
+    [dispatch]
   );
   return (
     <footer className="Footer">
-      <Button onClick={createTask} text="Добавить задачу" variant="primary" />
+      <Button
+        onClick={() =>
+          openModal({
+            type: "ModalTaskCreate"
+          })
+        }
+        text="Добавить задачу"
+        variant="primary"
+      />
       <input
         type="text"
         className="footerInput"
         placeholder="Фильтр..."
-        onChange={onChange}
-        value={searchValue}
+        onChange={(e) =>
+          dispatch(statusSearchChanged(e.target.value.toLowerCase()))
+        }
+        value={search}
       />
       <nav className="footerFilter">
         <select className="footerSelector" onChange={filterValue}>
-          <option value={SorterType.OFF} key="OFF">
+          <option value={StatusSorters.OFF} key="OFF">
             Сортировка отключена
           </option>
-          <option value={SorterType.aTOb} key="aTOb">
+          <option value={StatusSorters.aTOb} key="aTOb">
             По заголовку (А-Я)
           </option>
-          <option value={SorterType.bTOa} key="bTOa">
+          <option value={StatusSorters.bTOa} key="bTOa">
             По заголовку (Я-А)
           </option>
         </select>
         <button
           className="footerNavButton"
           value="ALL"
-          onClick={() => onFilterChange(FilterType.ALL)}
+          onClick={() => dispatch(statusFilterChanged(StatusFilters.All))}
         >
           All
         </button>
         <button
           className="footerNavButton"
           value="COMPLETED"
-          onClick={() => onFilterChange(FilterType.COMPLETED)}
+          onClick={() => dispatch(statusFilterChanged(StatusFilters.Completed))}
         >
           Completed
         </button>
         <button
           className="footerNavButton"
           value="ACTIVE"
-          onClick={() => onFilterChange(FilterType.ACTIVE)}
+          onClick={() => dispatch(statusFilterChanged(StatusFilters.Active))}
         >
-          active
+          Active
         </button>
       </nav>
     </footer>

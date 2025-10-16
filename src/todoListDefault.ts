@@ -99,23 +99,23 @@ export const boardsDefault = [
 ];
 
 export const INITIAL_MODALTASK_STATE: TaskType = {
-    boardID: "",
-    title: "",
-    text: "",
-    check: false,
-    date: new Date(),
-    id: 1,
-  };
-  export const INITIAL_MODALBOARD_STATE: BoardType ={
-    title:"",
-    id:"1",
-    color: "#2089AC",
-  }
+  boardID: "",
+  title: "",
+  text: "",
+  check: false,
+  date: new Date(),
+  id: 1,
+};
+export const INITIAL_MODALBOARD_STATE: BoardType = {
+  title: "",
+  id: "1",
+  color: "#2089AC",
+};
 export const boardColors: BoardColorsType[] = [
-  {color: "#2089AC", title:"Голубой"},
-  {color: "#104456", title:"Синий"},
-  {color: "#B5B577", title:"Желтый"},
-  {color: "#89AC7F", title:"Зеленый"},
-  {color: "#D85B5D", title:"Красный"},
-  {color: "#977846", title:"Коричневый"},
-]
+  { color: "#2089AC", title: "Голубой" },
+  { color: "#104456", title: "Синий" },
+  { color: "#B5B577", title: "Желтый" },
+  { color: "#89AC7F", title: "Зеленый" },
+  { color: "#D85B5D", title: "Красный" },
+  { color: "#977846", title: "Коричневый" },
+];

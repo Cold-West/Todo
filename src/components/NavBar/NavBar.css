@@ -68,10 +68,10 @@
 .navBoard:hover .navModalEditIcon {
   opacity: 1;
 }
-.navAdd{
+.navAdd {
   display: flex;
   flex-direction: row;
-  justify-content:left;
+  justify-content: left;
   gap: 12px;
 }
 .navTitleAdd {

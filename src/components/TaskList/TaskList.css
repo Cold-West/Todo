@@ -31,7 +31,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.TaskDateIcon{
+.TaskDateIcon {
   color: var(--Primary-Color);
   width: 14px;
   height: 14px;

@@ -18,19 +18,6 @@ export type BoardType = {
   color: string;
 };
 
-export enum FilterType {
-  ALL = "All",
-  ACTIVE = "Active",
-  COMPLETED = "Completed",
-}
-
-export enum SorterType {
-  OFF = "OFF",
-  aTOb = "aTOb",
-  bTOa = "bTOa",
-  date = "date",
-}
-
 export enum InputType {
   input = "input",
   textarea = "textarea",

@@ -1,4 +1,4 @@
-import "./CheckBox.css"
+import "./CheckBox.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 type CheckBoxType = {

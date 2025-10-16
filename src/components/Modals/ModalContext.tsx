@@ -6,17 +6,19 @@ import {
   useMemo,
   useState,
 } from "react";
-import { ModalTaskCreate, ModalTaskCreatePayload } from "./ModalTaskCreate";
+import { ModalTaskCreate } from "./ModalTaskCreate";
 import { ModalTaskEdit, ModalTaskEditPayload } from "./ModalTaskEdit";
-import { ModalBoardCreate, ModalBoardCreatePayload } from "./ModalBoardCreate";
-import { ModalBoardEdit, ModalBoardEditPayload } from "./ModalBoardEdit/ModalBoardEdit";
+import { ModalBoardCreate } from "./ModalBoardCreate";
+import {
+  ModalBoardEdit,
+  ModalBoardEditPayload,
+} from "./ModalBoardEdit/ModalBoardEdit";
 
 const ModalContext = createContext<ModalContextType>({} as never);
 
 type ModalState =
   | {
       type: "ModalTaskCreate";
-      payload: ModalTaskCreatePayload;
     }
   | {
       type: "ModalTaskEdit";
@@ -24,7 +26,6 @@ type ModalState =
     }
   | {
       type: "ModalBoardCreate";
-      payload: ModalBoardCreatePayload;
     }
   | {
       type: "ModalBoardEdit";
@@ -53,13 +54,13 @@ export const ModalContextProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ModalContext value={{ openModal }}>
       {modalState?.type === "ModalTaskCreate" && (
-        <ModalTaskCreate {...modalState.payload} {...commonProps} />
+        <ModalTaskCreate {...commonProps} />
       )}
       {modalState?.type === "ModalTaskEdit" && (
         <ModalTaskEdit {...modalState.payload} {...commonProps} />
       )}
       {modalState?.type === "ModalBoardCreate" && (
-        <ModalBoardCreate {...modalState.payload} {...commonProps} />
+        <ModalBoardCreate {...commonProps} />
       )}
       {modalState?.type === "ModalBoardEdit" && (
         <ModalBoardEdit {...modalState.payload} {...commonProps} />

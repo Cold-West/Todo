@@ -2,29 +2,42 @@ import "./NavBar.css";
 import { BoardType } from "../../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
-type NavBarProps = {
-  boards: BoardType[];
-  createBoard: () => void;
-  boardChange: (board: BoardType) => void;
-  currentBoard: string;
-  onEdit: (board: BoardType) => void;
-  counter: (board: BoardType) => number;
-};
+import { useCallback } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { BoardListChange } from "../../redux";
+import { useModalContext } from "../Modals";
 
-export const NavBar = (props: NavBarProps) => {
-  const { boardChange, currentBoard, counter, boards, createBoard, onEdit } =
-    props;
-  const onBoardEdit = (board: BoardType, e:React.MouseEvent) => {
+export const NavBar = () => {
+  
+  const dispatch = useAppDispatch();
+  const currentBoard = useAppSelector((state) => state.Boards.currentBoard);
+  const todoTasks = useAppSelector((state) => state.Tasks.value);
+  const boards = useAppSelector((state) => state.Boards.value);
+
+  const { openModal } = useModalContext();
+
+  const onBoardEdit = (board: BoardType, e: React.MouseEvent) => {
     e.stopPropagation();
-    onEdit(board);
+    openModal({
+      type: "ModalBoardEdit",
+      payload: { board },
+    });
   };
+  
+  const navBarIconCounter = useCallback(
+    (board: BoardType) => {
+      return todoTasks.filter((t) => t.boardID === board.id).length;
+    },
+    [todoTasks]
+  );
+
   return (
     <nav className="navLeft">
       <h1 className="navTitle">Секции Задач</h1>
       <div className="navSection">
         {boards.map((board) => (
           <div
-            onClick={() => boardChange(board)}
+            onClick={() => dispatch(BoardListChange(board.id))}
             className={`navBoard ${currentBoard === board.id ? "navActive" : ""}`}
           >
             <div className="navBoardBox">
@@ -32,7 +45,7 @@ export const NavBar = (props: NavBarProps) => {
                 className="navSectionIcon"
                 style={{ background: board.color }}
               >
-                {counter(board)}
+                {navBarIconCounter(board)}
               </div>
               <div className="navBoardTitle">{board.title}</div>
             </div>
@@ -43,7 +56,14 @@ export const NavBar = (props: NavBarProps) => {
             />
           </div>
         ))}
-        <div className="navBoard navAdd" onClick={createBoard}>
+        <div
+          className="navBoard navAdd"
+          onClick={() =>
+            openModal({
+              type: "ModalBoardCreate"
+            })
+          }
+        >
           <FontAwesomeIcon icon={faPlus} className="navAddIcon" />
           <div className="navTitleAdd">Добавить список...</div>
         </div>

@@ -7,30 +7,30 @@
   font-size: 16px;
   font-weight: 700;
 }
-.ModalTaskBody{
+.ModalTaskBody {
   min-height: 270px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
-.ModalTaskTitle{
+.ModalTaskTitle {
   font-size: 16px;
   font-weight: 700;
 }
-.ModalTaskText{
+.ModalTaskText {
   height: 112px;
 }
-.ModalTaskTextDiv{
+.ModalTaskTextDiv {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.ModalTaskH2{
+.ModalTaskH2 {
   font-size: 12px;
   font-weight: 700;
   padding-left: 12px;
 }
-.ModalTaskAdditional{
+.ModalTaskAdditional {
   display: flex;
   flex-direction: row;
   gap: 16px;
@@ -38,7 +38,7 @@
   height: 52px;
   font-size: 12px;
 }
-.ModalTaskSection{
+.ModalTaskSection {
   display: flex;
   flex-direction: column;
   width: 260px;
@@ -47,29 +47,29 @@
 .ModalTaskSection p {
   padding-left: 12px;
 }
-.ModalTaskSelect{
+.ModalTaskSelect {
   appearance: none;
   width: 225px;
   color: var(--Text-Color);
   padding: 2px;
 }
-.ModalTaskSelect:focus{
+.ModalTaskSelect:focus {
   outline: 2px solid var(--Primary-Color);
 }
-.ModalTaskOption{
+.ModalTaskOption {
   width: 250px;
   color: var(--Text-Color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.ModalTest{
+.ModalTest {
   display: flex;
   flex-direction: row;
   vertical-align: middle;
   text-align: center;
 }
-.ModalTaskDate{
+.ModalTaskDate {
   height: 32px;
   width: 260px;
   padding: 8px 12px;
@@ -78,12 +78,12 @@
   gap: 4px;
   align-items: center;
 }
-.ModalTaskDate:hover{
+.ModalTaskDate:hover {
   background: var(--Input-Background-Color);
   outline: 1px solid var(--Primary-Color);
   border-radius: 4px;
 }
-.ModalTaskDateIcon{
+.ModalTaskDateIcon {
   color: var(--Primary-Color);
 }
 .ModalTaskDatePicker {
@@ -97,15 +97,15 @@
   padding: 4px;
   color: var(--Primary-Color);
 }
-.ModalTaskDatePicker:focus{
+.ModalTaskDatePicker:focus {
   outline: 0;
 }
-.ModalTaskFooter{
+.ModalTaskFooter {
   display: flex;
   flex-direction: row;
-  gap:10px;
+  gap: 10px;
 }
-.ModalTaskCheck{
+.ModalTaskCheck {
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -119,15 +119,15 @@
   border: 2px solid var(--Custom-Color-2);
   background-color: var(--Custom-Color-2);
 }
-.ModalTaskButtons{
+.ModalTaskButtons {
   display: flex;
   gap: 16px;
   padding-top: 4px;
 }
-.ModalTaskButtons > *:hover{
+.ModalTaskButtons > *:hover {
   box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
 }
-.ModalTaskCansel{
+.ModalTaskCansel {
   width: 77px;
   border: 1px solid var(--Text-Color);
   border-radius: 5px;
