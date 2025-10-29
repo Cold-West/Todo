@@ -13,6 +13,8 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  QueryDocumentSnapshot,
+  Timestamp,
   updateDoc,
 } from "firebase/firestore";
 import db from "../../firebase/firebase";
@@ -31,11 +33,19 @@ type DND = {
 
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
   const querySnapshot = await getDocs(collection(db, "Tasks"));
-  const tasks = querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    task: doc.data(),
-  }));
-  console.log(tasks)
+  const tasks = querySnapshot.docs.map((doc) => {
+    const data = doc.data() as { boardId: string; checked: false, date: Timestamp };
+
+    return {
+      task: {
+        ...data,
+        date: data.date.toMillis(),
+      },
+      id: doc.id,
+    }
+  });
+
+  console.log({ tasks })
   return tasks;
 });
 

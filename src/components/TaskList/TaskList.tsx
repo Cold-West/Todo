@@ -29,7 +29,7 @@ export const TaskList = () => {
     },[dispatch])
   return (
     <div className="AppTaskList">
-      {visibleTasks.filter((task: IdTaskType) => task.task.boardID === currentBoard)
+      {visibleTasks.filter((task: IdTaskType) => task.task?.boardID === currentBoard)
         .length ? (
         <DragWrapper
           taskData={visibleTasks.filter(
@@ -49,7 +49,7 @@ export const TaskList = () => {
                   <FontAwesomeIcon icon={faClock} className="TaskDateIcon" />
                   <DatePicker
                     className="datePickerInput"
-                    selected={newTask.task.date}
+                    selected={newTask.task.date ? new Date(newTask.task.date) : null}
                     onChange={(date) => dispatch(TaskDateChange(date, newTask.id))}
                     dateFormat="MMMM d"
                   />

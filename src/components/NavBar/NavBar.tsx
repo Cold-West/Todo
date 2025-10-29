@@ -30,7 +30,7 @@ export const NavBar = () => {
   
   const navBarIconCounter = useCallback(
     (id:string) => {
-      return todoTasks.filter((t) => t.task.boardID === id).length;
+      return todoTasks.filter((t) => t.task?.boardID === id).length;
     },
     [todoTasks]
   );
