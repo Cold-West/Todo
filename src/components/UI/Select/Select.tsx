@@ -2,10 +2,13 @@ import { useCallback, useState } from "react";
 import "./Select.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+
 interface TValue {
   color: string;
   title: string;
+  id?: string;
 }
+
 type SelectProps<T> = {
   options: T[];
   onChangeValue: (optionValue: T) => void;

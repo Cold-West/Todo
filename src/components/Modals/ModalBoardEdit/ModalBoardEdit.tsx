@@ -3,21 +3,21 @@ import { Button, Input, Select } from "../../UI";
 import { Modal } from "../Modal";
 import { ModalProps } from "../types";
 import "./ModalBoardEdit.css";
-import { BoardColorsType, BoardType } from "../../../types";
+import { BoardType, IdBoardType } from "../../../types";
 import { useAppDispatch } from "../../../app/hooks";
-import { BoardEdit, BoardRemove, TaskRemoveOnBoard } from "../../../redux";
+import { deleteBoard, editBoard, TaskRemoveOnBoard } from "../../../redux";
 import { boardColors } from "../../../todoListDefault";
 
 export type ModalBoardEditPayload = {
-  board: BoardType;
+  newBoard: IdBoardType;
 };
 type ModalBoardEditProps = ModalProps<ModalBoardEditPayload>;
 export const ModalBoardEdit = (props: ModalBoardEditProps) => {
-  const { onClose, board } = props;
+  const { onClose, newBoard } = props;
   const dispatch = useAppDispatch();
-  const [modalBoard, setModalBoard] = useState<BoardType>(board);
-  const selectColor = boardColors.find((bc) => bc.color === board.color);
-  const [selectValue, setSelectValue] = useState<BoardColorsType | undefined>(
+  const [modalBoard, setModalBoard] = useState<BoardType>(newBoard.board);
+  const selectColor = boardColors.find((bc) => bc.color === newBoard.board.color);
+  const [selectValue, setSelectValue] = useState<BoardType | undefined>(
     selectColor,
   );
 
@@ -26,15 +26,14 @@ export const ModalBoardEdit = (props: ModalBoardEditProps) => {
       e.preventDefault();
       if (modalBoard.title !== "") {
         onClose();
-        dispatch(BoardEdit(modalBoard));
+        dispatch(editBoard({id: newBoard.id, board: modalBoard}));
       } else alert("Заголовок не может быть пустым");
     },
-    [modalBoard, dispatch, onClose],
+    [modalBoard, onClose, dispatch, newBoard.id],
   );
   const onModalBoardRemove = (id: string) => {
     onClose();
-    dispatch(TaskRemoveOnBoard(id));
-    dispatch(BoardRemove(id));
+    dispatch(deleteBoard(id));
   };
   const onTitleChange = useCallback(
     (Title: string) =>
@@ -44,7 +43,7 @@ export const ModalBoardEdit = (props: ModalBoardEditProps) => {
     [],
   );
 
-  const onColorChange = useCallback((boardColor: BoardColorsType) => {
+  const onColorChange = useCallback((boardColor: BoardType) => {
     setSelectValue(boardColor);
     setModalBoard((prev) => {
       return { ...prev, color: boardColor.color };
@@ -74,7 +73,7 @@ export const ModalBoardEdit = (props: ModalBoardEditProps) => {
         <div className="ModalBoardEditFooter">
           <Button
             text="Удалить секцию"
-            onClick={() => onModalBoardRemove(board.id)}
+            onClick={() => onModalBoardRemove(newBoard.id)}
             variant="primary"
           />
           <div className="ModalButtons">

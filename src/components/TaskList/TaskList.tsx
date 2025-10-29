@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TaskType } from "../../types";
+import { IdTaskType } from "../../types";
 import { DragWrapper } from "../DragWrapper";
 import { CheckBox } from "../UI";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
@@ -7,44 +7,50 @@ import DatePicker from "react-datepicker";
 import "./TaskList.css";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
-  visibleTasksSelector,
+  deleteTask,
+  fetchTasks,
   TaskCheck,
   TaskDateChange,
-  TaskRemove,
 } from "../../redux/taskList/taskListSlice";
-import { useSelector } from "react-redux";
 import { useModalContext } from "../Modals";
+import { useEffect } from "react";
 
 export const TaskList = () => {
   const currentBoard = useAppSelector((state) => state.Boards.currentBoard);
+
   const dispatch = useAppDispatch();
-  const visibleTasks = useSelector(visibleTasksSelector);
+
+  const visibleTasks = useAppSelector((state)=> state.Tasks.tasks);
 
   const { openModal } = useModalContext();
+
+  useEffect(()=>{
+      dispatch(fetchTasks())
+    },[dispatch])
   return (
     <div className="AppTaskList">
-      {visibleTasks.filter((task: TaskType) => task.boardID === currentBoard)
+      {visibleTasks.filter((task: IdTaskType) => task.task.boardID === currentBoard)
         .length ? (
         <DragWrapper
           taskData={visibleTasks.filter(
-            (task: TaskType) => task.boardID === currentBoard
+            (task: IdTaskType) => task.task.boardID === currentBoard
           )}
-          renderTasks={(task) => (
+          renderTasks={(newTask) => (
             <div className="TaskBox">
               <div className="TaskTop">
                 <div className="TaskCheck">
                   <CheckBox
-                    check={task.check}
-                    onClick={() => dispatch(TaskCheck(task.id))}
+                    check={newTask.task.check}
+                    onClick={() => dispatch(TaskCheck(newTask.id))}
                   />
                 </div>
                 <div>
-                  <h2 className="TaskTitle">{task.title}</h2>
+                  <h2 className="TaskTitle">{newTask.task.title}</h2>
                   <FontAwesomeIcon icon={faClock} className="TaskDateIcon" />
                   <DatePicker
                     className="datePickerInput"
-                    selected={task.date}
-                    onChange={(date) => dispatch(TaskDateChange(date, task.id))}
+                    selected={newTask.task.date}
+                    onChange={(date) => dispatch(TaskDateChange(date, newTask.id))}
                     dateFormat="MMMM d"
                   />
                 </div>
@@ -54,7 +60,7 @@ export const TaskList = () => {
                     onClick={() =>
                       openModal({
                         type: "ModalTaskEdit",
-                        payload: { task },
+                        payload: { newTask },
                       })
                     }
                   >
@@ -62,13 +68,13 @@ export const TaskList = () => {
                   </button>
                   <button
                     className="TaskButton"
-                    onClick={() => dispatch(TaskRemove(task.id))}
+                    onClick={() => dispatch(deleteTask(newTask.id))}
                   >
                     Удалить
                   </button>
                 </div>
               </div>
-              <div className="TaskText">{task.text}</div>
+              <div className="TaskText">{newTask.task.text}</div>
             </div>
           )}
         />

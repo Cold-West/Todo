@@ -28,7 +28,7 @@ export const Footer = () => {
       <Button
         onClick={() =>
           openModal({
-            type: "ModalTaskCreate"
+            type: "ModalTaskCreate",
           })
         }
         text="Добавить задачу"

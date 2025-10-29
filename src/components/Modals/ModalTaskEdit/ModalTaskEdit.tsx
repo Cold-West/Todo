@@ -3,27 +3,42 @@ import "./ModalTaskEdit.css";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { BoardType, TaskType } from "../../../types";
+import { IdTaskType, TaskType } from "../../../types";
 import { Modal } from "../Modal";
 import { Button, CheckBox, Input, Select } from "../../UI";
 import { ModalProps } from "../types";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { TaskEdit } from "../../../redux";
+import { editTask } from "../../../redux";
 
 export type ModalTaskEditPayload = {
-  task: TaskType;
+  newTask: IdTaskType;
 };
 type ModalTaskEditProps = ModalProps<ModalTaskEditPayload>;
+interface boardForSelectType {
+  color: string;
+  title: string;
+  id: string;
+}
 
 export const ModalTaskEdit = (props: ModalTaskEditProps) => {
-  const { onClose, task } = props;
-  const boards = useAppSelector((state)=> state.Boards.value)
+  const { onClose, newTask } = props;
+  const boards = useAppSelector((state) => state.Boards.boards);
 
-  const [modalTask, setModalTask] = useState<TaskType>(task);
-  const selectBoard = boards.find((board) => board.id === task.boardID);
-  const [selectValue, setSelectValue] = useState<BoardType | undefined>(
-    selectBoard,
+  const boardForSelect: boardForSelectType[] = boards.map((boards) => {
+    return {
+      ...boards.board,
+      id: boards.id,
+    };
+  });
+
+  const [modalTask, setModalTask] = useState<TaskType>(newTask.task);
+
+  const selectBoard = boardForSelect.find(
+    (board) => board.id === newTask.task.boardID
   );
+
+  const [selectValue, setSelectValue] = useState<boardForSelectType | undefined>(selectBoard);
+
   const dispatch = useAppDispatch();
 
   const onChangeTitle = useCallback(
@@ -31,7 +46,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       setModalTask((prev) => {
         return { ...prev, title: Title };
       }),
-    [],
+    []
   );
 
   const onChangeText = useCallback(
@@ -39,7 +54,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       setModalTask((prev) => {
         return { ...prev, text: Text };
       }),
-    [],
+    []
   );
 
   const onChangeDate = useCallback(
@@ -47,7 +62,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       setModalTask((prev) => {
         return { ...prev, date: Date };
       }),
-    [],
+    []
   );
 
   const onChangeCheck = useCallback(
@@ -55,10 +70,10 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       setModalTask((prev) => {
         return { ...prev, check: !modalTask.check };
       }),
-    [modalTask.check],
+    [modalTask.check]
   );
 
-  const onChangeBoardId = useCallback((board: BoardType) => {
+  const onChangeBoardId = useCallback((board: boardForSelectType) => {
     setSelectValue(board);
     setModalTask((prev) => {
       return { ...prev, boardID: board.id };
@@ -70,10 +85,10 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
       e.preventDefault();
       if (modalTask.title !== "") {
         onClose();
-        dispatch(TaskEdit(modalTask));
+        dispatch(editTask({id: newTask.id, task: modalTask}));
       } else alert("Заголовок не может быть пустым");
     },
-    [dispatch, modalTask, onClose],
+    [dispatch, modalTask, onClose, newTask.id]
   );
   return (
     <Modal onClose={onClose}>
@@ -101,7 +116,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
             <div className="ModalTaskSection">
               <p>Секция задач</p>
               <Select
-                options={boards}
+                options={boardForSelect}
                 onChangeValue={onChangeBoardId}
                 value={selectValue}
               />

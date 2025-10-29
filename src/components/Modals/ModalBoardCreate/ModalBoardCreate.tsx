@@ -2,10 +2,10 @@ import { useCallback, useState } from "react";
 import { Button, Input, Select } from "../../UI";
 import { Modal } from "../Modal";
 import "./ModalBoardCreate.css";
-import { BoardColorsType, BoardType } from "../../../types";
+import {  BoardType } from "../../../types";
 import { boardColors, INITIAL_MODALBOARD_STATE } from "../../../todoListDefault";
 import { useAppDispatch } from "../../../app/hooks";
-import { BoardCreate } from "../../../redux";
+import { addBoard } from "../../../redux";
 
 type ModalBoardCreateProps = {
   onClose: ()=> void;
@@ -16,14 +16,14 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
   const [modalBoard, setModalBoard] = useState<BoardType>(
     INITIAL_MODALBOARD_STATE,
   );
-  const [selectValue, setSelectValue] = useState<BoardColorsType | undefined>();
+  const [selectValue, setSelectValue] = useState<BoardType | undefined>();
 
   const onModalSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       if (modalBoard.title !== "") {
         onClose();
-        dispatch(BoardCreate(modalBoard));
+        dispatch(addBoard(modalBoard))
       } else alert("Заголовок не может быть пустым");
     },
     [modalBoard, dispatch, onClose],
@@ -36,7 +36,7 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
     [],
   );
 
-  const onColorChange = useCallback((boardColor: BoardColorsType) => {
+  const onColorChange = useCallback((boardColor: BoardType) => {
     setSelectValue(boardColor);
     setModalBoard((prev) => {
       return { ...prev, color: boardColor.color };

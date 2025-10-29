@@ -1,11 +1,11 @@
 import { JSX, useCallback, useRef } from "react";
-import { TaskType } from "../../types";
+import { IdTaskType, TaskType } from "../../types";
 import { useAppDispatch } from "../../app/hooks";
 import { DNDdropHandler } from "../../redux/";
 
 type DragWrapper = {
-  taskData: TaskType[];
-  renderTasks: (data: TaskType) => JSX.Element;
+  taskData: IdTaskType[];
+  renderTasks: (data: IdTaskType) => JSX.Element;
 };
 export const DragWrapper = (props: DragWrapper) => {
   const { taskData, renderTasks } = props;
@@ -62,11 +62,11 @@ export const DragWrapper = (props: DragWrapper) => {
         return (
           <div
             draggable={true}
-            onDragStart={(e) => dragStartHandler(e, task)}
+            onDragStart={(e) => dragStartHandler(e, task.task)}
             onDragOver={(e) => dragOverHandler(e)}
             onDragLeave={(e) => dragLeaveHandler(e)}
             onDragEnd={(e) => dragEndHandler(e)}
-            onDrop={(e) => dropHandler(e, task)}
+            onDrop={(e) => dropHandler(e, task.task)}
           >
             {renderTasks(task)}
           </div>
