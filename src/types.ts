@@ -2,7 +2,7 @@ export type TaskType = {
   title: string;
   text: string;
   check: boolean;
-  date: number | null;
+  date: string | null;
   boardID: string;
 };
 

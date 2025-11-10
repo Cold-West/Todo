@@ -5,7 +5,7 @@ import { ModalProps } from "../types";
 import "./ModalBoardEdit.css";
 import { BoardType, IdBoardType } from "../../../types";
 import { useAppDispatch } from "../../../app/hooks";
-import { deleteBoard, editBoard, TaskRemoveOnBoard } from "../../../redux";
+import { deleteBoard, deleteTaskBoard, editBoard } from "../../../redux";
 import { boardColors } from "../../../todoListDefault";
 
 export type ModalBoardEditPayload = {
@@ -33,6 +33,7 @@ export const ModalBoardEdit = (props: ModalBoardEditProps) => {
   );
   const onModalBoardRemove = (id: string) => {
     onClose();
+    dispatch(deleteTaskBoard(id));
     dispatch(deleteBoard(id));
   };
   const onTitleChange = useCallback(

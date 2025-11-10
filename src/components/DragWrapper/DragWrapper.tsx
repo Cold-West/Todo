@@ -1,7 +1,6 @@
 import { JSX, useCallback, useRef } from "react";
-import { IdTaskType, TaskType } from "../../types";
+import { IdTaskType } from "../../types";
 import { useAppDispatch } from "../../app/hooks";
-import { DNDdropHandler } from "../../redux/";
 
 type DragWrapper = {
   taskData: IdTaskType[];
@@ -11,10 +10,10 @@ export const DragWrapper = (props: DragWrapper) => {
   const { taskData, renderTasks } = props;
   const dispatch = useAppDispatch();
 
-  const startTask = useRef<false | TaskType>(false);
+  const startTask = useRef<false | IdTaskType>(false);
 
   const dragStartHandler = useCallback(
-    (_e: React.DragEvent<HTMLDivElement>, task: TaskType) => {
+    (_e: React.DragEvent<HTMLDivElement>, task: IdTaskType) => {
       startTask.current = task;
     },
     [],
@@ -39,7 +38,7 @@ export const DragWrapper = (props: DragWrapper) => {
   }, []);
 
   const dropHandler = useCallback(
-    (e: React.DragEvent<HTMLDivElement>, dropTask: TaskType) => {
+    (e: React.DragEvent<HTMLDivElement>, dropTask: IdTaskType) => {
       e.stopPropagation();
       const target = e.target as HTMLDivElement;
       target.style.boxShadow = "none";
@@ -49,11 +48,10 @@ export const DragWrapper = (props: DragWrapper) => {
       if (startTaskValue === false) {
         return;
       }
-      dispatch(DNDdropHandler(startTaskValue, dropTask));
-
+      
       startTask.current = false;
     },
-    [dispatch],
+    [],
   );
 
   return (
@@ -62,11 +60,11 @@ export const DragWrapper = (props: DragWrapper) => {
         return (
           <div
             draggable={true}
-            onDragStart={(e) => dragStartHandler(e, task.task)}
+            onDragStart={(e) => dragStartHandler(e, task)}
             onDragOver={(e) => dragOverHandler(e)}
             onDragLeave={(e) => dragLeaveHandler(e)}
             onDragEnd={(e) => dragEndHandler(e)}
-            onDrop={(e) => dropHandler(e, task.task)}
+            onDrop={(e) => dropHandler(e, task)}
           >
             {renderTasks(task)}
           </div>

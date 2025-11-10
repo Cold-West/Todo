@@ -8,29 +8,32 @@ import "./TaskList.css";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   deleteTask,
+  editTask,
   fetchTasks,
-  TaskCheck,
-  TaskDateChange,
+  visibleTasksSelector,
 } from "../../redux/taskList/taskListSlice";
 import { useModalContext } from "../Modals";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export const TaskList = () => {
   const currentBoard = useAppSelector((state) => state.Boards.currentBoard);
 
   const dispatch = useAppDispatch();
 
-  const visibleTasks = useAppSelector((state)=> state.Tasks.tasks);
+  const visibleTasks = useSelector(visibleTasksSelector);
 
   const { openModal } = useModalContext();
 
-  useEffect(()=>{
-      dispatch(fetchTasks())
-    },[dispatch])
+  useEffect(() => {
+    dispatch(fetchTasks());
+  }, [dispatch]);
+
   return (
     <div className="AppTaskList">
-      {visibleTasks.filter((task: IdTaskType) => task.task?.boardID === currentBoard)
-        .length ? (
+      {visibleTasks.filter(
+        (task: IdTaskType) => task.task?.boardID === currentBoard
+      ).length ? (
         <DragWrapper
           taskData={visibleTasks.filter(
             (task: IdTaskType) => task.task.boardID === currentBoard
@@ -41,7 +44,12 @@ export const TaskList = () => {
                 <div className="TaskCheck">
                   <CheckBox
                     check={newTask.task.check}
-                    onClick={() => dispatch(TaskCheck(newTask.id))}
+                    onClick={() => dispatch(
+                        editTask({
+                          id: newTask.id,
+                          task: { ...newTask.task, check: !newTask.task.check  },
+                        })
+                      )}
                   />
                 </div>
                 <div>
@@ -49,8 +57,17 @@ export const TaskList = () => {
                   <FontAwesomeIcon icon={faClock} className="TaskDateIcon" />
                   <DatePicker
                     className="datePickerInput"
-                    selected={newTask.task.date ? new Date(newTask.task.date) : null}
-                    onChange={(date) => dispatch(TaskDateChange(date, newTask.id))}
+                    selected={
+                      newTask.task.date ? new Date(newTask.task.date) : null
+                    }
+                    onChange={(date) =>
+                      dispatch(
+                        editTask({
+                          id: newTask.id,
+                          task: { ...newTask.task, date: date ? date.toString() : null },
+                        })
+                      )
+                    }
                     dateFormat="MMMM d"
                   />
                 </div>

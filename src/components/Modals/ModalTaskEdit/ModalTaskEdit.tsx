@@ -57,10 +57,10 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
     []
   );
 
-  const onChangeDate = useCallback(
+   const onChangeDate = useCallback(
     (Date: Date | null) =>
       setModalTask((prev) => {
-        return { ...prev, date: Date };
+        return { ...prev, date: Date ? Date.toString() : null};
       }),
     []
   );
@@ -127,7 +127,7 @@ export const ModalTaskEdit = (props: ModalTaskEditProps) => {
                 <FontAwesomeIcon icon={faClock} className="ModalTaskDateIcon" />
                 <DatePicker
                   className="ModalTaskDatePicker"
-                  selected={modalTask.date}
+                  selected={newTask.task.date ? new Date(newTask.task.date) : null}
                   onChange={onChangeDate}
                   dateFormat="MMMM d"
                 />

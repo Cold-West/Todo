@@ -9,7 +9,6 @@ import { Button, CheckBox, Input, Select } from "../../UI";
 import { INITIAL_MODALTASK_STATE } from "../../../todoListDefault";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { addTask } from "../../../redux/taskList/taskListSlice";
-import { Timestamp } from "firebase/firestore";
 
 type ModalTaskCreateProps = {
   onClose: () => void;
@@ -62,9 +61,9 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
   const onChangeDate = useCallback(
     (Date: Date | null) =>
       setModalTask((prev) => {
-        console.log()
-        return { ...prev, date: Date };
+        return { ...prev, date: Date ? Date.toString() : null};
       }),
+      
     []
   );
 
@@ -130,7 +129,7 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
                 <FontAwesomeIcon icon={faClock} className="ModalTaskDateIcon" />
                 <DatePicker
                   className="ModalTaskDatePicker"
-                  selected={modalTask.date}
+                  selected={modalTask.date ? new Date(modalTask.date) : null}
                   onChange={onChangeDate}
                   dateFormat="MMMM d"
                 />

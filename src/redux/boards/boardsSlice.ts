@@ -15,14 +15,17 @@ interface boardState {
   currentBoard: string;
 }
 
-const initialState: boardState = { boards: [], currentBoard: "1" };
+const initialState: boardState = { boards: [], currentBoard: "" };
 
 export const fetchBoards = createAsyncThunk("boards/fetchBoards", async () => {
   const querySnapshot = await getDocs(collection(db, "Boards"));
-  const boards = querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    board: doc.data(),
-  }));
+  const boards = querySnapshot.docs.map((doc) => {
+    const data = doc.data() as { title: string; color: string };
+    return {
+      id: doc.id,
+      board: data,
+    };
+  });
   return boards;
 });
 
@@ -78,11 +81,15 @@ export const boardsSlice = createSlice({
       })
       .addCase(fetchBoards.fulfilled, (state, action) => {
         state.boards = action.payload;
+        state.currentBoard = action.payload[0].id
       })
       .addCase(deleteBoard.fulfilled, (state, action) => {
         state.boards = state.boards.filter(
           (board) => board.id !== action.payload
         );
+        if (action.payload === state.currentBoard){
+          state.currentBoard = state.boards[0].id
+        }
       })
       .addCase(editBoard.fulfilled, (state, action) => {
         const { id, board } = action.payload;

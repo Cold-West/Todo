@@ -5,7 +5,8 @@ export const INITIAL_MODALTASK_STATE: TaskType = {
   title: "",
   text: "",
   check: false,
-  date: new Date(),
+  // date: new Date().getTime(),
+  date: null,
 };
 export const INITIAL_MODALBOARD_STATE: BoardType = {
   title: "",
