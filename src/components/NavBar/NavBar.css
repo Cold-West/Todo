@@ -1,9 +1,11 @@
 .navLeft {
-  height: 100vh;
   min-width: 300px;
   background-color: var(--Side-Panel-Background-Color);
   overflow-y: scroll;
   padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 .navLeft::-webkit-scrollbar {
   display: none;
@@ -13,9 +15,6 @@
   padding-top: 16px;
   color: var(--Text-Color);
   font-size: 20px;
-}
-.navSection {
-  margin-top: 8px;
 }
 .navBoard {
   display: flex;

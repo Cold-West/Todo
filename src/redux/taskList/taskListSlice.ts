@@ -13,7 +13,6 @@ import {
   doc,
   getDocs,
   query,
-
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -28,13 +27,7 @@ const initialState: taskState = { tasks: [] };
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
   const querySnapshot = await getDocs(collection(db, "Tasks"));
   const tasks = querySnapshot.docs.map((doc) => {
-    const data = doc.data() as {
-      boardID: string;
-      check: boolean;
-      date: string | null;
-      title: string;
-      text: string;
-    };
+    const data = doc.data() as TaskType;
     return {
       task: data,
       id: doc.id,

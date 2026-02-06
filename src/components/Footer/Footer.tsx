@@ -1,28 +1,44 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import "./Footer.css";
-import { Button } from "../UI";
+import { Button, Select } from "../UI";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   statusFilterChanged,
   StatusFilters,
   statusSearchChanged,
   statusSorterChanged,
-  StatusSorters,
 } from "../../redux";
 import { useModalContext } from "../Modals";
+import { selectOptions } from "../../todoListDefault";
+import { selectFooter } from "../../types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 
 export const Footer = () => {
   const search = useAppSelector((state) => state.Filters.statusSearch);
+  const filter = useAppSelector((state) => state.Filters.statusFilter);
   const dispatch = useAppDispatch();
-
   const { openModal } = useModalContext();
+  const [selectValue, setSelectValue] = useState<selectFooter>(
+    selectOptions[0],
+  );
 
   const filterValue = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      dispatch(statusSorterChanged(event.target.value));
+    (optionsValue: selectFooter) => {
+      dispatch(statusSorterChanged(optionsValue.value));
+      setSelectValue(optionsValue);
     },
-    [dispatch]
+    [dispatch],
   );
+
+  const onFilterChangeClick = () => {
+    if (filter == "All") {
+      dispatch(statusFilterChanged(StatusFilters.Completed));
+    } else if (filter == "Completed") {
+      dispatch(statusFilterChanged(StatusFilters.Active));
+    } else dispatch(statusFilterChanged(StatusFilters.All));
+  };
+
   return (
     <footer className="Footer">
       <Button
@@ -34,49 +50,32 @@ export const Footer = () => {
         text="Добавить задачу"
         variant="primary"
       />
-      <input
-        type="text"
-        className="footerInput"
-        placeholder="Фильтр..."
-        onChange={(e) =>
-          dispatch(statusSearchChanged(e.target.value.toLowerCase()))
-        }
-        value={search}
-      />
-      <nav className="footerFilter">
-        <select className="footerSelector" onChange={filterValue}>
-          <option value={StatusSorters.OFF} key="OFF">
-            Сортировка отключена
-          </option>
-          <option value={StatusSorters.aTOb} key="aTOb">
-            По заголовку (А-Я)
-          </option>
-          <option value={StatusSorters.bTOa} key="bTOa">
-            По заголовку (Я-А)
-          </option>
-        </select>
-        <button
-          className="footerNavButton"
-          value="ALL"
-          onClick={() => dispatch(statusFilterChanged(StatusFilters.All))}
-        >
-          All
-        </button>
-        <button
-          className="footerNavButton"
-          value="COMPLETED"
-          onClick={() => dispatch(statusFilterChanged(StatusFilters.Completed))}
-        >
-          Completed
-        </button>
-        <button
-          className="footerNavButton"
-          value="ACTIVE"
-          onClick={() => dispatch(statusFilterChanged(StatusFilters.Active))}
-        >
-          Active
-        </button>
-      </nav>
+      <div className="footerRightSide">
+        <input
+          type="text"
+          className="footerInput"
+          placeholder="Фильтр..."
+          onChange={(e) =>
+            dispatch(statusSearchChanged(e.target.value.toLowerCase()))
+          }
+          value={search}
+        />
+        <div className="footerActiveSort">
+          <FontAwesomeIcon
+            icon={filter == "Active" ? faCircle : faCircleCheck }
+            className={`${filter == "Completed" ? "UICheckedBox" : filter == "Active" ? "UIActiveCheckedBox" : "UIUnCheckedBox"} `}
+            onClick={onFilterChangeClick}
+          />
+        </div>
+        <nav className="footerFilter">
+          <Select
+            options={selectOptions}
+            onChangeValue={filterValue}
+            value={selectValue}
+            contentPos="top"
+          />
+        </nav>
+      </div>
     </footer>
   );
 };

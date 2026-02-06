@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 interface TValue {
-  color: string;
+  color?: string;
   title: string;
   id?: string;
 }
@@ -13,9 +13,10 @@ type SelectProps<T> = {
   options: T[];
   onChangeValue: (optionValue: T) => void;
   value: T | undefined;
+  contentPos?: "top" | "bottom"
 };
 export const Select = <T extends TValue>(props: SelectProps<T>) => {
-  const { options, onChangeValue, value } = props;
+  const { options, onChangeValue, value, contentPos } = props;
   const [openSelect, setOpenSelect] = useState(false);
 
   const onClickOption = useCallback(
@@ -23,7 +24,7 @@ export const Select = <T extends TValue>(props: SelectProps<T>) => {
       setOpenSelect(false);
       onChangeValue(optionValue);
     },
-    [onChangeValue],
+    [onChangeValue]
   );
   const onOpen = useCallback(() => {
     setOpenSelect(!openSelect);
@@ -43,7 +44,10 @@ export const Select = <T extends TValue>(props: SelectProps<T>) => {
       >
         {value ? (
           <div className="SelectPlaceHolder">
-            <div className="SelectIcon" style={{ background: value.color }} />
+            {value.color ? (
+              <div className="SelectIcon" style={{ background: value.color }} />
+            ) : null}
+
             <div className="SelectText">{value.title}</div>
           </div>
         ) : (
@@ -51,7 +55,7 @@ export const Select = <T extends TValue>(props: SelectProps<T>) => {
         )}
         <FontAwesomeIcon icon={faAngleDown} className="SelectArrowIcon" />
       </div>
-      <div className="SelectContent">
+      <div className={`SelectContent ${contentPos === "top" ? "SelectAncorTop": "SelectAncorBottom"}`}>
         {options
           ? openSelect &&
             options.map((options) => {
@@ -60,10 +64,12 @@ export const Select = <T extends TValue>(props: SelectProps<T>) => {
                   className="SelectOption"
                   onClick={() => onClickOption(options)}
                 >
-                  <div
-                    className="SelectIcon"
-                    style={{ background: options.color }}
-                  />
+                  {options.color ? (
+                    <div
+                      className="SelectIcon"
+                      style={{ background: options.color }}
+                    />
+                  ) : null}
                   <div className="SelectText">{options.title}</div>
                 </div>
               );

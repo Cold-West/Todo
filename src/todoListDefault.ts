@@ -5,8 +5,7 @@ export const INITIAL_MODALTASK_STATE: TaskType = {
   title: "",
   text: "",
   check: false,
-  // date: new Date().getTime(),
-  date: null,
+  date: new Date().toString(),
 };
 export const INITIAL_MODALBOARD_STATE: BoardType = {
   title: "",
@@ -19,4 +18,10 @@ export const boardColors: BoardType[] = [
   { color: "#89AC7F", title: "Зеленый" },
   { color: "#D85B5D", title: "Красный" },
   { color: "#977846", title: "Коричневый" },
+];
+
+export const selectOptions = [
+  { title: "Сортировка отключена", value: "OFF" },
+  { title: "По заголовку (А-Я)", value: "aTOb"},
+  { title: "По заголовку (Я-А)", value: "bTOa"},
 ];

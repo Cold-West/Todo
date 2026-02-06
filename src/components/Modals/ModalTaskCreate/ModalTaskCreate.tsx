@@ -22,6 +22,7 @@ interface boardForSelectType{
 export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
   const { onClose } = props;
   const boards = useAppSelector((state) => state.Boards.boards);
+  
   const boardForSelect:boardForSelectType[] = boards.map((boards) => {
     return {
       ...boards.board,
@@ -34,7 +35,6 @@ export const ModalTaskCreate = (props: ModalTaskCreateProps) => {
     boardID: currentBoard,
   });
   
-
   const selectBoard = boardForSelect.find((board) => board.id === modalTask.boardID);
   const [selectValue, setSelectValue] = useState<boardForSelectType | undefined>(
     selectBoard

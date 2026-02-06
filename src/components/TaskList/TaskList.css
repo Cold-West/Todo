@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 64px;
+  min-height: fit-content;
   background-color: var(--Main-Background-Color);
   color: #104456;
   padding: 15px;
@@ -16,13 +16,20 @@
 .TaskTop {
   display: flex;
   flex-direction: row;
-  height: 54px;
   gap: 10px;
 }
 .TaskCheck {
-  height: 54px;
-  width: 20px;
   padding-top: 17px;
+}
+.TaskTopInfo{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.TaskMainInfo{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .TaskTitle {
   font-size: 25px;
@@ -31,11 +38,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.TaskDate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+}
 .TaskDateIcon {
   color: var(--Primary-Color);
-  width: 14px;
-  height: 14px;
-  margin-right: 4px;
 }
 .datePickerInput {
   background-color: inherit;
@@ -51,12 +61,9 @@
 .TaskRightSide {
   display: flex;
   flex-direction: row;
-  margin-left: auto;
-  height: 30px;
   gap: 16px;
 }
 .TaskButton {
-  margin-left: auto;
   width: fit-content;
   height: 100%;
   background: 0;

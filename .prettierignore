@@ -3,3 +3,4 @@
 **/*.md 
 vite.config.ts
 eslint.config.js
+.env

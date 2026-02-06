@@ -21,7 +21,13 @@ export type IdBoardType = {
   id: string;
 }
 
+export type selectFooter = {
+  title: string;
+  value: string;
+}
+
 export enum InputType {
   input = "input",
   textarea = "textarea",
 }
+

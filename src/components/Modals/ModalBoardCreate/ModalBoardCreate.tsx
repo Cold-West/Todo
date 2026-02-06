@@ -53,14 +53,14 @@ export const ModalBoardCreate = (props: ModalBoardCreateProps) => {
             className="ModalBoardTitle"
             plaseholder="Title"
             variant="input"
-          ></Input>
+          />
           <div className="ModalBoardSmartListColor">
             <h2 className="ModalBoardH2">Цвет умного листа</h2>
             <Select
               options={boardColors}
               onChangeValue={onColorChange}
               value={selectValue}
-            ></Select>
+            />
           </div>
         </div>
         <div className="ModalBoardFooter">
